@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cấu hình giá nước</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <h2 class="text-center mt-3">Cấu hình giá nước</h2>
+
+    <div class="container mt-4">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tab1">Hộ nghèo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab2">Cơ quan hành chính</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab3">Hoạt động sản xuất</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab4">Kinh doanh dịch vụ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab5">Hộ cư dân khác</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <div class="tab-pane fade show active" id="tab1">
+                <h3>Hộ nghèo</h3>
+                <button class="btn btn-primary mb-3" onclick="addRow()">Thêm bậc</button>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Chỉ số đầu</th>
+                            <th scope="col">Chỉ số cuối</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col">Khác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table1">
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>10</td>
+                            <td>10000</td>
+                            <td>X</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" onclick="save()">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        var rowNum = 1;
+
+        function addRow() {
+            var table = document.getElementById("table1");
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            rowNum++;
+            cell1.innerHTML = rowNum;
+            cell2.innerHTML = "<input type='text' class='form-control'>";
+            cell3.innerHTML = "<input type='text' class='form-control'>";
+            cell4.innerHTML = "<input type='text' class='form-control'>";
+            cell5.innerHTML = "<input type='text' class='form-control'>";
+        }
+
+        function save() {
+            // Xử lý lưu thông tin
+            alert("Thông tin đã được lưu!");
+        }
+    </script>
+
+</body>
+
+</html>
