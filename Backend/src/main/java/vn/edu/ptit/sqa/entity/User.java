@@ -1,5 +1,6 @@
 package vn.edu.ptit.sqa.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -17,11 +18,11 @@ import java.util.stream.Collectors;
 @Data
 
 @Entity
-@Table(name = "user")
+@Table(name = "USER")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String username;
     private String password;
     private String name;
@@ -35,6 +36,10 @@ public class User implements UserDetails {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name ="role_id"))
     Set<Role> roles = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<EmailDetail> listEmailDetails;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
@@ -42,12 +47,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override

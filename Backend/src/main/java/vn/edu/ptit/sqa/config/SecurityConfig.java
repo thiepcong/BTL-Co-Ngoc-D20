@@ -30,6 +30,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/emailDetail/**").hasAnyAuthority("ADMIN", "STAFF")
+                        .requestMatchers("/api/emailAttachment/**").hasAnyAuthority("ADMIN", "STAFF")
+                        .requestMatchers("/api/emailTemplate/**").hasAnyAuthority("ADMIN", "STAFF")
+                        .requestMatchers("/api/emailAttachment/**").hasAnyAuthority("ADMIN", "STAFF")
                         .anyRequest().authenticated())
 
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(
