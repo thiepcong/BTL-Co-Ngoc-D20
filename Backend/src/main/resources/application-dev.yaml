@@ -26,3 +26,8 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+ftp:
+  host:
+  port: 21
+  username: ftp-user
+  password:
