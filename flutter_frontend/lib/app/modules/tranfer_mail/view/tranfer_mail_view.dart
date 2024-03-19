@@ -116,8 +116,8 @@ class _TranferMailViewState extends State<TranferMailView> {
                 6: FlexColumnWidth(2),
                 7: FlexColumnWidth(1),
               },
-              children: const [
-                TableRow(
+              children: [
+                const TableRow(
                   children: [
                     TableCell(child: Center(child: Text('STT'))),
                     TableCell(child: Center(child: Text('Mã khách hàng'))),
@@ -127,19 +127,25 @@ class _TranferMailViewState extends State<TranferMailView> {
                     TableCell(child: Center(child: Text('Email'))),
                     TableCell(child: Center(child: Text('Mã số thuế'))),
                     TableCell(child: Center(child: Text('Trạng thái'))),
+                    TableCell(child: Center(child: Text('Chọn')))
                   ],
                 ),
                 TableRow(
                   children: [
-                    TableCell(child: Center(child: Text('1'))),
-                    TableCell(child: Center(child: Text('KH001'))),
-                    TableCell(child: Center(child: Text('Nguyễn Văn A'))),
-                    TableCell(child: Center(child: Text('123 Đường ABC'))),
-                    TableCell(child: Center(child: Text('0123456789'))),
-                    TableCell(
+                    const TableCell(child: Center(child: Text('1'))),
+                    const TableCell(child: Center(child: Text('KH001'))),
+                    const TableCell(child: Center(child: Text('Nguyễn Văn A'))),
+                    const TableCell(
+                        child: Center(child: Text('123 Đường ABC'))),
+                    const TableCell(child: Center(child: Text('0123456789'))),
+                    const TableCell(
                         child: Center(child: Text('example@example.com'))),
-                    TableCell(child: Center(child: Text('123456789'))),
-                    TableCell(child: Center(child: Text('Active'))),
+                    const TableCell(child: Center(child: Text('123456789'))),
+                    const TableCell(child: Center(child: Text('Active'))),
+                    TableCell(
+                        child: Center(
+                            child:
+                                Checkbox(value: false, onChanged: (value) {}))),
                   ],
                 ),
               ],

@@ -10,7 +10,7 @@ void main() async {
   Bloc.observer = AppBlocObserver();
 
   EnvConfig devConfig = EnvConfig(
-    appName: "Ai là triệu phú?",
+    appName: "",
     appVersion: "0.1",
     apiBaseUrl: "",
     webBaseUrl: "",
