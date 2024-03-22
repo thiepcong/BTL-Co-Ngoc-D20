@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/values/app_colors.dart';
+import '../../../core/widgets/appBar/custom_app_bar.dart';
 
 class TranferMailView extends StatefulWidget {
   const TranferMailView({super.key});
@@ -10,22 +12,21 @@ class TranferMailView extends StatefulWidget {
 class _TranferMailViewState extends State<TranferMailView> {
   int _currentPage = 1;
   final int _totalPages = 100;
+
   @override
   Widget build(BuildContext context) {
+    return Title(
+        color: AppColors.colorFFFFFFFF,
+        title: 'Gửi Email',
+        child: _buildPage(context));
+  }
+
+  Widget _buildPage(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gửi Mail Tới Khách hàng'),
-      ),
+      appBar: const CustomAppBar(label: 'Gửi Mail Tới Khách hàng'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Quản lý Khách hàng',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

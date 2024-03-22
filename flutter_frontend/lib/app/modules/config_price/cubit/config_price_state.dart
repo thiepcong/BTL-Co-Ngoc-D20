@@ -10,7 +10,9 @@ class ConfigPriceState with _$ConfigPriceState {
 
   const factory ConfigPriceState({
     @Default([]) List<PriceList> all,
-    @Default([]) List<PriceList> current,
+    @Default([]) List<PriceList> currentList,
+    bool? isValidate,
+    PriceList? curentItem,
     String? message,
     Error? error,
   }) = _ConfigPriceState;

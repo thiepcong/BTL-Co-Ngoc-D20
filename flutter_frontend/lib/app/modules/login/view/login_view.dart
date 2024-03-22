@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/app/main_router.dart';
 
+import '../../../core/values/app_colors.dart';
 import '../../../core/values/text_styles.dart';
 import '../cubit/login_cubit.dart';
 import '../cubit/login_state.dart';
@@ -22,9 +23,13 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LoginCubit(context.read<LoginRepository>()),
-      child: _buildPage(context),
+    return Title(
+      color: AppColors.colorFFFFFFFF,
+      title: 'Đăng nhập',
+      child: BlocProvider(
+        create: (_) => LoginCubit(context.read<LoginRepository>()),
+        child: _buildPage(context),
+      ),
     );
   }
 

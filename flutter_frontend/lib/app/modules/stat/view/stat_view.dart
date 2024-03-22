@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/values/app_colors.dart';
+import '../../../core/widgets/appBar/custom_app_bar.dart';
+
 class StatView extends StatefulWidget {
   const StatView({super.key});
 
@@ -34,21 +37,18 @@ class _StatViewState extends State<StatView> {
 
   @override
   Widget build(BuildContext context) {
+    return Title(
+        color: AppColors.colorFFFFFFFF,
+        title: 'Xem báo cáo',
+        child: _buildPage(context));
+  }
+
+  Widget _buildPage(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Gửi Mail Tới Khách hàng'),
-      ),
+      appBar: const CustomAppBar(label: 'Xem báo cáo'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Quản lý Khách hàng',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
