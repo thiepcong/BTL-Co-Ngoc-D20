@@ -17,7 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ConfigPriceState {
   List<PriceList> get all => throw _privateConstructorUsedError;
-  List<PriceList> get current => throw _privateConstructorUsedError;
+  List<PriceList> get currentList => throw _privateConstructorUsedError;
+  bool? get isValidate => throw _privateConstructorUsedError;
+  PriceList? get curentItem => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   Error? get error => throw _privateConstructorUsedError;
 
@@ -34,7 +36,9 @@ abstract class $ConfigPriceStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<PriceList> all,
-      List<PriceList> current,
+      List<PriceList> currentList,
+      bool? isValidate,
+      PriceList? curentItem,
       String? message,
       Error? error});
 }
@@ -53,7 +57,9 @@ class _$ConfigPriceStateCopyWithImpl<$Res, $Val extends ConfigPriceState>
   @override
   $Res call({
     Object? all = null,
-    Object? current = null,
+    Object? currentList = null,
+    Object? isValidate = freezed,
+    Object? curentItem = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
@@ -62,10 +68,18 @@ class _$ConfigPriceStateCopyWithImpl<$Res, $Val extends ConfigPriceState>
           ? _value.all
           : all // ignore: cast_nullable_to_non_nullable
               as List<PriceList>,
-      current: null == current
-          ? _value.current
-          : current // ignore: cast_nullable_to_non_nullable
+      currentList: null == currentList
+          ? _value.currentList
+          : currentList // ignore: cast_nullable_to_non_nullable
               as List<PriceList>,
+      isValidate: freezed == isValidate
+          ? _value.isValidate
+          : isValidate // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      curentItem: freezed == curentItem
+          ? _value.curentItem
+          : curentItem // ignore: cast_nullable_to_non_nullable
+              as PriceList?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -88,7 +102,9 @@ abstract class _$$ConfigPriceStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<PriceList> all,
-      List<PriceList> current,
+      List<PriceList> currentList,
+      bool? isValidate,
+      PriceList? curentItem,
       String? message,
       Error? error});
 }
@@ -105,7 +121,9 @@ class __$$ConfigPriceStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? all = null,
-    Object? current = null,
+    Object? currentList = null,
+    Object? isValidate = freezed,
+    Object? curentItem = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
@@ -114,10 +132,18 @@ class __$$ConfigPriceStateImplCopyWithImpl<$Res>
           ? _value._all
           : all // ignore: cast_nullable_to_non_nullable
               as List<PriceList>,
-      current: null == current
-          ? _value._current
-          : current // ignore: cast_nullable_to_non_nullable
+      currentList: null == currentList
+          ? _value._currentList
+          : currentList // ignore: cast_nullable_to_non_nullable
               as List<PriceList>,
+      isValidate: freezed == isValidate
+          ? _value.isValidate
+          : isValidate // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      curentItem: freezed == curentItem
+          ? _value.curentItem
+          : curentItem // ignore: cast_nullable_to_non_nullable
+              as PriceList?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -135,11 +161,13 @@ class __$$ConfigPriceStateImplCopyWithImpl<$Res>
 class _$ConfigPriceStateImpl extends _ConfigPriceState {
   const _$ConfigPriceStateImpl(
       {final List<PriceList> all = const [],
-      final List<PriceList> current = const [],
+      final List<PriceList> currentList = const [],
+      this.isValidate,
+      this.curentItem,
       this.message,
       this.error})
       : _all = all,
-        _current = current,
+        _currentList = currentList,
         super._();
 
   final List<PriceList> _all;
@@ -151,15 +179,19 @@ class _$ConfigPriceStateImpl extends _ConfigPriceState {
     return EqualUnmodifiableListView(_all);
   }
 
-  final List<PriceList> _current;
+  final List<PriceList> _currentList;
   @override
   @JsonKey()
-  List<PriceList> get current {
-    if (_current is EqualUnmodifiableListView) return _current;
+  List<PriceList> get currentList {
+    if (_currentList is EqualUnmodifiableListView) return _currentList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_current);
+    return EqualUnmodifiableListView(_currentList);
   }
 
+  @override
+  final bool? isValidate;
+  @override
+  final PriceList? curentItem;
   @override
   final String? message;
   @override
@@ -167,7 +199,7 @@ class _$ConfigPriceStateImpl extends _ConfigPriceState {
 
   @override
   String toString() {
-    return 'ConfigPriceState(all: $all, current: $current, message: $message, error: $error)';
+    return 'ConfigPriceState(all: $all, currentList: $currentList, isValidate: $isValidate, curentItem: $curentItem, message: $message, error: $error)';
   }
 
   @override
@@ -176,7 +208,12 @@ class _$ConfigPriceStateImpl extends _ConfigPriceState {
         (other.runtimeType == runtimeType &&
             other is _$ConfigPriceStateImpl &&
             const DeepCollectionEquality().equals(other._all, _all) &&
-            const DeepCollectionEquality().equals(other._current, _current) &&
+            const DeepCollectionEquality()
+                .equals(other._currentList, _currentList) &&
+            (identical(other.isValidate, isValidate) ||
+                other.isValidate == isValidate) &&
+            (identical(other.curentItem, curentItem) ||
+                other.curentItem == curentItem) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.error, error) || other.error == error));
   }
@@ -185,7 +222,9 @@ class _$ConfigPriceStateImpl extends _ConfigPriceState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_all),
-      const DeepCollectionEquality().hash(_current),
+      const DeepCollectionEquality().hash(_currentList),
+      isValidate,
+      curentItem,
       message,
       error);
 
@@ -200,7 +239,9 @@ class _$ConfigPriceStateImpl extends _ConfigPriceState {
 abstract class _ConfigPriceState extends ConfigPriceState {
   const factory _ConfigPriceState(
       {final List<PriceList> all,
-      final List<PriceList> current,
+      final List<PriceList> currentList,
+      final bool? isValidate,
+      final PriceList? curentItem,
       final String? message,
       final Error? error}) = _$ConfigPriceStateImpl;
   const _ConfigPriceState._() : super._();
@@ -208,7 +249,11 @@ abstract class _ConfigPriceState extends ConfigPriceState {
   @override
   List<PriceList> get all;
   @override
-  List<PriceList> get current;
+  List<PriceList> get currentList;
+  @override
+  bool? get isValidate;
+  @override
+  PriceList? get curentItem;
   @override
   String? get message;
   @override

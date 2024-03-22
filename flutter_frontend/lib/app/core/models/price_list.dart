@@ -18,6 +18,22 @@ class PriceList {
     required this.items,
   });
 
+  PriceList copyWith({
+    int? id,
+    DateTime? applyDate,
+    String? description,
+    String? type,
+    List<PriceScale>? items,
+  }) {
+    return PriceList(
+      id: id ?? this.id,
+      applyDate: applyDate ?? this.applyDate,
+      description: description ?? this.description,
+      type: type ?? this.type,
+      items: items ?? this.items,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
