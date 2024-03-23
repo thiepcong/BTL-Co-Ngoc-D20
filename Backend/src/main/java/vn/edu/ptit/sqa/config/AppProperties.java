@@ -33,4 +33,11 @@ public interface AppProperties {
     interface EMAIL_PROPERTY {
         String PATTERN_PROPERTY = "<app-ht-tien-nuoc>.+?</app-ht-tien-nuoc>";
     }
+
+    interface PRICE_LIST {
+        interface STATUS {
+            Integer ACTIVE = 1;
+            Integer DELETED = -1;
+        }
+    }
 }

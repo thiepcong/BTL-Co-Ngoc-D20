@@ -27,7 +27,7 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 ftp:
-  host:
+  host: 192.168.0.101
   port: 21
   username: ftp-user
-  password:
+  password: 123456789

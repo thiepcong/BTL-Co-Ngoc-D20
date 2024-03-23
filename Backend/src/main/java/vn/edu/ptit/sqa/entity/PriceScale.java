@@ -18,12 +18,11 @@ public class PriceScale  {
     
     @Column(name = "END_INDEX")
     private Integer endIndex;
-    
+
+    @Column(name = "PRICE")
     private float price;
     
-    private String description;
-    
     @JoinColumn(name = "PRICE_LIST_ID")
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private PriceList priceList;
 }
