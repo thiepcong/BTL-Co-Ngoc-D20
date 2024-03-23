@@ -8,4 +8,9 @@ class ApiUrlConstants {
   static String login = '$baseUrl/api/login';
 
   static String configPrice = '$baseUrl/api/config_price';
+
+  static String configPrice2(int x) => '$baseUrl/api/config_price/$x';
+
+  static String tranferMail(int pageNum, int pageSize) =>
+      '$baseUrl/api/emailTemplate?pageNum=$pageNum&pageSize=$pageSize';
 }

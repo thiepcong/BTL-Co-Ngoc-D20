@@ -5,6 +5,7 @@ import 'package:flutter_frontend/app/main_router.dart';
 
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/text_styles.dart';
+import '../../../core/widgets/appBar/custom_app_bar.dart';
 import '../cubit/login_cubit.dart';
 import '../cubit/login_state.dart';
 import '../repository/login_repository.dart';
@@ -38,9 +39,10 @@ class _LoginViewState extends State<LoginView> {
       builder: (context, state) {
         final cubit = context.read<LoginCubit>();
         return Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text('Login'),
+          appBar: const CustomAppBar(
+            label: 'Đăng nhập',
+            bgColor: AppColors.colorFF940000,
+            style: TextStyles.boldWhiteS20,
           ),
           body: Center(
             child: Container(
@@ -56,19 +58,19 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Login",
+                    const Text(
+                      "Đăng nhập",
                       style: TextStyles.boldBlackS28,
                     ),
                     TextFormField(
                       controller: _usernameController,
                       decoration: const InputDecoration(
-                        labelText: 'Username',
+                        labelText: 'Tên người dùng',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Vui lòng nhập tên người dùng!';
                         }
                         return null;
                       },
@@ -78,12 +80,12 @@ class _LoginViewState extends State<LoginView> {
                       controller: _passwordController,
                       obscureText: true,
                       decoration: const InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'Mật khẩu',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Vui lòng nhập mật khẩu!';
                         }
                         return null;
                       },

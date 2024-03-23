@@ -11,6 +11,7 @@ class ConfigPriceState with _$ConfigPriceState {
   const factory ConfigPriceState({
     @Default([]) List<PriceList> all,
     @Default([]) List<PriceList> currentList,
+    PriceList? lastPriceScale,
     bool? isValidate,
     PriceList? curentItem,
     String? message,

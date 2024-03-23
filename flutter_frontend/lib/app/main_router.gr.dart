@@ -29,6 +29,12 @@ class _$MainRouter extends RootStackRouter {
         child: const ManagerView(),
       );
     },
+    TranferMailViewRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const TranferMailView(),
+      );
+    },
   };
 
   @override
@@ -46,6 +52,10 @@ class _$MainRouter extends RootStackRouter {
         RouteConfig(
           ManagerViewRoute.name,
           path: 'manager',
+        ),
+        RouteConfig(
+          TranferMailViewRoute.name,
+          path: 'tranfer_mail',
         ),
       ];
 }
@@ -72,4 +82,16 @@ class ManagerViewRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ManagerViewRoute';
+}
+
+/// generated route for
+/// [TranferMailView]
+class TranferMailViewRoute extends PageRouteInfo<void> {
+  const TranferMailViewRoute()
+      : super(
+          TranferMailViewRoute.name,
+          path: 'tranfer_mail',
+        );
+
+  static const String name = 'TranferMailViewRoute';
 }
