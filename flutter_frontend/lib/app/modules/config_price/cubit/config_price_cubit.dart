@@ -13,18 +13,18 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
   final ConfigPriceRepository _repo;
 
   void init() {
-    emit(state.copyWith(
-        curentItem: PriceList(
-            id: 1,
-            applyDate: DateTime.now(),
-            description: 'description',
-            type: 'type',
-            items: [])));
+    // emit(state.copyWith(
+    //     curentItem: PriceList(
+    //         id: 1,
+    //         applyDate: DateTime.now(),
+    //         description: 'description',
+    //         type: 'type',
+    //         items: [])));
   }
 
   bool checkPriceListValidate() {
     try {
-      List<PriceScale> li = List.from(state.curentItem?.items ?? []);
+      List<PriceScale> li = List.from(state.curentItem?.listPriceScales ?? []);
       if (li.isEmpty) return false;
       for (int i = 0; i < li.length; i++) {
         if (li[i].startIndex >= li[i].endIndex) return false;
@@ -52,25 +52,35 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
     debugPrint(res.toString());
   }
 
-  void saveAllPriceList() async {
-    final res = _repo.saveAllPriceList(List.empty());
+  void savePriceList() async {
+    final res = _repo.savePriceList(PriceList(
+        id: 1,
+        applyDate: DateTime.now(),
+        listPriceScales: [],
+        status: 1,
+        userType: UserType(id: 1, typeName: 'typeName')));
     debugPrint(res.toString());
   }
 
   void addPriceScale() {
-    List<PriceScale> li = List.from(state.curentItem?.items ?? []);
+    List<PriceScale> li = List.from(state.curentItem?.listPriceScales ?? []);
     li.add(PriceScale(
       startIndex: li.isEmpty ? 0 : li[li.length - 1].endIndex,
       endIndex: 0,
       price: 0,
     ));
-    emit(state.copyWith(curentItem: state.curentItem?.copyWith(items: li)));
+    emit(state.copyWith(
+        curentItem: state.curentItem?.copyWith(listPriceScales: li)));
   }
 
   void deletePriceScaleByIndex(int index) {
-    List<PriceScale> li = List.from(state.curentItem?.items ?? []);
+    List<PriceScale> li = List.from(state.curentItem?.listPriceScales ?? []);
     li.removeAt(index);
-    emit(state.copyWith(curentItem: state.curentItem?.copyWith(items: li)));
+    if (li.isNotEmpty) {
+      li[0] = li[0].copyWith(startIndex: 0);
+    }
+    emit(state.copyWith(
+        curentItem: state.curentItem?.copyWith(listPriceScales: li)));
   }
 
   void updatePriceListByItem(
@@ -82,7 +92,7 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
     final newStartIndex = int.tryParse(startIndex ?? '');
     final newEndIndex = int.tryParse(endIndex ?? '');
     final newPrice = int.tryParse(price ?? '');
-    List<PriceScale> li = List.from(state.curentItem?.items ?? []);
+    List<PriceScale> li = List.from(state.curentItem?.listPriceScales ?? []);
     li[index] = li[index].copyWith(
       startIndex: newStartIndex,
       endIndex: newEndIndex,
@@ -92,7 +102,7 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
       li[index + 1] = li[index + 1].copyWith(startIndex: newEndIndex);
     }
     emit(state.copyWith(
-      curentItem: state.curentItem?.copyWith(items: li),
+      curentItem: state.curentItem?.copyWith(listPriceScales: li),
       isValidate: null,
     ));
   }

@@ -7,6 +7,8 @@ class StatState with _$StatState {
   const StatState._();
 
   const factory StatState({
+    String? currentDistrict,
+    String? currentWard,
     String? message,
     Error? error,
   }) = _StatState;

@@ -44,15 +44,13 @@ class TableRowItem extends TableRow {
           onChanged: (e) => onChangePrice?.call(e),
         )),
         TableCell(
-          child: index == 0
-              ? const SizedBox.shrink()
-              : IconButton(
-                  onPressed: () => onDelete?.call(),
-                  icon: const Icon(
-                    Icons.close,
-                    color: AppColors.colorFFB20000,
-                  ),
-                ),
+          child: IconButton(
+            onPressed: () => onDelete?.call(),
+            icon: const Icon(
+              Icons.close,
+              color: AppColors.colorFFB20000,
+            ),
+          ),
         ),
       ];
 }

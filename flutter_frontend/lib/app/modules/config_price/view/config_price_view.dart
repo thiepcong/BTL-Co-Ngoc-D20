@@ -63,28 +63,27 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
       child: BlocBuilder<ConfigPriceCubit, ConfigPriceState>(
         builder: (context, state) {
           final curentItem = state.curentItem;
-          final lastPriceScale = (curentItem?.items.isNotEmpty ?? false)
-              ? curentItem!.items.last
-              : null;
+          final lastPriceScale =
+              (curentItem?.listPriceScales.isNotEmpty ?? false)
+                  ? curentItem!.listPriceScales.last
+                  : null;
           final cubit = context.read<ConfigPriceCubit>();
           return Scaffold(
             appBar: const CustomAppBar(label: 'Cấu hình giá nước'),
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: DefaultTabController(
-                length: 5,
+                length: 3,
                 child: Column(
                   children: [
                     const TabBar(
                       tabs: [
                         Tab(text: 'Hộ nghèo'),
-                        Tab(text: 'Cơ quan hành chính'),
-                        Tab(text: 'Hoạt động sản xuất'),
-                        Tab(text: 'Kinh doanh dịch vụ'),
-                        Tab(text: 'Hộ cư dân khác'),
+                        Tab(text: 'Hộ cận nghèo'),
+                        Tab(text: 'Hộ cá nhân'),
                       ],
                     ),
-                    Text(
+                    const Text(
                       "*(Mỗi thang giá được tính từ lớn hơn hoặc bằng chỉ số bắt đầu và nhỏ hơn chỉ số kết thúc)",
                       style: TextStyles.regularBlackS14,
                     ),
@@ -118,7 +117,7 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                                       TableCell(child: Text('')),
                                     ]),
                                     ...curentItem != null
-                                        ? curentItem.items
+                                        ? curentItem.listPriceScales
                                             .asMap()
                                             .entries
                                             .map((entry) {
@@ -149,34 +148,38 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                                             );
                                           }).toList()
                                         : [],
-                                    if (curentItem != null &&
-                                        curentItem.items.isNotEmpty)
-                                      TableRow(
-                                        children: [
-                                          TableCell(
-                                            child: CustomTextField(
-                                              text: curentItem.items.length,
-                                              enable: false,
-                                            ),
+                                    TableRow(
+                                      children: [
+                                        TableCell(
+                                          child: CustomTextField(
+                                            text: curentItem != null &&
+                                                    curentItem.listPriceScales
+                                                        .isNotEmpty
+                                                ? curentItem.listPriceScales
+                                                        .length +
+                                                    1
+                                                : 1,
+                                            enable: false,
                                           ),
-                                          TableCell(
-                                              child: CustomTextField(
-                                            text: lastPriceScale?.endIndex,
-                                            enable: false,
-                                          )),
-                                          const TableCell(
-                                              child: CustomTextField(
-                                            isLast: true,
-                                            enable: false,
-                                          )),
-                                          TableCell(
-                                              child: CustomTextField(
-                                            text: lastPriceScale?.price,
-                                          )),
-                                          const TableCell(
-                                              child: SizedBox.shrink()),
-                                        ],
-                                      )
+                                        ),
+                                        TableCell(
+                                            child: CustomTextField(
+                                          text: lastPriceScale?.endIndex ?? 0,
+                                          enable: false,
+                                        )),
+                                        const TableCell(
+                                            child: CustomTextField(
+                                          isLast: true,
+                                          enable: false,
+                                        )),
+                                        TableCell(
+                                            child: CustomTextField(
+                                          text: lastPriceScale?.price ?? 0,
+                                        )),
+                                        const TableCell(
+                                            child: SizedBox.shrink()),
+                                      ],
+                                    )
                                   ],
                                 ),
                                 const SizedBox(height: 10),
@@ -189,10 +192,8 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                               ],
                             ),
                           ),
-                          const Center(child: Text('Cơ quan hành chính')),
-                          const Center(child: Text('Hoạt động sản xuất')),
-                          const Center(child: Text('Kinh doanh dịch vụ')),
-                          const Center(child: Text('Hộ cư dân khác')),
+                          const Center(child: Text('Hộ cận nghèo')),
+                          const Center(child: Text('Hộ cá nhân')),
                         ],
                       ),
                     ),

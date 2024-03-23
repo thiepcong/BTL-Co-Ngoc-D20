@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'core/values/app_theme.dart';
 import 'main_router.dart';
 import 'modules/config_price/api/config_price_api.dart';
@@ -46,7 +48,10 @@ class _RouteAppState extends State<RouteApp> {
           ],
         ),
         theme: appTheme,
-        localizationsDelegates: const [],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          MonthYearPickerLocalizations.delegate,
+        ],
         debugShowCheckedModeBanner: false,
       ),
     );

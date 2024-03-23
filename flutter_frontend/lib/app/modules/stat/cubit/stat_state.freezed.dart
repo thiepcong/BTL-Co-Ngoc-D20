@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$StatState {
+  String? get currentDistrict => throw _privateConstructorUsedError;
+  String? get currentWard => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   Error? get error => throw _privateConstructorUsedError;
 
@@ -29,7 +31,11 @@ abstract class $StatStateCopyWith<$Res> {
   factory $StatStateCopyWith(StatState value, $Res Function(StatState) then) =
       _$StatStateCopyWithImpl<$Res, StatState>;
   @useResult
-  $Res call({String? message, Error? error});
+  $Res call(
+      {String? currentDistrict,
+      String? currentWard,
+      String? message,
+      Error? error});
 }
 
 /// @nodoc
@@ -45,10 +51,20 @@ class _$StatStateCopyWithImpl<$Res, $Val extends StatState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? currentDistrict = freezed,
+    Object? currentWard = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
+      currentDistrict: freezed == currentDistrict
+          ? _value.currentDistrict
+          : currentDistrict // ignore: cast_nullable_to_non_nullable
+              as String?,
+      currentWard: freezed == currentWard
+          ? _value.currentWard
+          : currentWard // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -69,7 +85,11 @@ abstract class _$$StatStateImplCopyWith<$Res>
       __$$StatStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? message, Error? error});
+  $Res call(
+      {String? currentDistrict,
+      String? currentWard,
+      String? message,
+      Error? error});
 }
 
 /// @nodoc
@@ -83,10 +103,20 @@ class __$$StatStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? currentDistrict = freezed,
+    Object? currentWard = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
     return _then(_$StatStateImpl(
+      currentDistrict: freezed == currentDistrict
+          ? _value.currentDistrict
+          : currentDistrict // ignore: cast_nullable_to_non_nullable
+              as String?,
+      currentWard: freezed == currentWard
+          ? _value.currentWard
+          : currentWard // ignore: cast_nullable_to_non_nullable
+              as String?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -102,8 +132,14 @@ class __$$StatStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$StatStateImpl extends _StatState {
-  const _$StatStateImpl({this.message, this.error}) : super._();
+  const _$StatStateImpl(
+      {this.currentDistrict, this.currentWard, this.message, this.error})
+      : super._();
 
+  @override
+  final String? currentDistrict;
+  @override
+  final String? currentWard;
   @override
   final String? message;
   @override
@@ -111,7 +147,7 @@ class _$StatStateImpl extends _StatState {
 
   @override
   String toString() {
-    return 'StatState(message: $message, error: $error)';
+    return 'StatState(currentDistrict: $currentDistrict, currentWard: $currentWard, message: $message, error: $error)';
   }
 
   @override
@@ -119,12 +155,17 @@ class _$StatStateImpl extends _StatState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$StatStateImpl &&
+            (identical(other.currentDistrict, currentDistrict) ||
+                other.currentDistrict == currentDistrict) &&
+            (identical(other.currentWard, currentWard) ||
+                other.currentWard == currentWard) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message, error);
+  int get hashCode =>
+      Object.hash(runtimeType, currentDistrict, currentWard, message, error);
 
   @JsonKey(ignore: true)
   @override
@@ -134,10 +175,17 @@ class _$StatStateImpl extends _StatState {
 }
 
 abstract class _StatState extends StatState {
-  const factory _StatState({final String? message, final Error? error}) =
-      _$StatStateImpl;
+  const factory _StatState(
+      {final String? currentDistrict,
+      final String? currentWard,
+      final String? message,
+      final Error? error}) = _$StatStateImpl;
   const _StatState._() : super._();
 
+  @override
+  String? get currentDistrict;
+  @override
+  String? get currentWard;
   @override
   String? get message;
   @override

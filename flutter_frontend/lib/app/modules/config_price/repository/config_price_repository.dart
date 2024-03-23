@@ -10,7 +10,7 @@ class ConfigPriceRepository {
     return _api.getAllPriceList();
   }
 
-  Future<String> saveAllPriceList(List<PriceList> data) async {
-    return _api.saveAllPriceList(data: data);
+  Future<int> savePriceList(PriceList data) async {
+    return _api.savePriceList(data: data);
   }
 }
