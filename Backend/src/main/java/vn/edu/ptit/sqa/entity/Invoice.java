@@ -23,11 +23,14 @@ public class Invoice {
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
+    @OneToOne
+    private WaterMeter waterMeter;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User staff;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private WaterPriceTable waterPriceTable;
 
-    private boolean isDelete = false;
+    private boolean isDeleted = false;
 }

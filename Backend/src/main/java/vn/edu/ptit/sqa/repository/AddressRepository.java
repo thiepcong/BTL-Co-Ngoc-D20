@@ -12,13 +12,13 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Override
     Optional<Address> findById(Long id);
 
-    @Query(value = "SELECT a " +
-            "       FROM Address a " +
-            "       WHERE a.provine = ?1 " +
-            "       AND a.district = ?2 " +
-            "       AND a.ward = ?3 " +
-            "       AND a.isDeleted = false ")
-    List<Address> findByProvineAndDistrictAndWard(String provine, String district, String ward);
+//    @Query(value = "SELECT a " +
+//            "       FROM Address a " +
+//            "       WHERE a.provine = ?1 " +
+//            "       AND a.district = ?2 " +
+//            "       AND a.ward = ?3 " +
+//            "       AND a.isDeleted = false ")
+//    List<Address> findByProvineAndDistrictAndWard(String provine, String district, String ward);
 
 
 }

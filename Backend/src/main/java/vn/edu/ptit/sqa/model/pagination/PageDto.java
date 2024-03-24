@@ -15,7 +15,7 @@ public class PageDto {
     private int	numberOfElements;
     private boolean	first;
 
-    public PageDto populatePageDto(Page<?> page) {
+    public static PageDto populatePageDto(Page<?> page) {
         if (page == null) {
             return null;
         }

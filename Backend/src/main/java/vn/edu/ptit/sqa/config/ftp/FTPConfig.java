@@ -27,7 +27,8 @@ public class FTPConfig {
             ftpClient.connect(host, port);
             ftpClient.login(username, password);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println(e);
             // Handle exception
         }
         return ftpClient;

@@ -1,14 +1,15 @@
-package vn.edu.ptit.sqa.model.waterMeasurementReport;
+package vn.edu.ptit.sqa.model.reportInfor;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 public class ReportInforRequest {
     private String provine;
     private String district;
     private String ward;
+    private Date month;
     private int page;
     private int size;
-
 }
