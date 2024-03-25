@@ -23,6 +23,9 @@ dependencies:
   json_annotation: 4.8.1
   logger: 2.1.0
   json_serializable: 6.7.1
+  shared_preferences: 2.2.2
+  side_navigation: 1.0.4
+  month_year_picker: 0.3.0+1
 
 dev_dependencies:
   flutter_test:

@@ -29,28 +29,10 @@ class _$MainRouter extends RootStackRouter {
         child: const ManagerView(),
       );
     },
-    StatViewRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const StatView(),
-      );
-    },
-    ConfigPriceViewRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const ConfigPriceView(),
-      );
-    },
     TranferMailViewRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: const TranferMailView(),
-      );
-    },
-    StatListViewRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const StatListView(),
       );
     },
   };
@@ -72,20 +54,8 @@ class _$MainRouter extends RootStackRouter {
           path: 'manager',
         ),
         RouteConfig(
-          StatViewRoute.name,
-          path: 'stat',
-        ),
-        RouteConfig(
-          ConfigPriceViewRoute.name,
-          path: 'config_price',
-        ),
-        RouteConfig(
           TranferMailViewRoute.name,
           path: 'tranfer_mail',
-        ),
-        RouteConfig(
-          StatListViewRoute.name,
-          path: 'stat_list',
         ),
       ];
 }
@@ -115,30 +85,6 @@ class ManagerViewRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [StatView]
-class StatViewRoute extends PageRouteInfo<void> {
-  const StatViewRoute()
-      : super(
-          StatViewRoute.name,
-          path: 'stat',
-        );
-
-  static const String name = 'StatViewRoute';
-}
-
-/// generated route for
-/// [ConfigPriceView]
-class ConfigPriceViewRoute extends PageRouteInfo<void> {
-  const ConfigPriceViewRoute()
-      : super(
-          ConfigPriceViewRoute.name,
-          path: 'config_price',
-        );
-
-  static const String name = 'ConfigPriceViewRoute';
-}
-
-/// generated route for
 /// [TranferMailView]
 class TranferMailViewRoute extends PageRouteInfo<void> {
   const TranferMailViewRoute()
@@ -148,16 +94,4 @@ class TranferMailViewRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'TranferMailViewRoute';
-}
-
-/// generated route for
-/// [StatListView]
-class StatListViewRoute extends PageRouteInfo<void> {
-  const StatListViewRoute()
-      : super(
-          StatListViewRoute.name,
-          path: 'stat_list',
-        );
-
-  static const String name = 'StatListViewRoute';
 }
