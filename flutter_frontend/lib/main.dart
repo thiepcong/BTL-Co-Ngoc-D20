@@ -12,7 +12,7 @@ void main() async {
   EnvConfig devConfig = EnvConfig(
     appName: "",
     appVersion: "0.1",
-    apiBaseUrl: "",
+    apiBaseUrl: "http://127.0.0.1:8085",
     webBaseUrl: "",
     shouldCollectCrashLog: true,
     iOSAppId: '',

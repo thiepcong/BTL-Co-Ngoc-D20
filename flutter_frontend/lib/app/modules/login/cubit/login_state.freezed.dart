@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoginState {
+  bool get isLoading => throw _privateConstructorUsedError;
+  bool get authDone => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   Error? get error => throw _privateConstructorUsedError;
 
@@ -30,7 +32,7 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
-  $Res call({String? message, Error? error});
+  $Res call({bool isLoading, bool authDone, String? message, Error? error});
 }
 
 /// @nodoc
@@ -46,10 +48,20 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isLoading = null,
+    Object? authDone = null,
     Object? message = freezed,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      authDone: null == authDone
+          ? _value.authDone
+          : authDone // ignore: cast_nullable_to_non_nullable
+              as bool,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -70,7 +82,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       __$$LoginStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? message, Error? error});
+  $Res call({bool isLoading, bool authDone, String? message, Error? error});
 }
 
 /// @nodoc
@@ -84,10 +96,20 @@ class __$$LoginStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isLoading = null,
+    Object? authDone = null,
     Object? message = freezed,
     Object? error = freezed,
   }) {
     return _then(_$LoginStateImpl(
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      authDone: null == authDone
+          ? _value.authDone
+          : authDone // ignore: cast_nullable_to_non_nullable
+              as bool,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -103,8 +125,16 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoginStateImpl extends _LoginState {
-  const _$LoginStateImpl({this.message, this.error}) : super._();
+  const _$LoginStateImpl(
+      {this.isLoading = false, this.authDone = false, this.message, this.error})
+      : super._();
 
+  @override
+  @JsonKey()
+  final bool isLoading;
+  @override
+  @JsonKey()
+  final bool authDone;
   @override
   final String? message;
   @override
@@ -112,7 +142,7 @@ class _$LoginStateImpl extends _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(message: $message, error: $error)';
+    return 'LoginState(isLoading: $isLoading, authDone: $authDone, message: $message, error: $error)';
   }
 
   @override
@@ -120,12 +150,17 @@ class _$LoginStateImpl extends _LoginState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginStateImpl &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.authDone, authDone) ||
+                other.authDone == authDone) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message, error);
+  int get hashCode =>
+      Object.hash(runtimeType, isLoading, authDone, message, error);
 
   @JsonKey(ignore: true)
   @override
@@ -135,10 +170,17 @@ class _$LoginStateImpl extends _LoginState {
 }
 
 abstract class _LoginState extends LoginState {
-  const factory _LoginState({final String? message, final Error? error}) =
-      _$LoginStateImpl;
+  const factory _LoginState(
+      {final bool isLoading,
+      final bool authDone,
+      final String? message,
+      final Error? error}) = _$LoginStateImpl;
   const _LoginState._() : super._();
 
+  @override
+  bool get isLoading;
+  @override
+  bool get authDone;
   @override
   String? get message;
   @override

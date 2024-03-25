@@ -1,48 +1,42 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'price_scale.dart';
 
 class PriceList {
-  final int id;
+  final int? id;
   final DateTime applyDate;
-  final int status;
+  final int? status;
   final UserType userType;
   final List<PriceScale> listPriceScales;
 
   PriceList({
-    required this.id,
+    this.id,
     required this.applyDate,
-    required this.status,
+    this.status,
     required this.userType,
     required this.listPriceScales,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'applyDate': applyDate.toString(),
-      'listPriceScales': listPriceScales.map((x) => x.toMap()).toList(),
+      'applyDate': DateFormat('yyyy-MM-dd').format(applyDate),
+      'listPriceScales': listPriceScales.map((x) => x.toJson()).toList(),
     };
   }
 
-  factory PriceList.fromMap(Map<String, dynamic> map) {
+  factory PriceList.fromJson(Map<String, dynamic> map) {
     return PriceList(
       id: map['id'] as int,
       applyDate: DateTime.parse(map['applyDate']),
       status: map['status'] as int,
-      userType: UserType.fromMap(map['userType'] as Map<String, dynamic>),
+      userType: UserType.fromJson(map['userType'] as Map<String, dynamic>),
       listPriceScales: List<PriceScale>.from(
-        (map['listPriceScales'] as List<int>).map<PriceScale>(
-          (x) => PriceScale.fromMap(x as Map<String, dynamic>),
+        (map['listPriceScales'] as List).map<PriceScale>(
+          (x) => PriceScale.fromJson(x as Map<String, dynamic>),
         ),
       ),
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory PriceList.fromJson(String source) =>
-      PriceList.fromMap(json.decode(source) as Map<String, dynamic>);
 
   PriceList copyWith({
     int? id,
@@ -67,22 +61,17 @@ class UserType {
 
   UserType({required this.id, required this.typeName});
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,
       'typeName': typeName,
     };
   }
 
-  factory UserType.fromMap(Map<String, dynamic> map) {
+  factory UserType.fromJson(Map<String, dynamic> map) {
     return UserType(
       id: map['id'] as int,
       typeName: map['typeName'] as String,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserType.fromJson(String source) =>
-      UserType.fromMap(json.decode(source) as Map<String, dynamic>);
 }

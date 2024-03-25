@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/app/core/values/show_message_internal.dart';
 import 'package:flutter_frontend/app/core/widgets/button/primary_button.dart';
 
 import '../../../core/values/app_colors.dart';
@@ -36,61 +37,59 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
       listeners: [
         BlocListener<ConfigPriceCubit, ConfigPriceState>(
           listenWhen: (previous, current) =>
-              previous.isValidate != current.isValidate,
+              previous.message != current.message,
           listener: (context, state) {
-            if (state.isValidate == true) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Thông báo'),
-                    content: const Text('Thông tin đã được lưu!'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  );
-                },
-              );
+            if (state.message != null) {
+              ShowMessageInternal.showOverlay(context, state.message ?? '');
             }
           },
-        )
+        ),
       ],
       child: BlocBuilder<ConfigPriceCubit, ConfigPriceState>(
         builder: (context, state) {
-          final curentItem = state.curentItem;
-          final lastPriceScale =
-              (curentItem?.listPriceScales.isNotEmpty ?? false)
-                  ? curentItem!.listPriceScales.last
-                  : null;
+          final lastPriceScale = state.lastPriceScale;
           final cubit = context.read<ConfigPriceCubit>();
           return Scaffold(
             appBar: const CustomAppBar(label: 'Cấu hình giá nước'),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: DefaultTabController(
-                length: 3,
-                child: Column(
-                  children: [
-                    const TabBar(
-                      tabs: [
-                        Tab(text: 'Hộ nghèo'),
-                        Tab(text: 'Hộ cận nghèo'),
-                        Tab(text: 'Hộ cá nhân'),
-                      ],
-                    ),
-                    const Text(
-                      "*(Mỗi thang giá được tính từ lớn hơn hoặc bằng chỉ số bắt đầu và nhỏ hơn chỉ số kết thúc)",
-                      style: TextStyles.regularBlackS14,
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          SingleChildScrollView(
+            body: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: DefaultTabController(
+                    length: 3,
+                    child: Column(
+                      children: [
+                        BlocBuilder<ConfigPriceCubit, ConfigPriceState>(
+                          builder: (context, state) {
+                            final cubit = context.read<ConfigPriceCubit>();
+                            return TabBar(
+                              onTap: (index) {
+                                switch (index) {
+                                  case 0:
+                                    cubit.getByType("Hộ Nghèo");
+                                    break;
+                                  case 1:
+                                    cubit.getByType("Hộ Cận Nghèo");
+                                    break;
+                                  default:
+                                    cubit.getByType("Hộ Cá Nhân");
+                                    break;
+                                }
+                              },
+                              tabs: const [
+                                Tab(text: 'Hộ nghèo'),
+                                Tab(text: 'Hộ cận nghèo'),
+                                Tab(text: 'Hộ cá nhân'),
+                              ],
+                            );
+                          },
+                        ),
+                        const Text(
+                          "*(Mỗi thang giá được tính từ lớn hơn hoặc bằng chỉ số bắt đầu và nhỏ hơn chỉ số kết thúc)",
+                          style: TextStyles.regularBlackS14,
+                        ),
+                        Expanded(
+                          child: SingleChildScrollView(
                             child: Column(
                               children: [
                                 const SizedBox(height: 10),
@@ -116,55 +115,46 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                                       TableCell(child: Text('Đơn giá')),
                                       TableCell(child: Text('')),
                                     ]),
-                                    ...curentItem != null
-                                        ? curentItem.listPriceScales
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                            final index = entry.key;
-                                            final item = entry.value;
-                                            return TableRowItem(
-                                              index,
-                                              item,
-                                              onChangeStartIndex: (e) =>
-                                                  cubit.updatePriceListByItem(
-                                                index,
-                                                startIndex: e,
-                                              ),
-                                              onChangeEndIndex: (e) =>
-                                                  cubit.updatePriceListByItem(
-                                                index,
-                                                endIndex: e,
-                                              ),
-                                              onChangePrice: (e) =>
-                                                  cubit.updatePriceListByItem(
-                                                index,
-                                                price: e,
-                                              ),
-                                              onDelete: () => _showDialogDelete(
-                                                  () => cubit
-                                                      .deletePriceScaleByIndex(
-                                                          index)),
-                                            );
-                                          }).toList()
-                                        : [],
+                                    ...state.currentList
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
+                                      final index = entry.key;
+                                      final item = entry.value;
+                                      return TableRowItem(
+                                        index,
+                                        item,
+                                        onChangeStartIndex: (e) =>
+                                            cubit.updatePriceListByItem(
+                                          index,
+                                          startIndex: e,
+                                        ),
+                                        onChangeEndIndex: (e) =>
+                                            cubit.updatePriceListByItem(
+                                          index,
+                                          endIndex: e,
+                                        ),
+                                        onChangePrice: (e) =>
+                                            cubit.updatePriceListByItem(
+                                          index,
+                                          price: e,
+                                        ),
+                                        onDelete: () => _showDialogDelete(() =>
+                                            cubit.deletePriceScaleByIndex(
+                                                index)),
+                                      );
+                                    }).toList(),
                                     TableRow(
                                       children: [
                                         TableCell(
                                           child: CustomTextField(
-                                            text: curentItem != null &&
-                                                    curentItem.listPriceScales
-                                                        .isNotEmpty
-                                                ? curentItem.listPriceScales
-                                                        .length +
-                                                    1
-                                                : 1,
+                                            text: state.currentList.length + 1,
                                             enable: false,
                                           ),
                                         ),
                                         TableCell(
                                             child: CustomTextField(
-                                          text: lastPriceScale?.endIndex ?? 0,
+                                          text: lastPriceScale?.startIndex,
                                           enable: false,
                                         )),
                                         const TableCell(
@@ -185,26 +175,47 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                                 const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    cubit.save();
+                                    _showDateTimeDialog((e) {
+                                      cubit.save(e);
+                                    });
                                   },
                                   child: const Text('Lưu'),
                                 ),
                               ],
                             ),
                           ),
-                          const Center(child: Text('Hộ cận nghèo')),
-                          const Center(child: Text('Hộ cá nhân')),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                state.isLoading
+                    ? Container(
+                        color: AppColors.colorFF000000.withOpacity(0.5),
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(),
+                      )
+                    : const SizedBox.shrink()
+              ],
             ),
           );
         },
       ),
     );
+  }
+
+  void _showDateTimeDialog(Function(DateTime) onSelectDate) async {
+    DateTime? picker = await showDatePicker(
+      context: context,
+      fieldLabelText: 'Chọn ngày áp dụng',
+      helpText: 'Chọn ngày áp dụng',
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      lastDate: DateTime(2100),
+      locale: const Locale('vi'),
+    );
+    if (picker != null) onSelectDate.call(picker);
   }
 
   void _showDialogDelete(VoidCallback? onDelete) {

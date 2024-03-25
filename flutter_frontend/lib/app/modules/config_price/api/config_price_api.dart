@@ -16,10 +16,11 @@ class ConfigPriceApi extends BaseRemoteSource {
   }
 
   Future<int> savePriceList({required PriceList data}) async {
-    final request = dioClient.post(ApiUrlConstants.configPrice2(data.userType.id), data:data.toJson());
+    final request = dioClient.post(
+        ApiUrlConstants.configPrice2(data.userType.id),
+        data: data.toJson());
     try {
-      return callApiWithErrorParser(request)
-          .then((value) => value.data['id']);
+      return callApiWithErrorParser(request).then((value) => 1);
     } catch (e) {
       rethrow;
     }

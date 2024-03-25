@@ -19,9 +19,11 @@ class ShowMessageInternal {
               color: AppColors.colorFFFFFFFF,
               border: Border.all(color: AppColors.colorFF03456e),
             ),
+            alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             child: Text(
               message,
+              textAlign: TextAlign.center,
               style: TextStyles.mediumMBlackS18,
             ),
           ),
