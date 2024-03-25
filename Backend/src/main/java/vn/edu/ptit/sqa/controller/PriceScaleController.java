@@ -10,6 +10,7 @@ import vn.edu.ptit.sqa.service.PriceScaleService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/price_scale")
 public class PriceScaleController {

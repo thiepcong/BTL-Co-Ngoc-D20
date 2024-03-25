@@ -9,6 +9,7 @@ import vn.edu.ptit.sqa.model.TemplateAM;
 import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
 import vn.edu.ptit.sqa.service.EmailTemplateService;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/emailTemplate")

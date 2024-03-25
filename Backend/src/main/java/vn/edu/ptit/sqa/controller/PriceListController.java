@@ -8,6 +8,7 @@ import vn.edu.ptit.sqa.model.PriceListRequest;
 import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
 import vn.edu.ptit.sqa.service.PriceListService;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/price_list")
 public class PriceListController {

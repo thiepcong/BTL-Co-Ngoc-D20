@@ -2,7 +2,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: chidtw09@gmail.com
+    username: huynhndev0403@gmail.com
     password:
     properties:
       mail:
@@ -20,14 +20,14 @@ spring:
   datasource:
     url : jdbc:mysql://127.0.0.1:3306/HTTinhTienNuoc
     username : root
-    password :
+    password : 123456
     driver-class-name : com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
 ftp:
-  host: 192.168.0.101
+  host: 192.168.1.20
   port: 21
-  username: ftp-user
-  password: 123456789
+  username: thiep
+  password: 123456

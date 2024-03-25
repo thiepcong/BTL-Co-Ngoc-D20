@@ -3,14 +3,12 @@ package vn.edu.ptit.sqa.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.edu.ptit.sqa.model.authentication.LoginRequest;
 import vn.edu.ptit.sqa.model.authentication.RegisterRequest;
 import vn.edu.ptit.sqa.service.AuthenticationService;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
