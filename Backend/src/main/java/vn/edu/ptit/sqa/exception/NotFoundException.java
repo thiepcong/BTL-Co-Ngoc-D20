@@ -13,4 +13,7 @@ public class NotFoundException extends RuntimeExceptionHandling {
         super(message + " " + MessageUtil.getMessage("message.notFound"));
     }
 
+    public NotFoundException(int code, String message) {
+        super(code + " " +  message + " " + MessageUtil.getMessage("message.notFound"));
+    }
 }
