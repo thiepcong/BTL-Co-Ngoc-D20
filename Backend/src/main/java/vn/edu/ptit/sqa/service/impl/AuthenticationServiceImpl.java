@@ -10,12 +10,14 @@ import vn.edu.ptit.sqa.entity.Role;
 import vn.edu.ptit.sqa.entity.User;
 import vn.edu.ptit.sqa.enums.RoleName;
 import vn.edu.ptit.sqa.exception.ExistedException;
+import vn.edu.ptit.sqa.model.UserDto;
 import vn.edu.ptit.sqa.model.authentication.LoginRequest;
 import vn.edu.ptit.sqa.model.authentication.LoginResponse;
 import vn.edu.ptit.sqa.model.authentication.RegisterRequest;
 import vn.edu.ptit.sqa.repository.RoleRepo;
 import vn.edu.ptit.sqa.repository.UserRepository;
 import vn.edu.ptit.sqa.service.AuthenticationService;
+import vn.edu.ptit.sqa.service.UserService;
 import vn.edu.ptit.sqa.util.converter.ConverterUtil;
 
 import java.sql.Timestamp;
@@ -36,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     RoleRepo roleRepo;
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Override
     public LoginResponse authenticate(LoginRequest request) {
         authenticationManager.authenticate(
@@ -47,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         Optional<User> user = Optional.ofNullable(userRepo.findByUsername(request.getUsername())
                 .orElseThrow(() -> new ExistedException("Username " + request.getUsername())));
         var token = jwtService.generateToken(user.get());
-        return new LoginResponse(token);
+        return new LoginResponse(token, ConverterUtil.mappingToObject(user, UserDto.class));
     }
 
 
@@ -66,6 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepo.save(user);
         var token = jwtService.generateToken(user);
-        return new LoginResponse(token);
+        UserDto  userDto = ConverterUtil.mappingToObject(user, UserDto.class);
+        return new LoginResponse(token, userDto);
     }
 }
