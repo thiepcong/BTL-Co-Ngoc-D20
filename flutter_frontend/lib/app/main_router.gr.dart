@@ -24,9 +24,14 @@ class _$MainRouter extends RootStackRouter {
       );
     },
     ManagerViewRoute.name: (routeData) {
+      final args = routeData.argsAs<ManagerViewRouteArgs>(
+          orElse: () => const ManagerViewRouteArgs());
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const ManagerView(),
+        child: ManagerView(
+          key: args.key,
+          user: args.user,
+        ),
       );
     },
     TranferMailViewRoute.name: (routeData) {
@@ -74,14 +79,36 @@ class LoginViewRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ManagerView]
-class ManagerViewRoute extends PageRouteInfo<void> {
-  const ManagerViewRoute()
-      : super(
+class ManagerViewRoute extends PageRouteInfo<ManagerViewRouteArgs> {
+  ManagerViewRoute({
+    Key? key,
+    User? user,
+  }) : super(
           ManagerViewRoute.name,
           path: 'manager',
+          args: ManagerViewRouteArgs(
+            key: key,
+            user: user,
+          ),
         );
 
   static const String name = 'ManagerViewRoute';
+}
+
+class ManagerViewRouteArgs {
+  const ManagerViewRouteArgs({
+    this.key,
+    this.user,
+  });
+
+  final Key? key;
+
+  final User? user;
+
+  @override
+  String toString() {
+    return 'ManagerViewRouteArgs{key: $key, user: $user}';
+  }
 }
 
 /// generated route for

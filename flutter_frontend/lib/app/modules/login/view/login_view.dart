@@ -43,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
               previous.authDone != current.authDone,
           listener: (context, state) {
             if (state.authDone) {
-              context.pushRoute(const ManagerViewRoute());
+              context.pushRoute(ManagerViewRoute(user: state.user));
             }
           },
         ),

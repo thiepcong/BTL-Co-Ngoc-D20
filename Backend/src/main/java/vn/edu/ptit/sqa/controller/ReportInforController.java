@@ -16,18 +16,18 @@ public class ReportInforController {
     @Autowired
     private CustomerInforService customerInforService;
 
-    @GetMapping("/getDebtCustomer")
+    @PostMapping("/getDebtCustomer")
     public ResponseEntity<?> getDebtCustomer(@RequestBody ReportInforRequest request){
         return ResponseEntity.ok(customerInforService.getDebtCustomerNumber(request));
     }
 
-    @GetMapping("/getDebtCustomerList")
+    @PostMapping("/getDebtCustomerList")
     public ResponseEntity<?> getDebtCustomerList(@RequestBody ReportInforRequest request){
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
         return ResponseEntity.ok(customerInforService.getDebtCustomerList(request, pageable));
     }
 
-    @GetMapping("/getNewCustomers")
+    @PostMapping("/getNewCustomers")
     public ResponseEntity<?> getNewCustomers(@RequestBody ReportInforRequest request){
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
         return ResponseEntity.ok(customerInforService.getNewCustomer(request, pageable));

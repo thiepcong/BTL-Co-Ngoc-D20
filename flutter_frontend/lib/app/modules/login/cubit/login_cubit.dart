@@ -17,8 +17,12 @@ class LoginCubit extends Cubit<LoginState> {
       final res =
           await _loginRepository.login(usename: username, password: password);
       final pre = await SharedPreferences.getInstance();
-      pre.setString(SecureKeyConstants.accessToken, res);
-      emit(state.copyWith(authDone: true, isLoading: false));
+      pre.setString(SecureKeyConstants.accessToken, res.token);
+      emit(state.copyWith(
+        authDone: true,
+        isLoading: false,
+        user: res.userInfo,
+      ));
     } catch (e) {
       if (e is BadRequestException || e is NetworkException) {
         emit(state.copyWith(

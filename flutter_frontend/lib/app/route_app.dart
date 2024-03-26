@@ -7,6 +7,8 @@ import 'core/values/app_theme.dart';
 import 'main_router.dart';
 import 'modules/config_price/api/config_price_api.dart';
 import 'modules/config_price/repository/config_price_repository.dart';
+import 'modules/list_client/api/list_client_api.dart';
+import 'modules/list_client/repository/list_client_repository.dart';
 import 'modules/login/api/login_api.dart';
 import 'modules/login/repository/login_repository.dart';
 
@@ -38,6 +40,9 @@ class _RouteAppState extends State<RouteApp> {
         ),
         RepositoryProvider<ConfigPriceRepository>(
           create: (context) => ConfigPriceRepository(ConfigPriceApi()),
+        ),
+        RepositoryProvider<ListClientRepository>(
+          create: (context) => ListClientRepository(ListClientApi()),
         ),
       ],
       child: MaterialApp.router(

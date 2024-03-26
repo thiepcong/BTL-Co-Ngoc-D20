@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LoginState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get authDone => throw _privateConstructorUsedError;
+  User? get user => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   Error? get error => throw _privateConstructorUsedError;
 
@@ -32,7 +33,12 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
-  $Res call({bool isLoading, bool authDone, String? message, Error? error});
+  $Res call(
+      {bool isLoading,
+      bool authDone,
+      User? user,
+      String? message,
+      Error? error});
 }
 
 /// @nodoc
@@ -50,6 +56,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   $Res call({
     Object? isLoading = null,
     Object? authDone = null,
+    Object? user = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
@@ -62,6 +69,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.authDone
           : authDone // ignore: cast_nullable_to_non_nullable
               as bool,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -82,7 +93,12 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       __$$LoginStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, bool authDone, String? message, Error? error});
+  $Res call(
+      {bool isLoading,
+      bool authDone,
+      User? user,
+      String? message,
+      Error? error});
 }
 
 /// @nodoc
@@ -98,6 +114,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? authDone = null,
+    Object? user = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
@@ -110,6 +127,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.authDone
           : authDone // ignore: cast_nullable_to_non_nullable
               as bool,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -126,7 +147,11 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 
 class _$LoginStateImpl extends _LoginState {
   const _$LoginStateImpl(
-      {this.isLoading = false, this.authDone = false, this.message, this.error})
+      {this.isLoading = false,
+      this.authDone = false,
+      this.user,
+      this.message,
+      this.error})
       : super._();
 
   @override
@@ -136,13 +161,15 @@ class _$LoginStateImpl extends _LoginState {
   @JsonKey()
   final bool authDone;
   @override
+  final User? user;
+  @override
   final String? message;
   @override
   final Error? error;
 
   @override
   String toString() {
-    return 'LoginState(isLoading: $isLoading, authDone: $authDone, message: $message, error: $error)';
+    return 'LoginState(isLoading: $isLoading, authDone: $authDone, user: $user, message: $message, error: $error)';
   }
 
   @override
@@ -154,13 +181,14 @@ class _$LoginStateImpl extends _LoginState {
                 other.isLoading == isLoading) &&
             (identical(other.authDone, authDone) ||
                 other.authDone == authDone) &&
+            (identical(other.user, user) || other.user == user) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, isLoading, authDone, message, error);
+      Object.hash(runtimeType, isLoading, authDone, user, message, error);
 
   @JsonKey(ignore: true)
   @override
@@ -173,6 +201,7 @@ abstract class _LoginState extends LoginState {
   const factory _LoginState(
       {final bool isLoading,
       final bool authDone,
+      final User? user,
       final String? message,
       final Error? error}) = _$LoginStateImpl;
   const _LoginState._() : super._();
@@ -181,6 +210,8 @@ abstract class _LoginState extends LoginState {
   bool get isLoading;
   @override
   bool get authDone;
+  @override
+  User? get user;
   @override
   String? get message;
   @override

@@ -1,10 +1,11 @@
+import '../../../core/models/login_response.dart';
 import '../api/login_api.dart';
 
 class LoginRepository {
   final LoginApi _api;
   LoginRepository(this._api);
 
-  Future<String> login({
+  Future<LoginResponse> login({
     required String usename,
     required String password,
   }) {

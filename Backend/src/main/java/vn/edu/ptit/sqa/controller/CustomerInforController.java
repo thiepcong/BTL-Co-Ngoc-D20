@@ -16,19 +16,19 @@ public class CustomerInforController {
     @Autowired
     private CustomerInforService service;
 
-    @GetMapping("/listByAdsress")
+    @PostMapping("/listByAdsress")
     public ResponseEntity<?> getClientListByAddress(@RequestBody ReportInforRequest request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
         return ResponseEntity.ok(service.getReportByAddress(request, pageable));
     }
 
-    @GetMapping("/UnPaidListByAdsress")
+    @PostMapping("/UnPaidListByAdsress")
     public ResponseEntity<?> getUnPaidClientList(@RequestBody ReportInforRequest request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
         return ResponseEntity.ok(service.getUnPaidClientList(request, pageable));
     }
 
-    @GetMapping("/getPaidCustomers")
+    @PostMapping("/getPaidCustomers")
     public ResponseEntity<?> getNewCustomers(@RequestBody ReportInforRequest request){
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
         return ResponseEntity.ok(service.getPaidCustomer(request, pageable));

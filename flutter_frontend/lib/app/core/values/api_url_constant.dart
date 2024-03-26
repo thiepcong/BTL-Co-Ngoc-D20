@@ -13,4 +13,6 @@ class ApiUrlConstants {
 
   static String tranferMail(int pageNum, int pageSize) =>
       '$baseUrl/api/emailTemplate?pageNum=$pageNum&pageSize=$pageSize';
+
+  static String listClient = '$baseUrl/api/customer/listByAdsress';
 }
