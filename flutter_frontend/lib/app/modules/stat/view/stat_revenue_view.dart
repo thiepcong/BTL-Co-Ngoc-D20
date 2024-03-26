@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
@@ -6,7 +5,6 @@ import 'package:month_year_picker/month_year_picker.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
 import '../../../core/values/text_styles.dart';
-import '../../../main_router.dart';
 import '../cubit/stat_cubit.dart';
 import '../cubit/stat_state.dart';
 
@@ -100,7 +98,9 @@ class _StatRevenueViewState extends State<StatRevenueView> {
                                   ),
                                 )
                               : DropdownButtonFormField<String>(
-                                  value: state.currentWard,
+                                  value: state.currentWard?.isNotEmpty ?? false
+                                      ? state.currentWard
+                                      : null,
                                   items: wards.map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -229,12 +229,12 @@ class _StatRevenueViewState extends State<StatRevenueView> {
                       ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      context.pushRoute(const TranferMailViewRoute());
-                    },
-                    child: const Text('Nhắc nhở'),
-                  ),
+                  // TextButton(
+                  //   onPressed: () {
+                  //     context.pushRoute(const TranferMailViewRoute());
+                  //   },
+                  //   child: const Text('Nhắc nhở'),
+                  // ),
                   TextButton(
                     onPressed: () {
                       // Xử lý khi nhấn nút Nhắc nhở

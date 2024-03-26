@@ -25,9 +25,8 @@ class _ListClientViewState extends State<ListClientView> {
   int _currentPage = 1;
   final int _totalPages = 100;
 
-  DateTime _month = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(
+      BuildContext context, Function(DateTime) onSelectDate) async {
     final DateTime? picked = await showMonthYearPicker(
         context: context,
         initialDate: DateTime.now(),
@@ -35,9 +34,7 @@ class _ListClientViewState extends State<ListClientView> {
         lastDate: DateTime.now(),
         locale: const Locale('vi'));
     if (picked != null) {
-      setState(() {
-        _month = picked;
-      });
+      onSelectDate.call(picked);
     }
   }
 
@@ -124,7 +121,11 @@ class _ListClientViewState extends State<ListClientView> {
                                           ),
                                         )
                                       : DropdownButtonFormField<String>(
-                                          value: state.currentWard,
+                                          value:
+                                              state.currentWard?.isNotEmpty ??
+                                                      false
+                                                  ? state.currentWard
+                                                  : null,
                                           items: wards.map((String value) {
                                             return DropdownMenuItem<String>(
                                               value: value,
@@ -186,12 +187,19 @@ class _ListClientViewState extends State<ListClientView> {
                               decoration: InputDecoration(
                                 labelText: 'Tháng',
                                 suffixIcon: IconButton(
-                                  onPressed: () => _selectDate(context),
+                                  onPressed: () => _selectDate(
+                                    context,
+                                    (e) => cubit.setCurrentSelectDate(e),
+                                  ),
                                   icon: const Icon(Icons.calendar_today),
                                 ),
                               ),
                               controller: TextEditingController(
-                                  text: _month.toString().substring(0, 7)),
+                                  text: state.currentSelectDate != null
+                                      ? state.currentSelectDate
+                                          .toString()
+                                          .substring(0, 7)
+                                      : ''),
                               readOnly: true,
                             ),
                           ),
@@ -199,6 +207,7 @@ class _ListClientViewState extends State<ListClientView> {
                           SizedBox(
                             width: 200,
                             child: DropdownButtonFormField<String>(
+                              value: state.currentFilter,
                               items: ['Chưa đóng tiền', 'Đã đóng tiền']
                                   .map((String value) {
                                 return DropdownMenuItem<String>(
@@ -206,7 +215,8 @@ class _ListClientViewState extends State<ListClientView> {
                                   child: Text(value),
                                 );
                               }).toList(),
-                              onChanged: (value) {},
+                              onChanged: (value) =>
+                                  cubit.setCurrentFilter(value),
                               hint: const Text('Lọc danh sách'),
                             ),
                           ),
@@ -248,13 +258,20 @@ class _ListClientViewState extends State<ListClientView> {
                                 TableCell(child: Center(child: Text('Chọn')))
                               ],
                             ),
-                            ...state.customers
-                                .asMap()
-                                .entries
-                                .map(
-                                  (e) => TableRowItem(e.value, e.key),
-                                )
-                                .toList(),
+                            ...state.currentItem?.reportDTOList
+                                    .asMap()
+                                    .entries
+                                    .map(
+                                      (e) => TableRowItem(
+                                        e.value,
+                                        e.key,
+                                        state.customerMails.contains(e.value),
+                                        (ee) => cubit.setCurrentTrandMail(
+                                            e.value, ee),
+                                      ),
+                                    )
+                                    .toList() ??
+                                [],
                           ],
                         ),
                       ),
@@ -318,8 +335,10 @@ class _ListClientViewState extends State<ListClientView> {
 class TableRowItem extends TableRow {
   final Customer item;
   final int index;
+  final bool isChoose;
+  final void Function(bool?)? onChanged;
 
-  const TableRowItem(this.item, this.index);
+  const TableRowItem(this.item, this.index, this.isChoose, this.onChanged);
   @override
   List<Widget> get children => [
         TableCell(child: Center(child: Text(index.toString()))),
@@ -332,7 +351,7 @@ class TableRowItem extends TableRow {
             child: Center(child: Text(getByType(item.status.toString())))),
         TableCell(
             child:
-                Center(child: Checkbox(value: false, onChanged: (value) {}))),
+                Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
       ];
 
   String getByType(String type) {

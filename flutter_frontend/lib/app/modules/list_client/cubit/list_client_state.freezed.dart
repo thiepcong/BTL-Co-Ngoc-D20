@@ -16,10 +16,13 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ListClientState {
-  List<Customer> get customers => throw _privateConstructorUsedError;
+  StatModel? get currentItem => throw _privateConstructorUsedError;
+  List<Customer> get customerMails => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  String? get currentFilter => throw _privateConstructorUsedError;
   String? get currentDistrict => throw _privateConstructorUsedError;
   String? get currentWard => throw _privateConstructorUsedError;
+  DateTime? get currentSelectDate => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   Error? get error => throw _privateConstructorUsedError;
 
@@ -35,10 +38,13 @@ abstract class $ListClientStateCopyWith<$Res> {
       _$ListClientStateCopyWithImpl<$Res, ListClientState>;
   @useResult
   $Res call(
-      {List<Customer> customers,
+      {StatModel? currentItem,
+      List<Customer> customerMails,
       bool isLoading,
+      String? currentFilter,
       String? currentDistrict,
       String? currentWard,
+      DateTime? currentSelectDate,
       String? message,
       Error? error});
 }
@@ -56,22 +62,33 @@ class _$ListClientStateCopyWithImpl<$Res, $Val extends ListClientState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? customers = null,
+    Object? currentItem = freezed,
+    Object? customerMails = null,
     Object? isLoading = null,
+    Object? currentFilter = freezed,
     Object? currentDistrict = freezed,
     Object? currentWard = freezed,
+    Object? currentSelectDate = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
-      customers: null == customers
-          ? _value.customers
-          : customers // ignore: cast_nullable_to_non_nullable
+      currentItem: freezed == currentItem
+          ? _value.currentItem
+          : currentItem // ignore: cast_nullable_to_non_nullable
+              as StatModel?,
+      customerMails: null == customerMails
+          ? _value.customerMails
+          : customerMails // ignore: cast_nullable_to_non_nullable
               as List<Customer>,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      currentFilter: freezed == currentFilter
+          ? _value.currentFilter
+          : currentFilter // ignore: cast_nullable_to_non_nullable
+              as String?,
       currentDistrict: freezed == currentDistrict
           ? _value.currentDistrict
           : currentDistrict // ignore: cast_nullable_to_non_nullable
@@ -80,6 +97,10 @@ class _$ListClientStateCopyWithImpl<$Res, $Val extends ListClientState>
           ? _value.currentWard
           : currentWard // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentSelectDate: freezed == currentSelectDate
+          ? _value.currentSelectDate
+          : currentSelectDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -101,10 +122,13 @@ abstract class _$$ListClientStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Customer> customers,
+      {StatModel? currentItem,
+      List<Customer> customerMails,
       bool isLoading,
+      String? currentFilter,
       String? currentDistrict,
       String? currentWard,
+      DateTime? currentSelectDate,
       String? message,
       Error? error});
 }
@@ -120,22 +144,33 @@ class __$$ListClientStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? customers = null,
+    Object? currentItem = freezed,
+    Object? customerMails = null,
     Object? isLoading = null,
+    Object? currentFilter = freezed,
     Object? currentDistrict = freezed,
     Object? currentWard = freezed,
+    Object? currentSelectDate = freezed,
     Object? message = freezed,
     Object? error = freezed,
   }) {
     return _then(_$ListClientStateImpl(
-      customers: null == customers
-          ? _value._customers
-          : customers // ignore: cast_nullable_to_non_nullable
+      currentItem: freezed == currentItem
+          ? _value.currentItem
+          : currentItem // ignore: cast_nullable_to_non_nullable
+              as StatModel?,
+      customerMails: null == customerMails
+          ? _value._customerMails
+          : customerMails // ignore: cast_nullable_to_non_nullable
               as List<Customer>,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      currentFilter: freezed == currentFilter
+          ? _value.currentFilter
+          : currentFilter // ignore: cast_nullable_to_non_nullable
+              as String?,
       currentDistrict: freezed == currentDistrict
           ? _value.currentDistrict
           : currentDistrict // ignore: cast_nullable_to_non_nullable
@@ -144,6 +179,10 @@ class __$$ListClientStateImplCopyWithImpl<$Res>
           ? _value.currentWard
           : currentWard // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentSelectDate: freezed == currentSelectDate
+          ? _value.currentSelectDate
+          : currentSelectDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -160,31 +199,40 @@ class __$$ListClientStateImplCopyWithImpl<$Res>
 
 class _$ListClientStateImpl extends _ListClientState {
   const _$ListClientStateImpl(
-      {final List<Customer> customers = const [],
+      {this.currentItem,
+      final List<Customer> customerMails = const [],
       this.isLoading = false,
+      this.currentFilter,
       this.currentDistrict,
       this.currentWard,
+      this.currentSelectDate,
       this.message,
       this.error})
-      : _customers = customers,
+      : _customerMails = customerMails,
         super._();
 
-  final List<Customer> _customers;
+  @override
+  final StatModel? currentItem;
+  final List<Customer> _customerMails;
   @override
   @JsonKey()
-  List<Customer> get customers {
-    if (_customers is EqualUnmodifiableListView) return _customers;
+  List<Customer> get customerMails {
+    if (_customerMails is EqualUnmodifiableListView) return _customerMails;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_customers);
+    return EqualUnmodifiableListView(_customerMails);
   }
 
   @override
   @JsonKey()
   final bool isLoading;
   @override
+  final String? currentFilter;
+  @override
   final String? currentDistrict;
   @override
   final String? currentWard;
+  @override
+  final DateTime? currentSelectDate;
   @override
   final String? message;
   @override
@@ -192,7 +240,7 @@ class _$ListClientStateImpl extends _ListClientState {
 
   @override
   String toString() {
-    return 'ListClientState(customers: $customers, isLoading: $isLoading, currentDistrict: $currentDistrict, currentWard: $currentWard, message: $message, error: $error)';
+    return 'ListClientState(currentItem: $currentItem, customerMails: $customerMails, isLoading: $isLoading, currentFilter: $currentFilter, currentDistrict: $currentDistrict, currentWard: $currentWard, currentSelectDate: $currentSelectDate, message: $message, error: $error)';
   }
 
   @override
@@ -200,14 +248,20 @@ class _$ListClientStateImpl extends _ListClientState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ListClientStateImpl &&
+            (identical(other.currentItem, currentItem) ||
+                other.currentItem == currentItem) &&
             const DeepCollectionEquality()
-                .equals(other._customers, _customers) &&
+                .equals(other._customerMails, _customerMails) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.currentFilter, currentFilter) ||
+                other.currentFilter == currentFilter) &&
             (identical(other.currentDistrict, currentDistrict) ||
                 other.currentDistrict == currentDistrict) &&
             (identical(other.currentWard, currentWard) ||
                 other.currentWard == currentWard) &&
+            (identical(other.currentSelectDate, currentSelectDate) ||
+                other.currentSelectDate == currentSelectDate) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.error, error) || other.error == error));
   }
@@ -215,10 +269,13 @@ class _$ListClientStateImpl extends _ListClientState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_customers),
+      currentItem,
+      const DeepCollectionEquality().hash(_customerMails),
       isLoading,
+      currentFilter,
       currentDistrict,
       currentWard,
+      currentSelectDate,
       message,
       error);
 
@@ -232,22 +289,31 @@ class _$ListClientStateImpl extends _ListClientState {
 
 abstract class _ListClientState extends ListClientState {
   const factory _ListClientState(
-      {final List<Customer> customers,
+      {final StatModel? currentItem,
+      final List<Customer> customerMails,
       final bool isLoading,
+      final String? currentFilter,
       final String? currentDistrict,
       final String? currentWard,
+      final DateTime? currentSelectDate,
       final String? message,
       final Error? error}) = _$ListClientStateImpl;
   const _ListClientState._() : super._();
 
   @override
-  List<Customer> get customers;
+  StatModel? get currentItem;
+  @override
+  List<Customer> get customerMails;
   @override
   bool get isLoading;
+  @override
+  String? get currentFilter;
   @override
   String? get currentDistrict;
   @override
   String? get currentWard;
+  @override
+  DateTime? get currentSelectDate;
   @override
   String? get message;
   @override

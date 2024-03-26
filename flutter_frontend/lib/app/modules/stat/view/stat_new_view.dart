@@ -1,12 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+import '../../../core/models/customer.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
 import '../../../core/values/text_styles.dart';
-import '../../../main_router.dart';
 import '../cubit/stat_cubit.dart';
 import '../cubit/stat_state.dart';
 
@@ -21,9 +20,8 @@ class _StatNewViewState extends State<StatNewView> {
   int _currentPage = 1;
   final int _totalPages = 100;
 
-  DateTime _month = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(
+      BuildContext context, Function(DateTime) onSelectDate) async {
     final DateTime? picked = await showMonthYearPicker(
         context: context,
         initialDate: DateTime.now(),
@@ -31,9 +29,7 @@ class _StatNewViewState extends State<StatNewView> {
         lastDate: DateTime.now(),
         locale: const Locale('vi'));
     if (picked != null) {
-      setState(() {
-        _month = picked;
-      });
+      onSelectDate.call(picked);
     }
   }
 
@@ -100,7 +96,9 @@ class _StatNewViewState extends State<StatNewView> {
                                   ),
                                 )
                               : DropdownButtonFormField<String>(
-                                  value: state.currentWard,
+                                  value: state.currentWard?.isNotEmpty ?? false
+                                      ? state.currentWard
+                                      : null,
                                   items: wards.map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -121,7 +119,7 @@ class _StatNewViewState extends State<StatNewView> {
                   const SizedBox(width: 24),
                   ElevatedButton(
                     onPressed: () {
-                      // Xử lý khi nhấn nút Xem
+                      cubit.getNewCustomers();
                     },
                     child: const Text('Xem'),
                   ),
@@ -147,41 +145,46 @@ class _StatNewViewState extends State<StatNewView> {
                   decoration: InputDecoration(
                     labelText: 'Tháng',
                     suffixIcon: IconButton(
-                      onPressed: () => _selectDate(context),
+                      onPressed: () => _selectDate(
+                        context,
+                        (e) => cubit.setCurrentSelectDate(e),
+                      ),
                       icon: const Icon(Icons.calendar_today),
                     ),
                   ),
                   controller: TextEditingController(
-                      text: _month.toString().substring(0, 7)),
+                      text: state.currentSelectDate != null
+                          ? state.currentSelectDate.toString().substring(0, 7)
+                          : ''),
                   readOnly: true,
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 180),
-              child: Table(
-                border: TableBorder.all(),
-                columnWidths: const {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(1),
-                },
-                children: const [
-                  TableRow(
-                    children: [
-                      TableCell(
-                          child: Center(child: Text('Số lượng hộ sử dụng'))),
-                      TableCell(child: Center(child: Text('Tỉ lệ hộ sử dụng'))),
-                    ],
-                  ),
-                  TableRow(
-                    children: [
-                      TableCell(child: Center(child: Text('1000'))),
-                      TableCell(child: Center(child: Text('3%'))),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 180),
+            //   child: Table(
+            //     border: TableBorder.all(),
+            //     columnWidths: const {
+            //       0: FlexColumnWidth(1),
+            //       1: FlexColumnWidth(1),
+            //     },
+            //     children: const [
+            //       TableRow(
+            //         children: [
+            //           TableCell(
+            //               child: Center(child: Text('Số lượng hộ sử dụng'))),
+            //           TableCell(child: Center(child: Text('Tỉ lệ hộ sử dụng'))),
+            //         ],
+            //       ),
+            //       TableRow(
+            //         children: [
+            //           TableCell(child: Center(child: Text('1000'))),
+            //           TableCell(child: Center(child: Text('3%'))),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -189,37 +192,54 @@ class _StatNewViewState extends State<StatNewView> {
                   border: TableBorder.all(),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
-                    1: FlexColumnWidth(2),
+                    1: FlexColumnWidth(1),
                     2: FlexColumnWidth(2),
-                    3: FlexColumnWidth(3),
+                    3: FlexColumnWidth(2),
                     4: FlexColumnWidth(2),
                     5: FlexColumnWidth(2),
-                    6: FlexColumnWidth(2),
+                    7: FlexColumnWidth(1),
                   },
-                  children: const [
-                    TableRow(
+                  children: [
+                    const TableRow(
                       children: [
                         TableCell(child: Center(child: Text('STT'))),
                         TableCell(child: Center(child: Text('Mã khách hàng'))),
-                        TableCell(child: Center(child: Text('Khách hàng'))),
+                        TableCell(child: Center(child: Text('Tên khách hàng'))),
                         TableCell(child: Center(child: Text('Địa chỉ'))),
                         TableCell(child: Center(child: Text('Số điện thoại'))),
                         TableCell(child: Center(child: Text('Email'))),
-                        TableCell(child: Center(child: Text('Mã số thuế'))),
+                        TableCell(child: Center(child: Text('Trạng thái'))),
                       ],
                     ),
-                    TableRow(
-                      children: [
-                        TableCell(child: Center(child: Text('1'))),
-                        TableCell(child: Center(child: Text('KH001'))),
-                        TableCell(child: Center(child: Text('Nguyễn Văn A'))),
-                        TableCell(child: Center(child: Text('123 Đường ABC'))),
-                        TableCell(child: Center(child: Text('0123456789'))),
-                        TableCell(
-                            child: Center(child: Text('example@example.com'))),
-                        TableCell(child: Center(child: Text('123456'))),
-                      ],
-                    ),
+                    ...(state.currentItem?.reportDTOList
+                            .asMap()
+                            .entries
+                            .map((e) => TableRowItem(e.value, e.key))
+                            .toList()) ??
+                        [],
+                    // TableRow(
+                    //   children: [
+                    //     TableCell(child: Center(child: Text('STT'))),
+                    //     TableCell(child: Center(child: Text('Mã khách hàng'))),
+                    //     TableCell(child: Center(child: Text('Khách hàng'))),
+                    //     TableCell(child: Center(child: Text('Địa chỉ'))),
+                    //     TableCell(child: Center(child: Text('Số điện thoại'))),
+                    //     TableCell(child: Center(child: Text('Email'))),
+                    //     TableCell(child: Center(child: Text('Mã số thuế'))),
+                    //   ],
+                    // ),
+                    // TableRow(
+                    //   children: [
+                    //     TableCell(child: Center(child: Text('1'))),
+                    //     TableCell(child: Center(child: Text('KH001'))),
+                    //     TableCell(child: Center(child: Text('Nguyễn Văn A'))),
+                    //     TableCell(child: Center(child: Text('123 Đường ABC'))),
+                    //     TableCell(child: Center(child: Text('0123456789'))),
+                    //     TableCell(
+                    //         child: Center(child: Text('example@example.com'))),
+                    //     TableCell(child: Center(child: Text('123456'))),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
@@ -247,12 +267,12 @@ class _StatNewViewState extends State<StatNewView> {
                       ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      context.pushRoute(const TranferMailViewRoute());
-                    },
-                    child: const Text('Nhắc nhở'),
-                  ),
+                  // TextButton(
+                  //   onPressed: () {
+                  //     context.pushRoute(const TranferMailViewRoute());
+                  //   },
+                  //   child: const Text('Nhắc nhở'),
+                  // ),
                   TextButton(
                     onPressed: () {
                       // Xử lý khi nhấn nút Nhắc nhở
@@ -266,5 +286,37 @@ class _StatNewViewState extends State<StatNewView> {
         );
       },
     );
+  }
+}
+
+class TableRowItem extends TableRow {
+  final Customer item;
+  final int index;
+
+  const TableRowItem(this.item, this.index);
+  @override
+  List<Widget> get children => [
+        TableCell(child: Center(child: Text(index.toString()))),
+        TableCell(child: Center(child: Text(item.customerId.toString()))),
+        TableCell(child: Center(child: Text(item.customerName.toString()))),
+        TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
+        TableCell(child: Center(child: Text(item.customerPhone.toString()))),
+        TableCell(child: Center(child: Text(item.customerEmail.toString()))),
+        TableCell(
+            child: Center(child: Text(getByType(item.status.toString())))),
+        // TableCell(
+        //     child:
+        //         Center(child: Checkbox(value: false, onChanged: (value) {}))),
+      ];
+
+  String getByType(String type) {
+    switch (type) {
+      case 'paid':
+        return "Đã đóng";
+      case 'unpaid':
+        return "Chưa đóng";
+      default:
+        return 'Còn Nợ';
+    }
   }
 }

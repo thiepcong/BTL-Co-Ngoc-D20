@@ -11,6 +11,8 @@ import 'modules/list_client/api/list_client_api.dart';
 import 'modules/list_client/repository/list_client_repository.dart';
 import 'modules/login/api/login_api.dart';
 import 'modules/login/repository/login_repository.dart';
+import 'modules/stat/api/stat_api.dart';
+import 'modules/stat/repository/stat_repository.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -43,6 +45,9 @@ class _RouteAppState extends State<RouteApp> {
         ),
         RepositoryProvider<ListClientRepository>(
           create: (context) => ListClientRepository(ListClientApi()),
+        ),
+        RepositoryProvider<StatRepository>(
+          create: (context) => StatRepository(StatApi()),
         ),
       ],
       child: MaterialApp.router(

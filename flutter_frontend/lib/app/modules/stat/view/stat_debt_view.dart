@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+import '../../../core/models/customer.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
 import '../../../core/values/text_styles.dart';
@@ -21,9 +22,8 @@ class _StatDebtViewState extends State<StatDebtView> {
   int _currentPage = 1;
   final int _totalPages = 100;
 
-  DateTime _month = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(
+      BuildContext context, Function(DateTime) onSelectDate) async {
     final DateTime? picked = await showMonthYearPicker(
         context: context,
         initialDate: DateTime.now(),
@@ -31,16 +31,13 @@ class _StatDebtViewState extends State<StatDebtView> {
         lastDate: DateTime.now(),
         locale: const Locale('vi'));
     if (picked != null) {
-      setState(() {
-        _month = picked;
-      });
+      onSelectDate.call(picked);
     }
   }
 
   List<String> districts = dataInfo.entries.map((e) => e.key).toList();
   List<String> wards = [];
   bool isWards = true;
-  bool showDetail = false;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +99,9 @@ class _StatDebtViewState extends State<StatDebtView> {
                                   ),
                                 )
                               : DropdownButtonFormField<String>(
-                                  value: state.currentWard,
+                                  value: state.currentWard?.isNotEmpty ?? false
+                                      ? state.currentWard
+                                      : null,
                                   items: wards.map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -123,7 +122,7 @@ class _StatDebtViewState extends State<StatDebtView> {
                   const SizedBox(width: 24),
                   ElevatedButton(
                     onPressed: () {
-                      // Xử lý khi nhấn nút Xem
+                      cubit.getDebtCustomer();
                     },
                     child: const Text('Thống kê'),
                   ),
@@ -149,18 +148,23 @@ class _StatDebtViewState extends State<StatDebtView> {
                   decoration: InputDecoration(
                     labelText: 'Tháng',
                     suffixIcon: IconButton(
-                      onPressed: () => _selectDate(context),
+                      onPressed: () => _selectDate(
+                        context,
+                        (e) => cubit.setCurrentSelectDate(e),
+                      ),
                       icon: const Icon(Icons.calendar_today),
                     ),
                   ),
                   controller: TextEditingController(
-                      text: _month.toString().substring(0, 7)),
+                      text: state.currentSelectDate != null
+                          ? state.currentSelectDate.toString().substring(0, 7)
+                          : ''),
                   readOnly: true,
                 ),
               ),
             ),
             Expanded(
-              child: !showDetail
+              child: state.currentDebt != null
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -185,15 +189,18 @@ class _StatDebtViewState extends State<StatDebtView> {
                               ),
                               TableRow(
                                 children: [
-                                  const TableCell(
-                                      child: Center(child: Text('2500'))),
-                                  const TableCell(
-                                      child: Center(child: Text('2,5 %'))),
+                                  TableCell(
+                                      child: Center(
+                                          child: Text(state.currentDebt!.debtNum
+                                              .toString()))),
+                                  TableCell(
+                                      child: Center(
+                                          child: Text(
+                                              state.currentDebt!.percent))),
                                   TableCell(
                                     child: Center(
                                         child: InkWell(
-                                      onTap: () =>
-                                          setState(() => showDetail = true),
+                                      onTap: () => cubit.getDebtCustomerList(),
                                       child: const Text(
                                         'Xem chi tiết',
                                         style: TextStyle(
@@ -209,81 +216,62 @@ class _StatDebtViewState extends State<StatDebtView> {
                         ],
                       ),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Table(
-                            border: TableBorder.all(),
-                            columnWidths: const {
-                              0: FlexColumnWidth(1),
-                              1: FlexColumnWidth(1),
-                              2: FlexColumnWidth(2),
-                              3: FlexColumnWidth(2),
-                              4: FlexColumnWidth(2),
-                              5: FlexColumnWidth(2),
-                              6: FlexColumnWidth(2),
-                              7: FlexColumnWidth(1),
-                              8: FlexColumnWidth(2)
-                            },
-                            children: const [
-                              TableRow(
+                  : state.currentItem != null
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Table(
+                                border: TableBorder.all(),
+                                columnWidths: const {
+                                  0: FlexColumnWidth(1),
+                                  1: FlexColumnWidth(1),
+                                  2: FlexColumnWidth(2),
+                                  3: FlexColumnWidth(2),
+                                  4: FlexColumnWidth(2),
+                                  5: FlexColumnWidth(2),
+                                  7: FlexColumnWidth(1),
+                                  8: FlexColumnWidth(2)
+                                },
                                 children: [
-                                  TableCell(child: Center(child: Text('STT'))),
-                                  TableCell(
-                                      child:
-                                          Center(child: Text('Mã khách hàng'))),
-                                  TableCell(
-                                      child: Center(
-                                          child: Text('Tên khách hàng'))),
-                                  TableCell(
-                                      child: Center(child: Text('Địa chỉ'))),
-                                  TableCell(
-                                      child:
-                                          Center(child: Text('Số điện thoại'))),
-                                  TableCell(
-                                      child: Center(child: Text('Email'))),
-                                  TableCell(
-                                      child: Center(child: Text('Mã số thuế'))),
-                                  TableCell(
-                                      child: Center(child: Text('Trạng thái'))),
-                                  TableCell(
-                                      child:
-                                          Center(child: Text('Số tiền(VNĐ)'))),
+                                  const TableRow(
+                                    children: [
+                                      TableCell(
+                                          child: Center(child: Text('STT'))),
+                                      TableCell(
+                                          child: Center(
+                                              child: Text('Mã khách hàng'))),
+                                      TableCell(
+                                          child: Center(
+                                              child: Text('Tên khách hàng'))),
+                                      TableCell(
+                                          child:
+                                              Center(child: Text('Địa chỉ'))),
+                                      TableCell(
+                                          child: Center(
+                                              child: Text('Số điện thoại'))),
+                                      TableCell(
+                                          child: Center(child: Text('Email'))),
+                                      TableCell(
+                                          child: Center(
+                                              child: Text('Trạng thái'))),
+                                      TableCell(child: Center(child: Text(''))),
+                                    ],
+                                  ),
+                                  ...state.currentItem!.reportDTOList
+                                      .asMap()
+                                      .entries
+                                      .map((e) => TableRowItem(e.value, e.key))
+                                      .toList(),
                                 ],
                               ),
-                              TableRow(
-                                children: [
-                                  TableCell(child: Center(child: Text('1'))),
-                                  TableCell(
-                                      child: Center(child: Text('KH001'))),
-                                  TableCell(
-                                      child:
-                                          Center(child: Text('Nguyễn Văn A'))),
-                                  TableCell(
-                                      child:
-                                          Center(child: Text('123 Đường ABC'))),
-                                  TableCell(
-                                      child: Center(child: Text('0123456789'))),
-                                  TableCell(
-                                      child: Center(
-                                          child: Text('example@example.com'))),
-                                  TableCell(
-                                      child: Center(child: Text('123456789'))),
-                                  TableCell(
-                                      child: Center(child: Text('Active'))),
-                                  TableCell(
-                                      child: Center(child: Text('1.200.000'))),
-                                ],
-                              ),
+                              // const Text("Tổng tiền: 1.200.200 VNĐ")
                             ],
                           ),
-                          const Text("Tổng tiền: 1.200.200 VNĐ")
-                        ],
-                      ),
-                    ),
+                        )
+                      : const SizedBox.shrink(),
             ),
-            if (showDetail)
+            if (state.currentItem != null)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -326,5 +314,37 @@ class _StatDebtViewState extends State<StatDebtView> {
         );
       },
     );
+  }
+}
+
+class TableRowItem extends TableRow {
+  final Customer item;
+  final int index;
+
+  const TableRowItem(this.item, this.index);
+  @override
+  List<Widget> get children => [
+        TableCell(child: Center(child: Text(index.toString()))),
+        TableCell(child: Center(child: Text(item.customerId.toString()))),
+        TableCell(child: Center(child: Text(item.customerName.toString()))),
+        TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
+        TableCell(child: Center(child: Text(item.customerPhone.toString()))),
+        TableCell(child: Center(child: Text(item.customerEmail.toString()))),
+        TableCell(
+            child: Center(child: Text(getByType(item.status.toString())))),
+        TableCell(
+            child:
+                Center(child: Checkbox(value: false, onChanged: (value) {}))),
+      ];
+
+  String getByType(String type) {
+    switch (type) {
+      case 'paid':
+        return "Đã đóng";
+      case 'unpaid':
+        return "Chưa đóng";
+      default:
+        return 'Còn Nợ';
+    }
   }
 }
