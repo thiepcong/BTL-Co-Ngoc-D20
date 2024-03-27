@@ -150,7 +150,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<ReportDTO> findDebtCustomer(String provine, String district, String ward,
                                                            Date start, Date end);
 
-    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.ReportDTO(" +
+    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.DebtCustomerDTO(" +
             "       c.id, " +
             "       c.name, " +
             "       c.phone, " +
@@ -159,8 +159,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       ad.district," +
             "       ad.ward," +
             "       wm.waterUsageNumber," +
-            "       wmi.startTime," +
-            "       wmi.endTime," +
             "       i.status ) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +

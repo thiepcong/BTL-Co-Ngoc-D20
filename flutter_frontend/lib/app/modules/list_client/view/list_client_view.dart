@@ -22,9 +22,6 @@ class ListClientView extends StatefulWidget {
 }
 
 class _ListClientViewState extends State<ListClientView> {
-  int _currentPage = 1;
-  final int _totalPages = 100;
-
   Future<void> _selectDate(
       BuildContext context, Function(DateTime) onSelectDate) async {
     final DateTime? picked = await showMonthYearPicker(
@@ -284,15 +281,21 @@ class _ListClientViewState extends State<ListClientView> {
                             child: Row(
                               children: [
                                 TextButton(
-                                  onPressed: _currentPage > 1
-                                      ? () => setState(() => _currentPage--)
+                                  onPressed: state.currentPage > 1
+                                      ? () => cubit
+                                          .setCurrentPage(state.currentPage - 1)
                                       : null,
                                   child: const Text('Previous'),
                                 ),
-                                Text('Page $_currentPage of $_totalPages'),
+                                Text(
+                                    'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
                                 TextButton(
-                                  onPressed: _currentPage < _totalPages
-                                      ? () => setState(() => _currentPage++)
+                                  onPressed: state.currentPage <
+                                          (state.currentItem?.pageDto
+                                                  .totalPages ??
+                                              0)
+                                      ? () => cubit
+                                          .setCurrentPage(state.currentPage + 1)
                                       : null,
                                   child: const Text('Next'),
                                 ),

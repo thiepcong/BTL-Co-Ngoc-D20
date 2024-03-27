@@ -19,6 +19,7 @@ mixin _$ListClientState {
   StatModel? get currentItem => throw _privateConstructorUsedError;
   List<Customer> get customerMails => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  int get currentPage => throw _privateConstructorUsedError;
   String? get currentFilter => throw _privateConstructorUsedError;
   String? get currentDistrict => throw _privateConstructorUsedError;
   String? get currentWard => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $ListClientStateCopyWith<$Res> {
       {StatModel? currentItem,
       List<Customer> customerMails,
       bool isLoading,
+      int currentPage,
       String? currentFilter,
       String? currentDistrict,
       String? currentWard,
@@ -65,6 +67,7 @@ class _$ListClientStateCopyWithImpl<$Res, $Val extends ListClientState>
     Object? currentItem = freezed,
     Object? customerMails = null,
     Object? isLoading = null,
+    Object? currentPage = null,
     Object? currentFilter = freezed,
     Object? currentDistrict = freezed,
     Object? currentWard = freezed,
@@ -85,6 +88,10 @@ class _$ListClientStateCopyWithImpl<$Res, $Val extends ListClientState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
       currentFilter: freezed == currentFilter
           ? _value.currentFilter
           : currentFilter // ignore: cast_nullable_to_non_nullable
@@ -125,6 +132,7 @@ abstract class _$$ListClientStateImplCopyWith<$Res>
       {StatModel? currentItem,
       List<Customer> customerMails,
       bool isLoading,
+      int currentPage,
       String? currentFilter,
       String? currentDistrict,
       String? currentWard,
@@ -147,6 +155,7 @@ class __$$ListClientStateImplCopyWithImpl<$Res>
     Object? currentItem = freezed,
     Object? customerMails = null,
     Object? isLoading = null,
+    Object? currentPage = null,
     Object? currentFilter = freezed,
     Object? currentDistrict = freezed,
     Object? currentWard = freezed,
@@ -167,6 +176,10 @@ class __$$ListClientStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
       currentFilter: freezed == currentFilter
           ? _value.currentFilter
           : currentFilter // ignore: cast_nullable_to_non_nullable
@@ -202,6 +215,7 @@ class _$ListClientStateImpl extends _ListClientState {
       {this.currentItem,
       final List<Customer> customerMails = const [],
       this.isLoading = false,
+      this.currentPage = 1,
       this.currentFilter,
       this.currentDistrict,
       this.currentWard,
@@ -226,6 +240,9 @@ class _$ListClientStateImpl extends _ListClientState {
   @JsonKey()
   final bool isLoading;
   @override
+  @JsonKey()
+  final int currentPage;
+  @override
   final String? currentFilter;
   @override
   final String? currentDistrict;
@@ -240,7 +257,7 @@ class _$ListClientStateImpl extends _ListClientState {
 
   @override
   String toString() {
-    return 'ListClientState(currentItem: $currentItem, customerMails: $customerMails, isLoading: $isLoading, currentFilter: $currentFilter, currentDistrict: $currentDistrict, currentWard: $currentWard, currentSelectDate: $currentSelectDate, message: $message, error: $error)';
+    return 'ListClientState(currentItem: $currentItem, customerMails: $customerMails, isLoading: $isLoading, currentPage: $currentPage, currentFilter: $currentFilter, currentDistrict: $currentDistrict, currentWard: $currentWard, currentSelectDate: $currentSelectDate, message: $message, error: $error)';
   }
 
   @override
@@ -254,6 +271,8 @@ class _$ListClientStateImpl extends _ListClientState {
                 .equals(other._customerMails, _customerMails) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.currentPage, currentPage) ||
+                other.currentPage == currentPage) &&
             (identical(other.currentFilter, currentFilter) ||
                 other.currentFilter == currentFilter) &&
             (identical(other.currentDistrict, currentDistrict) ||
@@ -272,6 +291,7 @@ class _$ListClientStateImpl extends _ListClientState {
       currentItem,
       const DeepCollectionEquality().hash(_customerMails),
       isLoading,
+      currentPage,
       currentFilter,
       currentDistrict,
       currentWard,
@@ -292,6 +312,7 @@ abstract class _ListClientState extends ListClientState {
       {final StatModel? currentItem,
       final List<Customer> customerMails,
       final bool isLoading,
+      final int currentPage,
       final String? currentFilter,
       final String? currentDistrict,
       final String? currentWard,
@@ -306,6 +327,8 @@ abstract class _ListClientState extends ListClientState {
   List<Customer> get customerMails;
   @override
   bool get isLoading;
+  @override
+  int get currentPage;
   @override
   String? get currentFilter;
   @override

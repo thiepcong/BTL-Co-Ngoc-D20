@@ -91,7 +91,13 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
     try {
       emit(state.copyWith(isLoading: true, message: null));
       final res = await _repo.savePriceList(priceList);
-      emit(state.copyWith(isLoading: false, message: "Lưu Thành Công"));
+      List<PriceList> all = List.from(state.all);
+      all.insert(0, priceList);
+      emit(state.copyWith(
+        isLoading: false,
+        message: "Lưu Thành Công",
+        all: all,
+      ));
       debugPrint(res.toString());
     } catch (e) {
       if (e is BadRequestException || e is NetworkException) {

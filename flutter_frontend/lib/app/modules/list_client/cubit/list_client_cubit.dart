@@ -17,6 +17,11 @@ class ListClientCubit extends Cubit<ListClientState> {
     emit(state.copyWith(currentWard: value));
   }
 
+  void setCurrentPage(int page) {
+    emit(state.copyWith(currentPage: page));
+    getListClient();
+  }
+
   void setCurrentFilter(String? value) {
     emit(state.copyWith(currentFilter: value));
   }
@@ -31,7 +36,7 @@ class ListClientCubit extends Cubit<ListClientState> {
       final res = await _repo.getListClient(
         district: state.currentDistrict!,
         ward: state.currentWard!,
-        page: 1,
+        page: state.currentPage,
         size: 10,
         date: state.currentSelectDate,
         type: handle(),

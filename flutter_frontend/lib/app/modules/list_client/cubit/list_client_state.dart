@@ -13,6 +13,7 @@ class ListClientState with _$ListClientState {
     StatModel? currentItem,
     @Default([]) List<Customer> customerMails,
     @Default(false) bool isLoading,
+    @Default(1) int currentPage,
     String? currentFilter,
     String? currentDistrict,
     String? currentWard,
