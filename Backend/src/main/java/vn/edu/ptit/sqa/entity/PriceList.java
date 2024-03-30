@@ -22,7 +22,10 @@ public class PriceList  {
 
     @Column(name = "STATUS")
     private Integer status;
-    
+
+    @OneToMany(mappedBy = "priceList")
+    private List<Invoice> invoices;
+
     @JoinColumn(name = "USER_ID")
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private User user;

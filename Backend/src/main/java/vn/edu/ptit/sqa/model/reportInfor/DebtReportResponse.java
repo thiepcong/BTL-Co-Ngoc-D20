@@ -6,7 +6,7 @@ import vn.edu.ptit.sqa.model.pagination.PageDto;
 import java.util.List;
 
 @Data
-public class DebtReportRespone {
+public class DebtReportResponse {
     private DebtReportDTO debtReportDTO;
     private List<DebtCustomerDTO> debtCustomerList;
     private Long totalDebtNumber;
