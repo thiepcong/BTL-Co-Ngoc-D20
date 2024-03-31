@@ -26,7 +26,8 @@ public class CustomerInforServiceImpl implements CustomerInforService {
 
     @Override
     public ReportInforResponse getReportByAddress(ReportInforRequest request, Pageable pageable) {
-        Page<ReportDTO> reportDtoPage = customerRepository.findByAddressPage(request.getProvine(), request.getDistrict(), request.getWard(), pageable);
+        Page<ReportDTO> reportDtoPage = customerRepository.findByAddressPage(request.getProvine(), request.getDistrict(),
+                request.getWard(), request.getSearch(),  pageable);
         List<ReportDTO> dtoList = reportDtoPage.getContent();
         if(dtoList == null) {
             throw new NotFoundException("Err: List is null");
@@ -43,7 +44,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         Page<ReportDTO> reportDTOPage = customerRepository.findUnPaidCustomerPageByAddressAndTime(request.getProvine(),
-                request.getDistrict(), request.getWard(), start, end , pageable);
+                request.getDistrict(), request.getWard(), start, end, request.getSearch(), pageable);
         List<ReportDTO> dtoList = reportDTOPage.getContent();
         if(dtoList == null) {
             throw new NotFoundException("Err: List is null");
@@ -74,27 +75,50 @@ public class CustomerInforServiceImpl implements CustomerInforService {
     }
 
     @Override
-    public DebtReportRespone getDebtCustomerList(ReportInforRequest request, Pageable pageable) {
+    public DebtReportResponse getDebtCustomerList(ReportInforRequest request, Pageable pageable) {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         Page<DebtCustomerDTO> allDebtCustomerList = customerRepository.findDebtCustomerPage(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, pageable);
         List<DebtCustomerDTO> debtCustomerDTOList = allDebtCustomerList.getContent();
-        DebtReportRespone response = new DebtReportRespone();
-        response.setDebtCustomerList(allDebtCustomerList.getContent());
+        List<DebtCustomerDTO> allDebtCustomers = customerRepository.findAllDebtCustomer(request.getProvine(),
+                request.getDistrict(), request.getWard(), start, end);
+        long totalDebtMoney = allDebtCustomers.stream().mapToLong(DebtCustomerDTO::getDebtMoneyNumber).sum();
+        DebtReportResponse response = new DebtReportResponse();
+        response.setDebtCustomerList(debtCustomerDTOList);
+        response.setTotalDebtNumber(totalDebtMoney);
         response.setPageDto(PageDto.populatePageDto(allDebtCustomerList));
         return response;
     }
 
     @Override
-    public ReportInforResponse getNewCustomer(ReportInforRequest request, Pageable pageable) {
+    public NewCustomerResponse getNewCustomerList(ReportInforRequest request, Pageable pageable) {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
-        ReportInforResponse response = new ReportInforResponse();
-        Page<ReportDTO> newCustomerPage = customerRepository.findNewCustomerPage(request.getProvine(),
+        NewCustomerResponse response = new NewCustomerResponse();
+        Page<NewCutomerDTO> newCustomerPage = customerRepository.findNewCustomerPage(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, pageable);
-        response.setReportDTOList(newCustomerPage.getContent());
+        response.setNewCutomerDTOList(newCustomerPage.getContent());
         response.setPageDto(PageDto.populatePageDto(newCustomerPage));
+        return response;
+    }
+
+    @Override
+    public NewCustomerReportDTO getNewCustomerNumber(ReportInforRequest request) {
+        Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
+        Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
+        List<ReportDTO> allCustomerList = customerRepository.findByAddressListAll(request.getProvine(),
+                request.getDistrict(), request.getWard());
+        int allNum = allCustomerList.size();
+        System.out.println(allNum);
+        List<ReportDTO> allNewCustomer = customerRepository.findNewCustomer(request.getProvine(),
+                request.getDistrict(), request.getWard(), start, end);
+        int newCustomerNum = allNewCustomer.size();
+        NewCustomerReportDTO response = new NewCustomerReportDTO();
+        response.setNewCustomerNum(newCustomerNum);
+        response.setAllCustomerNum(allNum);
+        double percent = (double) newCustomerNum / allNum * 100;
+        response.setPercent(percent + "%");
         return response;
     }
 
@@ -104,9 +128,26 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         ReportInforResponse response = new ReportInforResponse();
         Page<ReportDTO> newCustomerPage = customerRepository.findPaidCustomerPage(request.getProvine(),
-                request.getDistrict(), request.getWard(), start, end, pageable);
+                request.getDistrict(), request.getWard(), start, end, request.getSearch(), pageable);
         response.setReportDTOList(newCustomerPage.getContent());
         response.setPageDto(PageDto.populatePageDto(newCustomerPage));
+        return response;
+    }
+
+    @Override
+    public RevenueResponse getRevenue(ReportInforRequest request, Pageable pageable) {
+        Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
+        Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
+        List<RevenueDTO> allRevenues = customerRepository.findAllRevenue(request.getProvine(),
+                request.getDistrict(), request.getWard(), start, end);
+        Page<RevenueDTO> revenueDTOPage = customerRepository.findRevenuePage(request.getProvine(),
+                request.getDistrict(), request.getWard(), start, end, pageable);
+        List<RevenueDTO> dtos = revenueDTOPage.getContent();
+        Long totalMoney = allRevenues.stream().mapToLong(RevenueDTO::getMoneyNumber).sum();
+        RevenueResponse response = new RevenueResponse();
+        response.setRevenueDTOList(dtos);
+        response.setTotalMoney(totalMoney);
+        response.setPageDto(PageDto.populatePageDto(revenueDTOPage));
         return response;
     }
 

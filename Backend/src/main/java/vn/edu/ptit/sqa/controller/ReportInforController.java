@@ -28,8 +28,20 @@ public class ReportInforController {
     }
 
     @PostMapping("/getNewCustomers")
-    public ResponseEntity<?> getNewCustomers(@RequestBody ReportInforRequest request){
+    public ResponseEntity<?> getNewCustomerNumber(@RequestBody ReportInforRequest request){
+        return ResponseEntity.ok(customerInforService.getNewCustomerNumber(request));
+    }
+
+    @PostMapping("/getNewCustomerList")
+    public ResponseEntity<?> getNewCustomersList(@RequestBody ReportInforRequest request){
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
-        return ResponseEntity.ok(customerInforService.getNewCustomer(request, pageable));
+        return ResponseEntity.ok(customerInforService.getNewCustomerList(request, pageable));
+    }
+
+    @PostMapping("/getRevenueList")
+    public ResponseEntity<?> getRevenueList(@RequestBody ReportInforRequest request){
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
+        System.out.println("called");
+        return ResponseEntity.ok(customerInforService.getRevenue(request, pageable));
     }
 }

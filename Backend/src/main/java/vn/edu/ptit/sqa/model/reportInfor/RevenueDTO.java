@@ -1,34 +1,33 @@
 package vn.edu.ptit.sqa.model.reportInfor;
 
 import lombok.Data;
-
-import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-public class DebtCustomerDTO {
+public class RevenueDTO {
     private Long customerId;
     private String customerName;
     private String customerPhone;
     private String customerEmail;
-    private String provine;
+    private String province;
     private String district;
     private String ward;
     private Long waterUsageNumber;
     private String status;
-    private int customerNumber;
-    private Long debtMoneyNumber;
+    private Long moneyNumber;
 
-    public DebtCustomerDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
-                           String provine, String district, String ward, Long waterUsageNumber,Long debtMoneyNumber, String status) {
+    public RevenueDTO(Long customerId, String customerName, String customerPhone, String customerEmail, String province,
+                      String district, String ward, Long waterUsageNumber,Long moneyNumber, String status) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
         this.customerEmail = customerEmail;
-        this.provine = provine;
+        this.province = province;
         this.district = district;
         this.ward = ward;
         this.waterUsageNumber = waterUsageNumber;
-        this.debtMoneyNumber = debtMoneyNumber;
+        this.moneyNumber = moneyNumber;
         this.status = status;
     }
 }

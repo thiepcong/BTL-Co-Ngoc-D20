@@ -20,6 +20,8 @@ public class Invoice {
 
     private String description;
 
+    private Long totalPrice;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
@@ -30,7 +32,7 @@ public class Invoice {
     private User staff;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private WaterPriceTable waterPriceTable;
+    private PriceList priceList;
 
     private boolean isDeleted = false;
 }

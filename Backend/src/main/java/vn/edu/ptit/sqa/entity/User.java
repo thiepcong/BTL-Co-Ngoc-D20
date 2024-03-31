@@ -46,9 +46,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "staff")
     private List<Invoice> invoices;
 
-    @OneToMany
-    private List<WaterPriceTable> waterPriceTables;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());

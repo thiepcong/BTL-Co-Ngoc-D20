@@ -10,6 +10,8 @@ public class ReportInforRequest {
     private String district;
     private String ward;
     private Date month;
+    private String invoiceStatus;
+    private String search;
     private int page;
     private int size;
 }
