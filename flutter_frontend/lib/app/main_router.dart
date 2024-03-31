@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'app_routes.dart';
+import 'core/models/customer.dart';
 import 'core/models/login_response.dart';
 import 'modules/login/view/login_view.dart';
 import 'modules/login/view/manager_view.dart';

@@ -6,10 +6,11 @@ import '../../../core/values/api_url_constant.dart';
 
 class ListClientApi extends BaseRemoteSource {
   Future<StatModel> getListClient({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
+    String? key,
     DateTime? date,
     bool? type,
   }) async {
@@ -17,6 +18,7 @@ class ListClientApi extends BaseRemoteSource {
       "provine": "Hà Nội",
       "district": district,
       "ward": ward,
+      "search": key,
       "page": page,
       "size": size,
     };

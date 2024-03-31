@@ -33,7 +33,7 @@ class _ManagerViewState extends State<ManagerView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        label: 'Quản lý ${widget.user?.name ?? ''}',
+        label: 'Quản lý: ${widget.user?.name ?? ''}',
         bgColor: AppColors.colorFF940000,
         style: TextStyles.boldWhiteS20,
       ),

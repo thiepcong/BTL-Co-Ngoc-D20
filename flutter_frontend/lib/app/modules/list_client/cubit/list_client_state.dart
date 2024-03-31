@@ -14,6 +14,7 @@ class ListClientState with _$ListClientState {
     @Default([]) List<Customer> customerMails,
     @Default(false) bool isLoading,
     @Default(1) int currentPage,
+    @Default("") String key,
     String? currentFilter,
     String? currentDistrict,
     String? currentWard,

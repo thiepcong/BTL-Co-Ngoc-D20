@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/app/core/models/customer.dart';
 import 'package:flutter_frontend/app/network/exceptions/bad_request_exception.dart';
 import '../repository/stat_repository.dart';
 import 'stat_state.dart';
@@ -7,6 +8,44 @@ class StatCubit extends Cubit<StatState> {
   StatCubit(this._repo) : super(const StatState());
 
   final StatRepository _repo;
+
+  void setCurrentPage(int page, int type) {
+    emit(state.copyWith(currentPage: page));
+    if (type == 1) {
+      getRevenueList();
+    } else if (type == 2) {
+      getNewCustomers();
+    } else {
+      getDebtCustomer();
+    }
+  }
+
+  void getRevenueList() async {
+    try {
+      if (state.currentDistrict == null ||
+          state.currentWard == null ||
+          state.currentSelectDate == null) {
+        emit(state.copyWith(
+            message: "Vui lòng chọn quận/huyện, xã/phường và tháng"));
+        return;
+      }
+      emit(state.copyWith(isLoading: true, message: null));
+      final res = await _repo.getRevenueList(
+        district: state.currentDistrict!,
+        ward: state.currentWard!,
+        date: state.currentSelectDate!,
+        page: state.currentPage,
+        size: 10,
+      );
+      emit(state.copyWith(isLoading: false, currentItem: res));
+    } catch (e) {
+      if (e is BadRequestException) {
+        emit(state.copyWith(isLoading: false, message: e.message));
+        return;
+      }
+      rethrow;
+    }
+  }
 
   void getDebtCustomerList() async {
     try {
@@ -22,7 +61,7 @@ class StatCubit extends Cubit<StatState> {
         district: state.currentDistrict!,
         ward: state.currentWard!,
         date: state.currentSelectDate!,
-        page: 1,
+        page: state.currentPage,
         size: 10,
       );
       emit(state.copyWith(
@@ -71,15 +110,26 @@ class StatCubit extends Cubit<StatState> {
         return;
       }
       emit(state.copyWith(isLoading: true, message: null));
-      final res = await _repo.getNewCustomers(
+      final res = await _repo.getNewCustomersList(
         district: state.currentDistrict!,
         ward: state.currentWard!,
         date: state.currentSelectDate!,
-        page: 1,
+        page: state.currentPage,
+        size: 10,
+      );
+      final res2 = await _repo.getNewCustomers(
+        district: state.currentDistrict!,
+        ward: state.currentWard!,
+        date: state.currentSelectDate!,
+        page: state.currentPage,
         size: 10,
       );
       emit(state.copyWith(
-          isLoading: false, currentItem: res, currentDebt: null));
+        isLoading: false,
+        currentItem: res,
+        currentNew: res2,
+        currentDebt: null,
+      ));
     } catch (e) {
       if (e is BadRequestException) {
         emit(state.copyWith(isLoading: false, message: e.message));
@@ -95,6 +145,9 @@ class StatCubit extends Cubit<StatState> {
       currentDistrict: null,
       currentDebt: null,
       currentSelectDate: null,
+      currentPage: 1,
+      currentWard: null,
+      currentNew: null,
     ));
   }
 
@@ -108,5 +161,17 @@ class StatCubit extends Cubit<StatState> {
 
   void setCurrentWard(String value) {
     emit(state.copyWith(currentWard: value));
+  }
+
+  void setCurrentTrandMail(Customer item, bool? isChoose) {
+    if (isChoose == true) {
+      List<Customer> li = List.from(state.customerMails);
+      li.add(item);
+      emit(state.copyWith(customerMails: li));
+    } else if (isChoose == false) {
+      List<Customer> li = List.from(state.customerMails);
+      li.remove(item);
+      emit(state.copyWith(customerMails: li));
+    }
   }
 }

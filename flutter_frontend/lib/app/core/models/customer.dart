@@ -12,6 +12,8 @@ class Customer {
   final DateTime? startTime;
   final DateTime? endTime;
   final String? status;
+  final int? moneyNumber;
+  final int? debtMoneyNumber;
 
   Customer({
     required this.customerId,
@@ -27,6 +29,8 @@ class Customer {
     this.startTime,
     this.endTime,
     this.status,
+    this.moneyNumber,
+    this.debtMoneyNumber,
   });
 
   Map<String, dynamic> toJson() {
@@ -44,6 +48,8 @@ class Customer {
       'startTime': startTime?.millisecondsSinceEpoch,
       'endTime': endTime?.millisecondsSinceEpoch,
       'status': status,
+      'moneyNumber': moneyNumber,
+      'debtMoneyNumber': debtMoneyNumber,
     };
   }
 
@@ -72,6 +78,10 @@ class Customer {
           map['startTime'] != null ? DateTime.parse(map['startTime']) : null,
       endTime: map['endTime'] != null ? DateTime.parse(map['endTime']) : null,
       status: map['status'] != null ? map['status'] as String : null,
+      moneyNumber:
+          map['moneyNumber'] != null ? map['moneyNumber'] as int : null,
+      debtMoneyNumber:
+          map['debtMoneyNumber'] != null ? map['debtMoneyNumber'] as int : null,
     );
   }
 }

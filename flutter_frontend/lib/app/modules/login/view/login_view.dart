@@ -62,7 +62,7 @@ class _LoginViewState extends State<LoginView> {
           final cubit = context.read<LoginCubit>();
           return Scaffold(
             appBar: const CustomAppBar(
-              label: 'Đăng nhập',
+              label: 'HỆ THỐNG TÍNH TIỀN NƯỚC CHO HỘ CÁ NHÂN',
               bgColor: AppColors.colorFF940000,
               style: TextStyles.boldWhiteS20,
             ),
@@ -86,45 +86,51 @@ class _LoginViewState extends State<LoginView> {
                             "Đăng nhập",
                             style: TextStyles.boldBlackS28,
                           ),
-                          TextFormField(
-                            controller: _usernameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Tên người dùng',
-                              border: OutlineInputBorder(),
+                          SizedBox(
+                            width: double.infinity,
+                            child: TextFormField(
+                              controller: _usernameController,
+                              decoration: const InputDecoration(
+                                labelText: 'Tên người dùng',
+                                border: OutlineInputBorder(),
+                              ),
+                              onFieldSubmitted: (e) {
+                                if (_formKey.currentState!.validate()) {
+                                  cubit.login(_usernameController.text,
+                                      _passwordController.text);
+                                }
+                              },
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Vui lòng nhập tên người dùng!';
+                                }
+                                return null;
+                              },
                             ),
-                            onFieldSubmitted: (e) {
-                              if (_formKey.currentState!.validate()) {
-                                cubit.login(_usernameController.text,
-                                    _passwordController.text);
-                              }
-                            },
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Vui lòng nhập tên người dùng!';
-                              }
-                              return null;
-                            },
                           ),
                           const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Mật khẩu',
-                              border: OutlineInputBorder(),
+                          SizedBox(
+                            width: double.infinity,
+                            child: TextFormField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                labelText: 'Mật khẩu',
+                                border: OutlineInputBorder(),
+                              ),
+                              onFieldSubmitted: (e) {
+                                if (_formKey.currentState!.validate()) {
+                                  cubit.login(_usernameController.text,
+                                      _passwordController.text);
+                                }
+                              },
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Vui lòng nhập mật khẩu!';
+                                }
+                                return null;
+                              },
                             ),
-                            onFieldSubmitted: (e) {
-                              if (_formKey.currentState!.validate()) {
-                                cubit.login(_usernameController.text,
-                                    _passwordController.text);
-                              }
-                            },
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Vui lòng nhập mật khẩu!';
-                              }
-                              return null;
-                            },
                           ),
                           const SizedBox(height: 16),
                           ElevatedButton(

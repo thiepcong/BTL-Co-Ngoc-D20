@@ -6,6 +6,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import '../../../core/models/customer.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
+import '../../../core/values/show_message_internal.dart';
 import '../../../core/values/text_styles.dart';
 import '../../../main_router.dart';
 import '../cubit/stat_cubit.dart';
@@ -19,9 +20,6 @@ class StatDebtView extends StatefulWidget {
 }
 
 class _StatDebtViewState extends State<StatDebtView> {
-  int _currentPage = 1;
-  final int _totalPages = 100;
-
   Future<void> _selectDate(
       BuildContext context, Function(DateTime) onSelectDate) async {
     final DateTime? picked = await showMonthYearPicker(
@@ -230,6 +228,7 @@ class _StatDebtViewState extends State<StatDebtView> {
                                   3: FlexColumnWidth(2),
                                   4: FlexColumnWidth(2),
                                   5: FlexColumnWidth(2),
+                                  6: FlexColumnWidth(1),
                                   7: FlexColumnWidth(1),
                                   8: FlexColumnWidth(2)
                                 },
@@ -254,6 +253,9 @@ class _StatDebtViewState extends State<StatDebtView> {
                                           child: Center(child: Text('Email'))),
                                       TableCell(
                                           child: Center(
+                                              child: Text('Số tiền nợ'))),
+                                      TableCell(
+                                          child: Center(
                                               child: Text('Trạng thái'))),
                                       TableCell(child: Center(child: Text(''))),
                                     ],
@@ -261,11 +263,19 @@ class _StatDebtViewState extends State<StatDebtView> {
                                   ...state.currentItem!.reportDTOList
                                       .asMap()
                                       .entries
-                                      .map((e) => TableRowItem(e.value, e.key))
+                                      .map((e) => TableRowItem(
+                                            e.value,
+                                            e.key,
+                                            state.customerMails
+                                                .contains(e.value),
+                                            (ee) => cubit.setCurrentTrandMail(
+                                                e.value, ee),
+                                          ))
                                       .toList(),
                                 ],
                               ),
-                              // const Text("Tổng tiền: 1.200.200 VNĐ")
+                              Text(
+                                  "Tổng tiền nợ: ${state.currentItem?.totalDebtNumber ?? 0} VNĐ")
                             ],
                           ),
                         )
@@ -280,15 +290,19 @@ class _StatDebtViewState extends State<StatDebtView> {
                       child: Row(
                         children: [
                           TextButton(
-                            onPressed: _currentPage > 1
-                                ? () => setState(() => _currentPage--)
+                            onPressed: state.currentPage > 1
+                                ? () => cubit.setCurrentPage(
+                                    state.currentPage - 1, 3)
                                 : null,
                             child: const Text('Previous'),
                           ),
-                          Text('Page $_currentPage of $_totalPages'),
+                          Text(
+                              'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
                           TextButton(
-                            onPressed: _currentPage < _totalPages
-                                ? () => setState(() => _currentPage++)
+                            onPressed: state.currentPage <
+                                    (state.currentItem?.pageDto.totalPages ?? 0)
+                                ? () => cubit.setCurrentPage(
+                                    state.currentPage + 1, 3)
                                 : null,
                             child: const Text('Next'),
                           ),
@@ -297,7 +311,13 @@ class _StatDebtViewState extends State<StatDebtView> {
                     ),
                     TextButton(
                       onPressed: () {
-                        context.pushRoute(const TranferMailViewRoute());
+                        if (state.customerMails.isEmpty) {
+                          ShowMessageInternal.showOverlay(
+                              context, 'Vui lòng chọn ít nhất một khách hàng');
+                          return;
+                        }
+                        context.pushRoute(TranferMailViewRoute(
+                            customers: state.customerMails));
                       },
                       child: const Text('Nhắc nhở'),
                     ),
@@ -320,8 +340,10 @@ class _StatDebtViewState extends State<StatDebtView> {
 class TableRowItem extends TableRow {
   final Customer item;
   final int index;
+  final bool isChoose;
+  final void Function(bool?)? onChanged;
 
-  const TableRowItem(this.item, this.index);
+  const TableRowItem(this.item, this.index, this.isChoose, this.onChanged);
   @override
   List<Widget> get children => [
         TableCell(child: Center(child: Text(index.toString()))),
@@ -330,11 +352,12 @@ class TableRowItem extends TableRow {
         TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
         TableCell(child: Center(child: Text(item.customerPhone.toString()))),
         TableCell(child: Center(child: Text(item.customerEmail.toString()))),
+        TableCell(child: Center(child: Text(item.debtMoneyNumber.toString()))),
         TableCell(
             child: Center(child: Text(getByType(item.status.toString())))),
         TableCell(
             child:
-                Center(child: Checkbox(value: false, onChanged: (value) {}))),
+                Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
       ];
 
   String getByType(String type) {

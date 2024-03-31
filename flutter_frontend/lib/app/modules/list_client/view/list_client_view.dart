@@ -41,9 +41,13 @@ class _ListClientViewState extends State<ListClientView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ListClientCubit(context.read<ListClientRepository>()),
-      child: _buildPage(context),
+    return Title(
+      color: AppColors.colorFFFFFFFF,
+      title: 'Danh sách khách hàng',
+      child: BlocProvider(
+        create: (_) => ListClientCubit(context.read<ListClientRepository>()),
+        child: _buildPage(context),
+      ),
     );
   }
 
@@ -172,9 +176,8 @@ class _ListClientViewState extends State<ListClientView> {
                               decoration: const InputDecoration(
                                 hintText: 'Nhập từ khóa tìm kiếm...',
                                 border: OutlineInputBorder(),
-                                suffixIcon: Icon(Icons.search),
                               ),
-                              onChanged: (e) {},
+                              onChanged: (e) => cubit.setKey(e),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -304,7 +307,13 @@ class _ListClientViewState extends State<ListClientView> {
                           ),
                           TextButton(
                             onPressed: () {
-                              context.pushRoute(const TranferMailViewRoute());
+                              if (state.customerMails.isEmpty) {
+                                ShowMessageInternal.showOverlay(context,
+                                    'Vui lòng chọn ít nhất một khách hàng');
+                                return;
+                              }
+                              context.pushRoute(TranferMailViewRoute(
+                                  customers: state.customerMails));
                             },
                             child: const Text('Nhắc nhở'),
                           ),

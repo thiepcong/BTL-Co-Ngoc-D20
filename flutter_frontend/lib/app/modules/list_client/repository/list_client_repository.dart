@@ -6,16 +6,18 @@ class ListClientRepository {
   ListClientRepository(this._api);
 
   Future<StatModel> getListClient({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
+    String? key,
     DateTime? date,
     bool? type,
   }) async {
     return _api.getListClient(
       district: district,
       ward: ward,
+      key: key,
       page: page,
       size: size,
       date: date,

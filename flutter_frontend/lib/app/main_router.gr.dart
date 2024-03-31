@@ -35,9 +35,13 @@ class _$MainRouter extends RootStackRouter {
       );
     },
     TranferMailViewRoute.name: (routeData) {
+      final args = routeData.argsAs<TranferMailViewRouteArgs>();
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const TranferMailView(),
+        child: TranferMailView(
+          key: args.key,
+          customers: args.customers,
+        ),
       );
     },
   };
@@ -113,12 +117,34 @@ class ManagerViewRouteArgs {
 
 /// generated route for
 /// [TranferMailView]
-class TranferMailViewRoute extends PageRouteInfo<void> {
-  const TranferMailViewRoute()
-      : super(
+class TranferMailViewRoute extends PageRouteInfo<TranferMailViewRouteArgs> {
+  TranferMailViewRoute({
+    Key? key,
+    required List<Customer> customers,
+  }) : super(
           TranferMailViewRoute.name,
           path: 'tranfer_mail',
+          args: TranferMailViewRouteArgs(
+            key: key,
+            customers: customers,
+          ),
         );
 
   static const String name = 'TranferMailViewRoute';
+}
+
+class TranferMailViewRouteArgs {
+  const TranferMailViewRouteArgs({
+    this.key,
+    required this.customers,
+  });
+
+  final Key? key;
+
+  final List<Customer> customers;
+
+  @override
+  String toString() {
+    return 'TranferMailViewRouteArgs{key: $key, customers: $customers}';
+  }
 }

@@ -1,4 +1,5 @@
 import '../../../core/models/debt_model.dart';
+import '../../../core/models/new_customer.dart';
 import '../../../core/models/stat_model.dart';
 import '../api/stat_api.dart';
 
@@ -35,7 +36,7 @@ class StatRepository {
     );
   }
 
-  Future<StatModel> getNewCustomers({
+  Future<NewCustomer> getNewCustomers({
     required String district,
     required String ward,
     required int page,
@@ -43,6 +44,38 @@ class StatRepository {
     required DateTime date,
   }) async {
     return _api.getNewCustomers(
+      district: district,
+      ward: ward,
+      page: page,
+      size: size,
+      date: date,
+    );
+  }
+
+  Future<StatModel> getNewCustomersList({
+    required String district,
+    required String ward,
+    required int page,
+    required int size,
+    required DateTime date,
+  }) async {
+    return _api.getNewCustomersList(
+      district: district,
+      ward: ward,
+      page: page,
+      size: size,
+      date: date,
+    );
+  }
+
+  Future<StatModel> getRevenueList({
+    required String district,
+    required String ward,
+    required int page,
+    required int size,
+    required DateTime date,
+  }) {
+    return _api.getRevenueList(
       district: district,
       ward: ward,
       page: page,

@@ -9,6 +9,10 @@ class ListClientCubit extends Cubit<ListClientState> {
 
   final ListClientRepository _repo;
 
+  void setKey(String key) {
+    emit(state.copyWith(key: key));
+  }
+
   void setCurrentDistrict(String value) {
     emit(state.copyWith(currentDistrict: value, currentWard: null));
   }
@@ -27,16 +31,17 @@ class ListClientCubit extends Cubit<ListClientState> {
   }
 
   void getListClient() async {
-    if (state.currentDistrict == null || state.currentWard == null) {
-      emit(state.copyWith(message: "Vui lòng chọn quận/huyện và xã/phường"));
+    if (state.currentFilter != null && state.currentSelectDate == null) {
+      emit(state.copyWith(message: "Vui lòng chọn cả tháng khi lọc"));
       return;
     }
     emit(state.copyWith(isLoading: true, message: null));
     try {
       final res = await _repo.getListClient(
-        district: state.currentDistrict!,
-        ward: state.currentWard!,
+        district: state.currentDistrict,
+        ward: state.currentWard,
         page: state.currentPage,
+        key: state.key,
         size: 10,
         date: state.currentSelectDate,
         type: handle(),

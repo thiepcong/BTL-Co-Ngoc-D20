@@ -13,6 +13,8 @@ import 'modules/login/api/login_api.dart';
 import 'modules/login/repository/login_repository.dart';
 import 'modules/stat/api/stat_api.dart';
 import 'modules/stat/repository/stat_repository.dart';
+import 'modules/tranfer_mail/api/tranfer_mail_api.dart';
+import 'modules/tranfer_mail/repository/tranfer_mail_repository.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -48,6 +50,9 @@ class _RouteAppState extends State<RouteApp> {
         ),
         RepositoryProvider<StatRepository>(
           create: (context) => StatRepository(StatApi()),
+        ),
+        RepositoryProvider<TranferMailRepository>(
+          create: (context) => TranferMailRepository(TranferMailApi()),
         ),
       ],
       child: MaterialApp.router(

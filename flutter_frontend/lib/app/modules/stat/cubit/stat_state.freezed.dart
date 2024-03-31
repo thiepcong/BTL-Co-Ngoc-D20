@@ -20,6 +20,8 @@ mixin _$StatState {
   List<Customer> get customerMails => throw _privateConstructorUsedError;
   StatModel? get currentItem => throw _privateConstructorUsedError;
   DebtModel? get currentDebt => throw _privateConstructorUsedError;
+  NewCustomer? get currentNew => throw _privateConstructorUsedError;
+  int get currentPage => throw _privateConstructorUsedError;
   String? get currentDistrict => throw _privateConstructorUsedError;
   String? get currentWard => throw _privateConstructorUsedError;
   DateTime? get currentSelectDate => throw _privateConstructorUsedError;
@@ -41,6 +43,8 @@ abstract class $StatStateCopyWith<$Res> {
       List<Customer> customerMails,
       StatModel? currentItem,
       DebtModel? currentDebt,
+      NewCustomer? currentNew,
+      int currentPage,
       String? currentDistrict,
       String? currentWard,
       DateTime? currentSelectDate,
@@ -65,6 +69,8 @@ class _$StatStateCopyWithImpl<$Res, $Val extends StatState>
     Object? customerMails = null,
     Object? currentItem = freezed,
     Object? currentDebt = freezed,
+    Object? currentNew = freezed,
+    Object? currentPage = null,
     Object? currentDistrict = freezed,
     Object? currentWard = freezed,
     Object? currentSelectDate = freezed,
@@ -88,6 +94,14 @@ class _$StatStateCopyWithImpl<$Res, $Val extends StatState>
           ? _value.currentDebt
           : currentDebt // ignore: cast_nullable_to_non_nullable
               as DebtModel?,
+      currentNew: freezed == currentNew
+          ? _value.currentNew
+          : currentNew // ignore: cast_nullable_to_non_nullable
+              as NewCustomer?,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
       currentDistrict: freezed == currentDistrict
           ? _value.currentDistrict
           : currentDistrict // ignore: cast_nullable_to_non_nullable
@@ -125,6 +139,8 @@ abstract class _$$StatStateImplCopyWith<$Res>
       List<Customer> customerMails,
       StatModel? currentItem,
       DebtModel? currentDebt,
+      NewCustomer? currentNew,
+      int currentPage,
       String? currentDistrict,
       String? currentWard,
       DateTime? currentSelectDate,
@@ -147,6 +163,8 @@ class __$$StatStateImplCopyWithImpl<$Res>
     Object? customerMails = null,
     Object? currentItem = freezed,
     Object? currentDebt = freezed,
+    Object? currentNew = freezed,
+    Object? currentPage = null,
     Object? currentDistrict = freezed,
     Object? currentWard = freezed,
     Object? currentSelectDate = freezed,
@@ -170,6 +188,14 @@ class __$$StatStateImplCopyWithImpl<$Res>
           ? _value.currentDebt
           : currentDebt // ignore: cast_nullable_to_non_nullable
               as DebtModel?,
+      currentNew: freezed == currentNew
+          ? _value.currentNew
+          : currentNew // ignore: cast_nullable_to_non_nullable
+              as NewCustomer?,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
       currentDistrict: freezed == currentDistrict
           ? _value.currentDistrict
           : currentDistrict // ignore: cast_nullable_to_non_nullable
@@ -202,6 +228,8 @@ class _$StatStateImpl extends _StatState {
       final List<Customer> customerMails = const [],
       this.currentItem,
       this.currentDebt,
+      this.currentNew,
+      this.currentPage = 1,
       this.currentDistrict,
       this.currentWard,
       this.currentSelectDate,
@@ -227,6 +255,11 @@ class _$StatStateImpl extends _StatState {
   @override
   final DebtModel? currentDebt;
   @override
+  final NewCustomer? currentNew;
+  @override
+  @JsonKey()
+  final int currentPage;
+  @override
   final String? currentDistrict;
   @override
   final String? currentWard;
@@ -239,7 +272,7 @@ class _$StatStateImpl extends _StatState {
 
   @override
   String toString() {
-    return 'StatState(isLoading: $isLoading, customerMails: $customerMails, currentItem: $currentItem, currentDebt: $currentDebt, currentDistrict: $currentDistrict, currentWard: $currentWard, currentSelectDate: $currentSelectDate, message: $message, error: $error)';
+    return 'StatState(isLoading: $isLoading, customerMails: $customerMails, currentItem: $currentItem, currentDebt: $currentDebt, currentNew: $currentNew, currentPage: $currentPage, currentDistrict: $currentDistrict, currentWard: $currentWard, currentSelectDate: $currentSelectDate, message: $message, error: $error)';
   }
 
   @override
@@ -255,6 +288,10 @@ class _$StatStateImpl extends _StatState {
                 other.currentItem == currentItem) &&
             (identical(other.currentDebt, currentDebt) ||
                 other.currentDebt == currentDebt) &&
+            (identical(other.currentNew, currentNew) ||
+                other.currentNew == currentNew) &&
+            (identical(other.currentPage, currentPage) ||
+                other.currentPage == currentPage) &&
             (identical(other.currentDistrict, currentDistrict) ||
                 other.currentDistrict == currentDistrict) &&
             (identical(other.currentWard, currentWard) ||
@@ -272,6 +309,8 @@ class _$StatStateImpl extends _StatState {
       const DeepCollectionEquality().hash(_customerMails),
       currentItem,
       currentDebt,
+      currentNew,
+      currentPage,
       currentDistrict,
       currentWard,
       currentSelectDate,
@@ -291,6 +330,8 @@ abstract class _StatState extends StatState {
       final List<Customer> customerMails,
       final StatModel? currentItem,
       final DebtModel? currentDebt,
+      final NewCustomer? currentNew,
+      final int currentPage,
       final String? currentDistrict,
       final String? currentWard,
       final DateTime? currentSelectDate,
@@ -306,6 +347,10 @@ abstract class _StatState extends StatState {
   StatModel? get currentItem;
   @override
   DebtModel? get currentDebt;
+  @override
+  NewCustomer? get currentNew;
+  @override
+  int get currentPage;
   @override
   String? get currentDistrict;
   @override

@@ -17,9 +17,6 @@ class StatNewView extends StatefulWidget {
 }
 
 class _StatNewViewState extends State<StatNewView> {
-  int _currentPage = 1;
-  final int _totalPages = 100;
-
   Future<void> _selectDate(
       BuildContext context, Function(DateTime) onSelectDate) async {
     final DateTime? picked = await showMonthYearPicker(
@@ -160,31 +157,39 @@ class _StatNewViewState extends State<StatNewView> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 180),
-            //   child: Table(
-            //     border: TableBorder.all(),
-            //     columnWidths: const {
-            //       0: FlexColumnWidth(1),
-            //       1: FlexColumnWidth(1),
-            //     },
-            //     children: const [
-            //       TableRow(
-            //         children: [
-            //           TableCell(
-            //               child: Center(child: Text('Số lượng hộ sử dụng'))),
-            //           TableCell(child: Center(child: Text('Tỉ lệ hộ sử dụng'))),
-            //         ],
-            //       ),
-            //       TableRow(
-            //         children: [
-            //           TableCell(child: Center(child: Text('1000'))),
-            //           TableCell(child: Center(child: Text('3%'))),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 180),
+              child: Table(
+                border: TableBorder.all(),
+                columnWidths: const {
+                  0: FlexColumnWidth(1),
+                  1: FlexColumnWidth(1),
+                },
+                children: [
+                  const TableRow(
+                    children: [
+                      TableCell(
+                          child:
+                              Center(child: Text('Số lượng hộ mới sử dụng'))),
+                      TableCell(
+                          child: Center(child: Text('Tỉ lệ hộ mới sử dụng'))),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(
+                          child: Center(
+                              child: Text(
+                                  state.currentNew?.newCustomerNum.toString() ??
+                                      ''))),
+                      TableCell(
+                          child: Center(
+                              child: Text(state.currentNew?.percent ?? ''))),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -217,29 +222,6 @@ class _StatNewViewState extends State<StatNewView> {
                             .map((e) => TableRowItem(e.value, e.key))
                             .toList()) ??
                         [],
-                    // TableRow(
-                    //   children: [
-                    //     TableCell(child: Center(child: Text('STT'))),
-                    //     TableCell(child: Center(child: Text('Mã khách hàng'))),
-                    //     TableCell(child: Center(child: Text('Khách hàng'))),
-                    //     TableCell(child: Center(child: Text('Địa chỉ'))),
-                    //     TableCell(child: Center(child: Text('Số điện thoại'))),
-                    //     TableCell(child: Center(child: Text('Email'))),
-                    //     TableCell(child: Center(child: Text('Mã số thuế'))),
-                    //   ],
-                    // ),
-                    // TableRow(
-                    //   children: [
-                    //     TableCell(child: Center(child: Text('1'))),
-                    //     TableCell(child: Center(child: Text('KH001'))),
-                    //     TableCell(child: Center(child: Text('Nguyễn Văn A'))),
-                    //     TableCell(child: Center(child: Text('123 Đường ABC'))),
-                    //     TableCell(child: Center(child: Text('0123456789'))),
-                    //     TableCell(
-                    //         child: Center(child: Text('example@example.com'))),
-                    //     TableCell(child: Center(child: Text('123456'))),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
@@ -252,31 +234,27 @@ class _StatNewViewState extends State<StatNewView> {
                     child: Row(
                       children: [
                         TextButton(
-                          onPressed: _currentPage > 1
-                              ? () => setState(() => _currentPage--)
+                          onPressed: state.currentPage > 1
+                              ? () =>
+                                  cubit.setCurrentPage(state.currentPage - 1, 2)
                               : null,
                           child: const Text('Previous'),
                         ),
-                        Text('Page $_currentPage of $_totalPages'),
+                        Text(
+                            'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
                         TextButton(
-                          onPressed: _currentPage < _totalPages
-                              ? () => setState(() => _currentPage++)
+                          onPressed: state.currentPage <
+                                  (state.currentItem?.pageDto.totalPages ?? 0)
+                              ? () =>
+                                  cubit.setCurrentPage(state.currentPage + 1, 2)
                               : null,
                           child: const Text('Next'),
                         ),
                       ],
                     ),
                   ),
-                  // TextButton(
-                  //   onPressed: () {
-                  //     context.pushRoute(const TranferMailViewRoute());
-                  //   },
-                  //   child: const Text('Nhắc nhở'),
-                  // ),
                   TextButton(
-                    onPressed: () {
-                      // Xử lý khi nhấn nút Nhắc nhở
-                    },
+                    onPressed: () {},
                     child: const Text('Xuất báo cáo'),
                   ),
                 ],
