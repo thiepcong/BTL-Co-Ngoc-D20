@@ -41,7 +41,6 @@ public class ReportInforController {
     @PostMapping("/getRevenueList")
     public ResponseEntity<?> getRevenueList(@RequestBody ReportInforRequest request){
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
-        System.out.println("called");
         return ResponseEntity.ok(customerInforService.getRevenue(request, pageable));
     }
 }

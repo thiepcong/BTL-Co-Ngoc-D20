@@ -77,12 +77,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.name, " +
             "       c.phone, " +
             "       c.email," +
-            "       ad.provine," +
-            "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber," +
-            "       wmi.startTime," +
-            "       wmi.endTime," +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex, " +
+            "       wmi.startTime, " +
+            "       wmi.endTime, " +
             "       i.status) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -109,12 +110,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.name, " +
             "       c.phone, " +
             "       c.email," +
-            "       ad.provine," +
-            "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber," +
-            "       wmi.startTime," +
-            "       wmi.endTime," +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex, " +
+            "       wmi.startTime, " +
+            "       wmi.endTime, " +
             "       i.status) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -127,23 +129,27 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "           AND i.status = 'unpaid' " +
             "           AND wmi.startTime >= :start " +
             "           AND wmi.endTime <= :end " +
+            "           AND ((:search IS NULL or c.name like concat('%', :search, '%')) " +
+            "               OR (:search IS NULL or c.phone like concat('%', :search, '%')) " +
+            "               OR (:search IS NULL or c.email like concat('%', :search, '%'))) " +
             "           AND c.isDeleted = FALSE " +
             "           AND i.isDeleted = FALSE " +
             "        ORDER BY c.name")
     List<ReportDTO> findUnPaidCustomerListByAddressAndTime(String province, String district, String ward,
-                                                           Date start, Date end, Pageable pageable);
+                                                           Date start, Date end, String search);
 
     @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.ReportDTO(" +
             "       c.id, " +
             "       c.name, " +
             "       c.phone, " +
             "       c.email," +
-            "       ad.provine," +
-            "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber," +
-            "       wmi.startTime," +
-            "       wmi.endTime," +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex, " +
+            "       wmi.startTime, " +
+            "       wmi.endTime, " +
             "       i.status) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -198,9 +204,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.email," +
             "       ad.provine," +
             "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber, " +
-            "       i.totalPrice, " +
+            "       ad.ward, " +
+            "       wmi.newIndex," +
+            "       wmi.oldIndex, " +
+            "       wmi.startTime," +
+            "       wmi.endTime," +
             "       i.status ) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -226,9 +234,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.email," +
             "       ad.provine," +
             "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber, " +
-            "       i.totalPrice, " +
+            "       ad.ward, " +
+            "       wmi.newIndex," +
+            "       wmi.oldIndex," +
+            "       wmi.startTime," +
+            "       wmi.endTime," +
             "       i.status ) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -277,12 +287,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.name, " +
             "       c.phone, " +
             "       c.email," +
-            "       ad.provine," +
-            "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber," +
-            "       wmi.startTime," +
-            "       wmi.endTime," +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex, " +
+            "       wmi.startTime, " +
+            "       wmi.endTime, " +
             "       i.status) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -304,16 +315,48 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Page<ReportDTO> findPaidCustomerPage(String province, String district, String ward,
                                      Date start, Date end, String search, Pageable pageable);
 
-    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.RevenueDTO(" +
+    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.ReportDTO(" +
             "       c.id, " +
             "       c.name, " +
             "       c.phone, " +
             "       c.email," +
-            "       ad.provine," +
-            "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber, " +
-            "       i.totalPrice, " +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex, " +
+            "       wmi.startTime, " +
+            "       wmi.endTime, " +
+            "       i.status) " +
+            "       FROM Customer c " +
+            "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
+            "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
+            "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
+            "       LEFT JOIN Invoice i ON wm.id = i.waterMeter.id " +
+            "       WHERE (:province IS NULL OR  ad.provine = :province)  " +
+            "           AND (:district IS NULL OR ad.district = :district) " +
+            "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
+            "           AND i.status = 'unpaid' " +
+            "           AND wmi.startTime >= :start " +
+            "           AND wmi.endTime <= :end " +
+            "           AND c.isDeleted = FALSE " +
+            "           AND i.isDeleted = FALSE " +
+            "           ORDER BY c.name ")
+    List<ReportDTO> findAllPaidCustomer(String province, String district, String ward,
+                                         Date start, Date end);
+
+    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.RevenueDTO(" +
+            "       c.id, " +
+            "       c.name, " +
+            "       c.phone, " +
+            "       c.email, " +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex," +
+            "       wmi.startTime," +
+            "       wmi.endTime, " +
             "       i.status ) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
@@ -335,12 +378,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.id, " +
             "       c.name, " +
             "       c.phone, " +
-            "       c.email," +
-            "       ad.provine," +
-            "       ad.district," +
-            "       ad.ward," +
-            "       wm.waterUsageNumber, " +
-            "       i.totalPrice, " +
+            "       c.email, " +
+            "       ad.provine, " +
+            "       ad.district, " +
+            "       ad.ward, " +
+            "       wmi.newIndex, " +
+            "       wmi.oldIndex," +
+            "       wmi.startTime," +
+            "       wmi.endTime, " +
             "       i.status ) " +
             "       FROM Customer c " +
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +

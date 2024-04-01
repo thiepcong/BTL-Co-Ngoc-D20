@@ -20,6 +20,9 @@ public class UserType {
     @Column(name = "TYPE_NAME")
     private String typeName;
 
+    @OneToMany(mappedBy = "userType")
+    private List<Customer> customer;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userType", cascade = CascadeType.ALL)
     private List<PriceList> listPriceLists;
 }

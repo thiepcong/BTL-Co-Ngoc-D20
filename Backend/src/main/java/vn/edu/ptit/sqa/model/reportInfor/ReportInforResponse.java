@@ -16,5 +16,6 @@ public class ReportInforResponse {
     private ReportDTO reportDTO;
     private List<ReportDTO> reportDTOList;
     private DebtReportDTO debtReportDTO;
+    private float totalMoney;
     private PageDto pageDto;
 }

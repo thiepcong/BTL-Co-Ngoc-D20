@@ -9,6 +9,6 @@ import java.util.List;
 public class RevenueResponse {
     private RevenueDTO revenueDTO;
     private List<RevenueDTO> revenueDTOList;
-    private Long totalMoney;
+    private float totalMoney;
     private PageDto pageDto;
 }
