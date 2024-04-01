@@ -27,5 +27,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Invoice> invoices;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UserType userType;
+
     private boolean isDeleted;
 }

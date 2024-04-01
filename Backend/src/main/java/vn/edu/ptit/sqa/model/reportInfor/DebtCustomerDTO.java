@@ -14,12 +14,17 @@ public class DebtCustomerDTO {
     private String district;
     private String ward;
     private Long waterUsageNumber;
+    private Long newWaterUsageIndex;
+    private Long oldWaterUsageIndex;
     private String status;
+    private Date startTime;
+    private Date endTime;
     private int customerNumber;
-    private Long debtMoneyNumber;
+    private float debtMoneyNumber;
 
     public DebtCustomerDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
-                           String provine, String district, String ward, Long waterUsageNumber,Long debtMoneyNumber, String status) {
+                           String provine, String district, String ward, Long newWaterUsageIndex,
+                           Long oldWaterUsageIndex, Date startTime, Date endTime, String status) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -27,8 +32,10 @@ public class DebtCustomerDTO {
         this.provine = provine;
         this.district = district;
         this.ward = ward;
-        this.waterUsageNumber = waterUsageNumber;
-        this.debtMoneyNumber = debtMoneyNumber;
+        this.newWaterUsageIndex = newWaterUsageIndex;
+        this.oldWaterUsageIndex = oldWaterUsageIndex;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.status = status;
     }
 }

@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Data
 public class RevenueDTO {
     private Long customerId;
@@ -14,11 +16,16 @@ public class RevenueDTO {
     private String district;
     private String ward;
     private Long waterUsageNumber;
+    private Long newWaterUsageIndex;
+    private Long oldWaterUsageIndex;
+    private Date start;
+    private Date end;
     private String status;
-    private Long moneyNumber;
+    private float moneyNumber;
 
     public RevenueDTO(Long customerId, String customerName, String customerPhone, String customerEmail, String province,
-                      String district, String ward, Long waterUsageNumber,Long moneyNumber, String status) {
+                      String district, String ward, Long newWaterUsageIndex, Long oldWaterUsageIndex, Date start, Date end,
+                      String status) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -26,8 +33,10 @@ public class RevenueDTO {
         this.province = province;
         this.district = district;
         this.ward = ward;
-        this.waterUsageNumber = waterUsageNumber;
-        this.moneyNumber = moneyNumber;
+        this.newWaterUsageIndex = newWaterUsageIndex;
+        this.oldWaterUsageIndex = oldWaterUsageIndex;
+        this.start = start;
+        this.end = end;
         this.status = status;
     }
 }

@@ -20,24 +20,12 @@ public class ReportDTO {
     private Date endTime;
     private String status;
     private int customerNumber;
-    public ReportDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
-                     Long waterUsageNumber, Long newWaterUsageIndex, Long oldWaterUsageIndex,
-                     Date startTime, Date endTime, String status) {
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.customerPhone = customerPhone;
-        this.customerEmail = customerEmail;
-        this.waterUsageNumber = waterUsageNumber;
-        this.newWaterUsageIndex = newWaterUsageIndex;
-        this.oldWaterUsageIndex = oldWaterUsageIndex;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.status = status;
-    }
+    private float moneyPrice;
+    private Long totaMoney;
 
     public ReportDTO(Long customerId, String customerName, String customerPhone, String customerEmail, String provine,
-                     String district, String ward, Long waterUsageNumber, Long newWaterUsageIndex, Long oldWaterUsageIndex,
-                     Date startTime, Date endTime, String status, int customerNumber) {
+                     String district, String ward, Long newWaterUsageIndex, Long oldWaterUsageIndex,
+                     Date startTime, Date endTime, String status) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -45,13 +33,11 @@ public class ReportDTO {
         this.provine = provine;
         this.district = district;
         this.ward = ward;
-        this.waterUsageNumber = waterUsageNumber;
         this.newWaterUsageIndex = newWaterUsageIndex;
         this.oldWaterUsageIndex = oldWaterUsageIndex;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
-        this.customerNumber = customerNumber;
     }
 
     public ReportDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
