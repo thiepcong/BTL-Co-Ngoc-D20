@@ -67,6 +67,11 @@ class _ListClientViewState extends State<ListClientView> {
       child: BlocBuilder<ListClientCubit, ListClientState>(
         builder: (context, state) {
           final cubit = context.read<ListClientCubit>();
+          bool checkFilter = (state.currentItem?.reportDTOList ?? [])
+              .where((element) =>
+                  element.moneyPrice != null && element.moneyPrice != 0)
+              .toList()
+              .isNotEmpty;
           return Scaffold(
             appBar: const CustomAppBar(label: 'Danh Sách Khách Hàng'),
             body: Stack(
@@ -228,34 +233,40 @@ class _ListClientViewState extends State<ListClientView> {
                         padding: const EdgeInsets.all(8.0),
                         child: Table(
                           border: TableBorder.all(),
-                          columnWidths: const {
-                            0: FlexColumnWidth(1),
-                            1: FlexColumnWidth(1),
-                            2: FlexColumnWidth(2),
-                            3: FlexColumnWidth(3),
-                            4: FlexColumnWidth(2),
-                            5: FlexColumnWidth(2),
-                            6: FlexColumnWidth(2),
-                            7: FlexColumnWidth(1),
+                          columnWidths: {
+                            0: const FlexColumnWidth(1),
+                            1: const FlexColumnWidth(1),
+                            2: const FlexColumnWidth(2),
+                            3: const FlexColumnWidth(3),
+                            4: const FlexColumnWidth(2),
+                            5: const FlexColumnWidth(2),
+                            6: const FlexColumnWidth(2),
+                            if (checkFilter) 8: const FlexColumnWidth(1),
                           },
                           children: [
-                            const TableRow(
+                            TableRow(
                               children: [
-                                TableCell(child: Center(child: Text('STT'))),
-                                TableCell(
+                                const TableCell(
+                                    child: Center(child: Text('STT'))),
+                                const TableCell(
                                     child:
                                         Center(child: Text('Mã khách hàng'))),
-                                TableCell(
+                                const TableCell(
                                     child: Center(child: Text('Khách hàng'))),
-                                TableCell(
+                                const TableCell(
                                     child: Center(child: Text('Địa chỉ'))),
-                                TableCell(
+                                const TableCell(
                                     child:
                                         Center(child: Text('Số điện thoại'))),
-                                TableCell(child: Center(child: Text('Email'))),
-                                TableCell(
+                                const TableCell(
+                                    child: Center(child: Text('Email'))),
+                                const TableCell(
                                     child: Center(child: Text('Trạng thái'))),
-                                TableCell(child: Center(child: Text('Chọn')))
+                                if (checkFilter)
+                                  const TableCell(
+                                      child: Center(child: Text('Tổng tiền'))),
+                                const TableCell(
+                                    child: Center(child: Text('Chọn')))
                               ],
                             ),
                             ...state.currentItem?.reportDTOList
@@ -263,12 +274,12 @@ class _ListClientViewState extends State<ListClientView> {
                                     .entries
                                     .map(
                                       (e) => TableRowItem(
-                                        e.value,
-                                        e.key,
-                                        state.customerMails.contains(e.value),
-                                        (ee) => cubit.setCurrentTrandMail(
-                                            e.value, ee),
-                                      ),
+                                          e.value,
+                                          e.key,
+                                          state.customerMails.contains(e.value),
+                                          (ee) => cubit.setCurrentTrandMail(
+                                              e.value, ee),
+                                          checkFilter),
                                     )
                                     .toList() ??
                                 [],
@@ -288,10 +299,10 @@ class _ListClientViewState extends State<ListClientView> {
                                       ? () => cubit
                                           .setCurrentPage(state.currentPage - 1)
                                       : null,
-                                  child: const Text('Previous'),
+                                  child: const Text('Trước'),
                                 ),
                                 Text(
-                                    'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
+                                    'Trang ${state.currentPage} : ${state.currentItem?.pageDto.totalPages ?? 1}'),
                                 TextButton(
                                   onPressed: state.currentPage <
                                           (state.currentItem?.pageDto
@@ -300,7 +311,7 @@ class _ListClientViewState extends State<ListClientView> {
                                       ? () => cubit
                                           .setCurrentPage(state.currentPage + 1)
                                       : null,
-                                  child: const Text('Next'),
+                                  child: const Text('Sau'),
                                 ),
                               ],
                             ),
@@ -348,9 +359,11 @@ class TableRowItem extends TableRow {
   final Customer item;
   final int index;
   final bool isChoose;
+  final bool isFilter;
   final void Function(bool?)? onChanged;
 
-  const TableRowItem(this.item, this.index, this.isChoose, this.onChanged);
+  const TableRowItem(
+      this.item, this.index, this.isChoose, this.onChanged, this.isFilter);
   @override
   List<Widget> get children => [
         TableCell(child: Center(child: Text(index.toString()))),
@@ -361,6 +374,8 @@ class TableRowItem extends TableRow {
         TableCell(child: Center(child: Text(item.customerEmail.toString()))),
         TableCell(
             child: Center(child: Text(getByType(item.status.toString())))),
+        if (isFilter)
+          TableCell(child: Center(child: Text(item.moneyPrice.toString()))),
         TableCell(
             child:
                 Center(child: Checkbox(value: isChoose, onChanged: onChanged))),

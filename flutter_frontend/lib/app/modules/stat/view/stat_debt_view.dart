@@ -193,8 +193,11 @@ class _StatDebtViewState extends State<StatDebtView> {
                                               .toString()))),
                                   TableCell(
                                       child: Center(
-                                          child: Text(
-                                              state.currentDebt!.percent))),
+                                          child: Text(state
+                                                      .currentDebt!.percent ==
+                                                  "NaN%"
+                                              ? "0%"
+                                              : state.currentDebt!.percent))),
                                   TableCell(
                                     child: Center(
                                         child: InkWell(
@@ -294,17 +297,17 @@ class _StatDebtViewState extends State<StatDebtView> {
                                 ? () => cubit.setCurrentPage(
                                     state.currentPage - 1, 3)
                                 : null,
-                            child: const Text('Previous'),
+                            child: const Text('Trước'),
                           ),
                           Text(
-                              'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
+                              'Trang ${state.currentPage} : ${state.currentItem?.pageDto.totalPages ?? 1}'),
                           TextButton(
                             onPressed: state.currentPage <
                                     (state.currentItem?.pageDto.totalPages ?? 0)
                                 ? () => cubit.setCurrentPage(
                                     state.currentPage + 1, 3)
                                 : null,
-                            child: const Text('Next'),
+                            child: const Text('Sau'),
                           ),
                         ],
                       ),

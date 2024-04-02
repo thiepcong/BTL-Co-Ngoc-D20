@@ -188,14 +188,15 @@ class _StatRevenueViewState extends State<StatRevenueView> {
                             TableCell(child: Center(child: Text('Tổng tiền'))),
                           ],
                         ),
-                        ...state.currentItem!.reportDTOList
-                            .asMap()
-                            .entries
-                            .map((e) => TableRowItem(
-                                  e.value,
-                                  e.key,
-                                ))
-                            .toList(),
+                        ...state.currentItem?.reportDTOList
+                                .asMap()
+                                .entries
+                                .map((e) => TableRowItem(
+                                      e.value,
+                                      e.key,
+                                    ))
+                                .toList() ??
+                            [],
                         // TableRow(
                         //   children: [
                         //     TableCell(child: Center(child: Text('1'))),
@@ -230,17 +231,17 @@ class _StatRevenueViewState extends State<StatRevenueView> {
                               ? () =>
                                   cubit.setCurrentPage(state.currentPage - 1, 1)
                               : null,
-                          child: const Text('Previous'),
+                          child: const Text('Trước'),
                         ),
                         Text(
-                            'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
+                            'Trang ${state.currentPage} : ${state.currentItem?.pageDto.totalPages ?? 1}'),
                         TextButton(
                           onPressed: state.currentPage <
                                   (state.currentItem?.pageDto.totalPages ?? 0)
                               ? () =>
                                   cubit.setCurrentPage(state.currentPage + 1, 1)
                               : null,
-                          child: const Text('Next'),
+                          child: const Text('Sau'),
                         ),
                       ],
                     ),

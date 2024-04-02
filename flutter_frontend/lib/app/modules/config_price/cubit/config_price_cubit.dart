@@ -51,18 +51,23 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
   }
 
   void getAllPriceList() async {
-    emit(state.copyWith(isLoading: true));
-    final res = await _repo.getAllPriceList();
-    final re = handleInit(res, 'Hộ Nghèo');
-    if (re != null) {
-      emit(state.copyWith(
-        currentList:
-            re.listPriceScales.sublist(0, re.listPriceScales.length - 1),
-        lastPriceScale: re.listPriceScales.last.copyWith(endIndex: 100000),
-        currentItem: re,
-      ));
+    try {
+      emit(state.copyWith(isLoading: true));
+      final res = await _repo.getAllPriceList();
+      final re = handleInit(res, 'Hộ Nghèo');
+      if (re != null) {
+        emit(state.copyWith(
+          currentList:
+              re.listPriceScales.sublist(0, re.listPriceScales.length - 1),
+          lastPriceScale: re.listPriceScales.last.copyWith(endIndex: 100000),
+          currentItem: re,
+        ));
+      }
+      emit(state.copyWith(all: res, isLoading: false));
+    } catch (e) {
+      if (e is StateError) return;
+      rethrow;
     }
-    emit(state.copyWith(all: res, isLoading: false));
   }
 
   void getByType(String type) {
@@ -107,6 +112,7 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
                 e is BadRequestException ? e.message : "Vui lòng thử lại sau"));
         return;
       }
+      if (e is StateError) return;
       rethrow;
     }
   }

@@ -52,6 +52,7 @@ class ListClientCubit extends Cubit<ListClientState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      if (e is StateError) return;
       rethrow;
     }
   }

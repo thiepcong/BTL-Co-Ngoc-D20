@@ -238,17 +238,17 @@ class _StatNewViewState extends State<StatNewView> {
                               ? () =>
                                   cubit.setCurrentPage(state.currentPage - 1, 2)
                               : null,
-                          child: const Text('Previous'),
+                          child: const Text('Trước'),
                         ),
                         Text(
-                            'Page ${state.currentPage} of ${state.currentItem?.pageDto.totalPages ?? 1}'),
+                            'Trang ${state.currentPage} : ${state.currentItem?.pageDto.totalPages ?? 1}'),
                         TextButton(
                           onPressed: state.currentPage <
                                   (state.currentItem?.pageDto.totalPages ?? 0)
                               ? () =>
                                   cubit.setCurrentPage(state.currentPage + 1, 2)
                               : null,
-                          child: const Text('Next'),
+                          child: const Text('Sau'),
                         ),
                       ],
                     ),

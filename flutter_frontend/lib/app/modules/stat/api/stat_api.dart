@@ -23,8 +23,8 @@ class StatApi extends BaseRemoteSource {
       "month": DateFormat('yyyy-MM-dd').format(date),
     });
     try {
-      return callApiWithErrorParser(request)
-          .then((value) => StatModel.fromJson(value.data));
+      return callApiWithErrorParser(request).then((value) =>
+          StatModel.fromJson(value.data, keyList: 'debtCustomerList'));
     } catch (e) {
       rethrow;
     }
@@ -113,8 +113,8 @@ class StatApi extends BaseRemoteSource {
       "month": DateFormat('yyyy-MM-dd').format(date),
     });
     try {
-      return callApiWithErrorParser(request)
-          .then((value) => StatModel.fromJson(value.data));
+      return callApiWithErrorParser(request).then(
+          (value) => StatModel.fromJson(value.data, keyList: 'revenueDTOList'));
     } catch (e) {
       rethrow;
     }

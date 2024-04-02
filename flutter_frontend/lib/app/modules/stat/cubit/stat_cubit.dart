@@ -22,6 +22,7 @@ class StatCubit extends Cubit<StatState> {
 
   void getRevenueList() async {
     try {
+      emit(state.copyWith(message: null));
       if (state.currentDistrict == null ||
           state.currentWard == null ||
           state.currentSelectDate == null) {
@@ -43,12 +44,14 @@ class StatCubit extends Cubit<StatState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      if (e is StateError) return;
       rethrow;
     }
   }
 
   void getDebtCustomerList() async {
     try {
+      emit(state.copyWith(message: null));
       if (state.currentDistrict == null ||
           state.currentWard == null ||
           state.currentSelectDate == null) {
@@ -71,12 +74,14 @@ class StatCubit extends Cubit<StatState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      if (e is StateError) return;
       rethrow;
     }
   }
 
   void getDebtCustomer() async {
     try {
+      emit(state.copyWith(message: null));
       if (state.currentDistrict == null ||
           state.currentWard == null ||
           state.currentSelectDate == null) {
@@ -96,12 +101,14 @@ class StatCubit extends Cubit<StatState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      if (e is StateError) return;
       rethrow;
     }
   }
 
   void getNewCustomers() async {
     try {
+      emit(state.copyWith(message: null));
       if (state.currentDistrict == null ||
           state.currentWard == null ||
           state.currentSelectDate == null) {
@@ -135,6 +142,7 @@ class StatCubit extends Cubit<StatState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      if (e is StateError) return;
       rethrow;
     }
   }
@@ -148,6 +156,7 @@ class StatCubit extends Cubit<StatState> {
       currentPage: 1,
       currentWard: null,
       currentNew: null,
+      message: null,
     ));
   }
 

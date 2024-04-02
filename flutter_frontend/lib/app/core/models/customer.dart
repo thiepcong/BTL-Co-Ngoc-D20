@@ -14,6 +14,8 @@ class Customer {
   final String? status;
   final int? moneyNumber;
   final int? debtMoneyNumber;
+  final double? moneyPrice;
+  final double? totaMoney;
 
   Customer({
     required this.customerId,
@@ -31,6 +33,8 @@ class Customer {
     this.status,
     this.moneyNumber,
     this.debtMoneyNumber,
+    this.moneyPrice,
+    this.totaMoney,
   });
 
   Map<String, dynamic> toJson() {
@@ -50,6 +54,8 @@ class Customer {
       'status': status,
       'moneyNumber': moneyNumber,
       'debtMoneyNumber': debtMoneyNumber,
+      'moneyPrice': moneyPrice,
+      "totaMoney": totaMoney,
     };
   }
 
@@ -82,6 +88,9 @@ class Customer {
           map['moneyNumber'] != null ? map['moneyNumber'] as int : null,
       debtMoneyNumber:
           map['debtMoneyNumber'] != null ? map['debtMoneyNumber'] as int : null,
+      totaMoney: map['totaMoney'] != null ? map['totaMoney'] as double : null,
+      moneyPrice:
+          map['moneyPrice'] != null ? map['moneyPrice'] as double : null,
     );
   }
 }
