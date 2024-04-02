@@ -70,34 +70,11 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             throw new NotFoundException("Err: List is null");
         }
 
-        for(ReportDTO dto : dtoList){
-            Long customerId = dto.getCustomerId();
-            Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
-            if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
-            Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStartTime(), dto.getEndTime());
-            if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
-            float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
-            dto.setMoneyPrice(money);
-        }
-
+        setMoneyForList(dtoList);
         List<ReportDTO> unpaidList = customerRepository.findUnPaidCustomerListByAddressAndTime(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, request.getSearch());
-        for(ReportDTO dto : unpaidList){
-            Long customerId = dto.getCustomerId();
-            Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
-            if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
-            Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStartTime(), dto.getEndTime());
-            if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
-            float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
-            dto.setMoneyPrice(money);
-        }
 
+        setMoneyForList(unpaidList);
         float totalMoney = (float) unpaidList.stream().mapToDouble(ReportDTO::getMoneyPrice).sum();
         ReportInforResponse response = new ReportInforResponse();
         response.setReportDTOList(dtoList);
@@ -139,10 +116,10 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
             if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
             Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStartTime(), dto.getEndTime());
+            List<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
+                    dto.getStartTime());
             if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
+            List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setDebtMoneyNumber(money);
         }
@@ -152,10 +129,10 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
             if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
             Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStartTime(), dto.getEndTime());
+            List<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
+                    dto.getStartTime());
             if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
+            List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setDebtMoneyNumber(money);
         }
@@ -206,34 +183,11 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Page<ReportDTO> paidCustomerPage = customerRepository.findPaidCustomerPage(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, request.getSearch(), pageable);
         List<ReportDTO> paidCusList = paidCustomerPage.getContent();
-        for(ReportDTO dto : paidCusList){
-            Long customerId = dto.getCustomerId();
-            Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
-            if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
-            Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStartTime(), dto.getEndTime());
-            if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
-            float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
-            dto.setMoneyPrice(money);
-        }
+        setMoneyForList(paidCusList);
         List<ReportDTO> allPaidCustomer = customerRepository.findAllPaidCustomer(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end);
 
-        for (ReportDTO dto : allPaidCustomer) {
-            Long customerId = dto.getCustomerId();
-            Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
-            if (customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
-            Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStartTime(), dto.getEndTime());
-            if (optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
-            float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
-            dto.setMoneyPrice(money);
-        }
-
+        setMoneyForList(allPaidCustomer);
         float totalMoney = (float) allPaidCustomer.stream().mapToDouble(ReportDTO::getMoneyPrice).sum();
         response.setReportDTOList(paidCusList);
         response.setPageDto(PageDto.populatePageDto(paidCustomerPage));
@@ -252,10 +206,11 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
             if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
             Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStart(), dto.getEnd());
+            List<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
+                    dto.getStart());
+            System.out.println(optionalPriceList);
             if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
+            List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setMoneyNumber(money);
         }
@@ -267,10 +222,10 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
             if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
             Customer customer = customerOptional.get();
-            Optional<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
-                    dto.getStart(), dto.getEnd());
+            List<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
+                    dto.getStart());
             if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
-            List<PriceScale> priceScales = optionalPriceList.get().getListPriceScales();
+            List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setMoneyNumber(money);
         }
@@ -280,6 +235,21 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         response.setTotalMoney(totalMoney);
         response.setPageDto(PageDto.populatePageDto(revenueDTOPage));
         return response;
+    }
+
+    private void setMoneyForList(List<ReportDTO> reportDTOS){
+        for(ReportDTO dto : reportDTOS){
+            Long customerId = dto.getCustomerId();
+            Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
+            if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
+            Customer customer = customerOptional.get();
+            List<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
+                    dto.getStartTime());
+            if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
+            List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
+            float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
+            dto.setMoneyPrice(money);
+        }
     }
 
 }

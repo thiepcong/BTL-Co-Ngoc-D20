@@ -303,7 +303,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       WHERE (:province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
-            "           AND i.status = 'unpaid' " +
+            "           AND i.status = 'paid' " +
             "           AND wmi.startTime >= :start " +
             "           AND wmi.endTime <= :end " +
             "           AND ((:search IS NULL or c.name like concat('%', :search, '%')) " +
@@ -336,7 +336,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       WHERE (:province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
-            "           AND i.status = 'unpaid' " +
+            "           AND i.status = 'paid' " +
             "           AND wmi.startTime >= :start " +
             "           AND wmi.endTime <= :end " +
             "           AND c.isDeleted = FALSE " +
