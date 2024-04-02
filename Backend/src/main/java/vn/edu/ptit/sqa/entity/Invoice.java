@@ -26,7 +26,7 @@ public class Invoice {
     private Customer customer;
 
     @OneToOne
-    private WaterMeter waterMeter;
+    private WaterMeasurementIndex waterMeasurementIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User staff;
