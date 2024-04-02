@@ -1,6 +1,7 @@
 package vn.edu.ptit.sqa.repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,8 @@ public interface PriceListRepo extends JpaRepository<PriceList, Integer>{
 	@Query(value = "SELECT p " +
 			"		FROM PriceList p " +
 			"		WHERE p.userType.id = :userTypeId " +
-			"		AND p.applyDate between :start and :end")
-	Optional<PriceList> findByUserType(Integer userTypeId, Date start, Date end);
+			"			AND p.status = 1 " +
+			"			AND p.applyDate <= :start " +
+			"		ORDER BY p.applyDate DESC ")
+	List<PriceList> findByUserType(Integer userTypeId, Date start);
 }
