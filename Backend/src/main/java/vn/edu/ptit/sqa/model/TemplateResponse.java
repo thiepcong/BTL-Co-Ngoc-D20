@@ -18,5 +18,5 @@ public class TemplateResponse {
     private String templateSubject;
     private String templateContent;
     private Timestamp createdDate;
-    private List<TemplatePropertyResponse> listProperties;
+//    private List<TemplatePropertyResponse> listProperties;
 }

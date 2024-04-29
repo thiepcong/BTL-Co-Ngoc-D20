@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import vn.edu.ptit.sqa.entity.EmailTemplate;
 import vn.edu.ptit.sqa.exception.NotFoundException;
 import vn.edu.ptit.sqa.model.TemplateAM;
-import vn.edu.ptit.sqa.model.TemplatePropertyResponse;
 import vn.edu.ptit.sqa.model.TemplateResponse;
 import vn.edu.ptit.sqa.model.pagination.DataTableResults;
 import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
@@ -41,7 +40,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
         Optional<EmailTemplate> emailTemplate = emailTemplateRepo.findById(id);
         if(emailTemplate.isEmpty()) throw new NotFoundException("Email Template " + id + " not found");
         TemplateResponse templateResponse = ConverterUtil.mappingToObject(emailTemplate.get(), TemplateResponse.class);
-        templateResponse.setListProperties(ConverterUtil.mapList(emailTemplate.get().getListProperties(), TemplatePropertyResponse.class));
+//        templateResponse.setListProperties(ConverterUtil.mapList(emailTemplate.get().getListProperties(), TemplatePropertyResponse.class));
         return templateResponse;
     }
 

@@ -19,16 +19,9 @@ public class EmailDetailController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
     @PostMapping("/send")
-    public ResponseEntity<?> createEmailDetail(@RequestBody EmailDetailAM emailDetailAM,
-                                               @RequestParam(name = "filterAll", required = false, defaultValue = "False") Boolean isFilterAll,
-                                               @RequestParam(name = "city", required = false, defaultValue = "") String city,
-                                               @RequestParam(name = "district", required = false, defaultValue = "") String district,
-                                               @RequestParam(name = "ward", required = false, defaultValue = "") String ward,
-                                               @RequestParam(name = "village", required = false, defaultValue = "") String village,
-                                               @RequestParam(name = "customerName", required = false, defaultValue = "") String customerName,
-                                               @RequestParam(name = "isPaid", required = false, defaultValue = "False") Boolean isPaid){
-        AllUserFilter allUserFilter = new AllUserFilter(isFilterAll, city, district, ward, village, customerName, isPaid);
-        emailDetailService.createEmailDetail(emailDetailAM, allUserFilter);
+    public ResponseEntity<?> createEmailDetail(@RequestBody EmailDetailAM emailDetailAM){
+
+        emailDetailService.createEmailDetail(emailDetailAM);
         return ResponseEntity.ok("OK");
     }
 
