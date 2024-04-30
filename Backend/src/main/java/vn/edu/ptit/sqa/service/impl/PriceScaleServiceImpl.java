@@ -27,10 +27,12 @@ public class PriceScaleServiceImpl implements PriceScaleService {
                 .orElseThrow(() -> new NotFoundException("price list id " + priceListId));
         int currThreshold = 0;
         for(PriceScaleRequest priceScaleRequest : priceScaleRequests){
-            if(priceScaleRequest.getStartIndex() <= currThreshold){
+            if(priceScaleRequest.getStartIndex() > currThreshold + 1){
                 throw new BadRequestException("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị");
-            }else if(priceScaleRequest.getStartIndex() >= priceScaleRequest.getEndIndex()){
-                throw new BadRequestException("Chỉ số đầu phải bé hơn chỉ số cuối");
+            }else if(priceScaleRequest.getStartIndex() < currThreshold + 1 && currThreshold != 0){
+                throw new BadRequestException("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị");
+            }else if(priceScaleRequest.getStartIndex() >= priceScaleRequest.getEndIndex()) {
+                    throw new BadRequestException("Chỉ số đầu phải bé hơn chỉ số cuối");
             }
             currThreshold = priceScaleRequest.getEndIndex();
         }
