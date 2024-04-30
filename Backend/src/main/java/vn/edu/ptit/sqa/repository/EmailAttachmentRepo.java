@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import vn.edu.ptit.sqa.entity.EmailAttachment;
 @Repository
 public interface EmailAttachmentRepo extends JpaRepository<EmailAttachment, Long> {
+    EmailAttachment getById(Long id);
 }

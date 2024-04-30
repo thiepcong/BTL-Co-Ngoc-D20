@@ -36,12 +36,12 @@ public class EmailTemplate {
     @Column(name = "CREATED_DATE")
     private Timestamp createdDate;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "EMAIL_USED_TEMPLATE_PROPERTY",
-            joinColumns = @JoinColumn(name = "EMAIL_TEMPLATE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "TEMPLATE_PROPERTY_ID"))
-    private List<TemplateProperty> listProperties;
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "EMAIL_USED_TEMPLATE_PROPERTY",
+//            joinColumns = @JoinColumn(name = "EMAIL_TEMPLATE_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "TEMPLATE_PROPERTY_ID"))
+//    private List<TemplateProperty> listProperties;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "emailTemplate", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("emailTemplate")

@@ -6,11 +6,12 @@ import vn.edu.ptit.sqa.model.EmailDetailAM;
 import vn.edu.ptit.sqa.model.EmailDetailDto;
 import vn.edu.ptit.sqa.model.pagination.DataTableResults;
 import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
+import vn.edu.ptit.sqa.model.reportInfor.ReportInforRequest;
 
 import java.util.List;
 
 public interface EmailDetailService {
-    void createEmailDetail(EmailDetailAM emailDetailAM, AllUserFilter allUserFilter );
+    void createEmailDetail(EmailDetailAM emailDetailAM);
     void sendEmail(EmailDetailDto emailDetailDto);
 
     EmailDetailDto getEmailDetailById(Long id);

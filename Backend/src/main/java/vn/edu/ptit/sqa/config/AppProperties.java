@@ -31,7 +31,7 @@ public interface AppProperties {
         String REMOTE_FILE_PATH = "attachments/";
     }
     interface EMAIL_PROPERTY {
-        String PATTERN_PROPERTY = "<app-ht-tien-nuoc>.+?</app-ht-tien-nuoc>";
+        String PATTERN_PROPERTY = "\\{\\{[a-zA-Z0-9]+\\}\\}";
     }
 
     interface PRICE_LIST {

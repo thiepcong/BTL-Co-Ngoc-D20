@@ -13,5 +13,5 @@ public class TemplateAM {
     private String templateName;
     private String templateSubject;
     private String templateContent;
-    private List<TemplatePropertyResponse> listProperties;
+//    private List<TemplatePropertyResponse> listProperties;
 }

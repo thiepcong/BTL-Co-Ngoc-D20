@@ -25,7 +25,10 @@ import vn.edu.ptit.sqa.model.EmailDetailAM;
 import vn.edu.ptit.sqa.model.EmailDetailDto;
 import vn.edu.ptit.sqa.model.pagination.DataTableResults;
 import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
+import vn.edu.ptit.sqa.model.reportInfor.*;
+import vn.edu.ptit.sqa.repository.EmailAttachmentRepo;
 import vn.edu.ptit.sqa.repository.EmailDetailRepo;
+import vn.edu.ptit.sqa.service.CustomerInforService;
 import vn.edu.ptit.sqa.service.EmailDetailService;
 import vn.edu.ptit.sqa.service.EmailTemplateService;
 import vn.edu.ptit.sqa.service.FTPService;
@@ -33,9 +36,8 @@ import vn.edu.ptit.sqa.util.EmailUtil;
 import vn.edu.ptit.sqa.util.converter.ConverterUtil;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -53,23 +55,33 @@ public class EmailDetailServiceImpl implements EmailDetailService {
 
     @Autowired
     EmailDetailRepo emailDetailRepo;
+
+    @Autowired
+    CustomerInforService customerInforService;
+    @Autowired
+    private EmailAttachmentRepo emailAttachmentRepo;
+
     @Transactional
     @Override
-    public void createEmailDetail(EmailDetailAM request, AllUserFilter allUserFilter ) {
-        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplateById(request.getTemplate().getId());
-        if(!allUserFilter.getIsFilterAll()) {
-            for (int i = 0; i < request.getToList().size(); i++) {
-                String to = request.getToList().get(i);
+    public void createEmailDetail(EmailDetailAM request) {
+        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplateById(request.getTemplateId());
+        List<EmailAttachment> emailAttachments = new ArrayList<>();
+        request.getAttachmentIds().forEach(attachmentId -> {
+            EmailAttachment emailAttachment = emailAttachmentRepo.getById(attachmentId);
+            emailAttachments.add(emailAttachment);
+        });
+        if(emailTemplate.getId() == 8) {
+            ReportInforResponse reportInforResponse = customerInforService.getUnPaidClientList(request.getReportInforRequest(), null);
+            for (ReportDTO reportDTO : reportInforResponse.getReportDTOList()) {
+                String to = reportDTO.getCustomerEmail();
                 EmailDetail emailDetail = new EmailDetail();
                 emailDetail.setEmailTemplate(emailTemplate);
                 emailDetail.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 emailDetail.setStatus(AppProperties.EMAIL_DETAIL_STATUS.INIT);
                 emailDetail.setToEmail(to);
-                emailDetail.setEmailAttachments(request.getAttachments().stream()
-                        .map(emailAttachment -> ConverterUtil.mappingToObject(emailAttachment, EmailAttachment.class))
-                        .collect(Collectors.toList()));
-                emailDetail.setSubject(request.getTemplate().getTemplateSubject());
-                emailDetail.setContext(createContext(emailTemplate));
+                emailDetail.setEmailAttachments(emailAttachments);
+                emailDetail.setSubject(emailTemplate.getTemplateSubject());
+                emailDetail.setContext(createUnpaidCustomerContext(emailTemplate.getTemplateContent(), reportDTO));
 
                 emailDetail.setEmailSender(AppProperties.EMAIL_SERVER.USERNAME);
 
@@ -86,21 +98,60 @@ public class EmailDetailServiceImpl implements EmailDetailService {
                 emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
                 sendEmail(emailDetailMessage);
             }
-        }else{
+        }else if(emailTemplate.getId() == 10){
+            DebtReportResponse reportInforResponse = customerInforService.getDebtCustomerList(request.getReportInforRequest(), null);
+            for (DebtCustomerDTO reportDTO : reportInforResponse.getDebtCustomerList()) {
+                String to = reportDTO.getCustomerEmail();
+                EmailDetail emailDetail = new EmailDetail();
+                emailDetail.setEmailTemplate(emailTemplate);
+                emailDetail.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                emailDetail.setStatus(AppProperties.EMAIL_DETAIL_STATUS.INIT);
+                emailDetail.setToEmail(to);
+                emailDetail.setEmailAttachments(emailAttachments);
+                emailDetail.setSubject(emailTemplate.getTemplateSubject());
+                emailDetail.setContext(createDebtCustomerContext(emailTemplate.getTemplateContent(), reportDTO));
 
-        }
+                emailDetail.setEmailSender(AppProperties.EMAIL_SERVER.USERNAME);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication != null && authentication.isAuthenticated()) {
+                    Object principal = authentication.getPrincipal();
+                    if (principal instanceof User) {
+                        emailDetail.setUser((User) principal);
+                    }
+                }
+                emailDetail = emailDetailRepo.save(emailDetail);
+
+                EmailDetailDto emailDetailMessage = ConverterUtil.mappingToObject(emailDetail, EmailDetailDto.class);
+                emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
+                sendEmail(emailDetailMessage);
+            }
+        }else throw new NotFoundException("Send type not found");
     }
 
-    public String createContext(EmailTemplate emailTemplate){
-        String templateDetail = emailTemplate.getTemplateContent();
-        Pattern pattern = Pattern.compile(AppProperties.EMAIL_PROPERTY.PATTERN_PROPERTY);
-        Matcher matcher = pattern.matcher(templateDetail);
+    public String createUnpaidCustomerContext(String templateDetail, ReportDTO reportDTO){
+        templateDetail = templateDetail.replaceAll("\\{\\{customerName\\}\\}", reportDTO.getCustomerName());
+        String startTime = String.valueOf(reportDTO.getStartTime()).substring(5, 7) + " - " + String.valueOf(reportDTO.getStartTime()).substring(0, 4);
+        templateDetail = templateDetail.replaceAll("\\{\\{month\\}\\}", startTime);
+        templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getWaterUsageNumber()));
+        templateDetail = templateDetail.replaceAll("\\{\\{total\\}\\}", String.valueOf(reportDTO.getTotaMoney()));
+//
+        return templateDetail;
+    }
 
-        while (matcher.find()) {
-            log.info(matcher.group());
-            templateDetail = templateDetail.replaceAll(matcher.group(), "Huynh");
-        }
+    public String createDebtCustomerContext(String templateDetail, DebtCustomerDTO reportDTO){
+        templateDetail = templateDetail.replaceAll("\\{\\{customerName\\}\\}", reportDTO.getCustomerName());
+        String startTime = String.valueOf(reportDTO.getStartTime()).substring(5, 7) + " - " + String.valueOf(reportDTO.getStartTime()).substring(0, 4);
+        templateDetail = templateDetail.replaceAll("\\{\\{month\\}\\}", startTime);
+        templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getWaterUsageNumber()));
+        templateDetail = templateDetail.replaceAll("\\{\\{total\\}\\}", String.valueOf(reportDTO.getDebtMoneyNumber()));
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(reportDTO.getStartTime());
+
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        Date resultDateTime = calendar.getTime();
+        templateDetail = templateDetail.replaceAll("\\{\\{dueDate\\}\\}", String.valueOf(resultDateTime));
         return templateDetail;
     }
 
