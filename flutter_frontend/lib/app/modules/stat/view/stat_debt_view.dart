@@ -312,6 +312,12 @@ class _StatDebtViewState extends State<StatDebtView> {
                         ],
                       ),
                     ),
+                    (state.currentItem?.reportDTOList ?? []).isNotEmpty
+                        ? TextButton(
+                            onPressed: () {},
+                            child: const Text("Gửi mail cho tất cả khách hàng"),
+                          )
+                        : const SizedBox.shrink(),
                     TextButton(
                       onPressed: () {
                         if (state.customerMails.isEmpty) {

@@ -157,11 +157,12 @@ class ConfigPriceCubit extends Cubit<ConfigPriceState> {
       endIndex: newEndIndex,
       price: newPrice,
     );
-    if (index + 1 < li.length) {
-      li[index + 1] = li[index + 1].copyWith(startIndex: newEndIndex);
-    } else if (index == li.length - 1) {
+    if (index + 1 < li.length && newEndIndex != null) {
+      li[index + 1] = li[index + 1].copyWith(startIndex: newEndIndex + 1);
+    } else if (index == li.length - 1 && newEndIndex != null) {
       emit(state.copyWith(
-        lastPriceScale: state.lastPriceScale?.copyWith(startIndex: newEndIndex),
+        lastPriceScale:
+            state.lastPriceScale?.copyWith(startIndex: newEndIndex + 1),
       ));
     }
     emit(state.copyWith(

@@ -316,6 +316,13 @@ class _ListClientViewState extends State<ListClientView> {
                               ],
                             ),
                           ),
+                          (state.currentItem?.reportDTOList ?? []).isNotEmpty
+                              ? TextButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                      "Gửi mail cho tất cả khách hàng"),
+                                )
+                              : const SizedBox.shrink(),
                           TextButton(
                             onPressed: () {
                               if (state.customerMails.isEmpty) {
