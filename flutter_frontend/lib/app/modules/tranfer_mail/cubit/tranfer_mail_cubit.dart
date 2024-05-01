@@ -59,6 +59,7 @@ class TranferMailCubit extends Cubit<TranferMailState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      print(e.toString());
       emit(state.copyWith(isLoading: false, message: "Đã có lỗi xảy ra"));
       rethrow;
     }

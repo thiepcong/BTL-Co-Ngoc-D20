@@ -70,7 +70,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
             EmailAttachment emailAttachment = emailAttachmentRepo.getById(attachmentId);
             emailAttachments.add(emailAttachment);
         });
-        if(emailTemplate.getId() == 8) {
+        if(emailTemplate.getId() == 2) {
             ReportInforResponse reportInforResponse = customerInforService.getUnPaidClientList(request.getReportInforRequest(), null);
             for (ReportDTO reportDTO : reportInforResponse.getReportDTOList()) {
                 String to = reportDTO.getCustomerEmail();
@@ -98,7 +98,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
                 emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
                 sendEmail(emailDetailMessage);
             }
-        }else if(emailTemplate.getId() == 10){
+        }else if(emailTemplate.getId() == 1){
             DebtReportResponse reportInforResponse = customerInforService.getDebtCustomerList(request.getReportInforRequest(), null);
             for (DebtCustomerDTO reportDTO : reportInforResponse.getDebtCustomerList()) {
                 String to = reportDTO.getCustomerEmail();

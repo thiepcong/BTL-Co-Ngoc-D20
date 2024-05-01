@@ -1,22 +1,18 @@
+import 'package:intl/intl.dart';
+
 class ReportInforRequest {
   final String? provine;
   final String? district;
   final String? ward;
   final DateTime? month;
-  final String? invoiceStatus;
   final String? search;
-  final int? page;
-  final int? size;
 
   ReportInforRequest({
     this.provine,
     this.district,
     this.ward,
     this.month,
-    this.invoiceStatus,
     this.search,
-    this.page,
-    this.size,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,11 +20,8 @@ class ReportInforRequest {
       'provine': provine,
       'district': district,
       'ward': ward,
-      'month': month?.toString(),
-      'invoiceStatus': invoiceStatus,
+      'month': month != null ? DateFormat('yyyy-MM-dd').format(month!) : null,
       'search': search,
-      'page': page,
-      'size': size,
     };
   }
 }

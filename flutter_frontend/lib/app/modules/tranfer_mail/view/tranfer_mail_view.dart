@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_frontend/app/core/values/show_message_internal.dart';
 import '../../../core/models/customer.dart';
 import '../../../core/models/report_info_request.dart';
 import '../../../core/values/app_colors.dart';
@@ -39,167 +40,192 @@ class _TranferMailViewState extends State<TranferMailView> {
   }
 
   Widget _buildPage(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(
-        isLeading: true,
-        label: 'Gửi Mail Tới Khách hàng',
-        bgColor: AppColors.colorFF940000,
-        style: TextStyles.boldWhiteS20,
-      ),
-      body: BlocBuilder<TranferMailCubit, TranferMailState>(
-        builder: (context, state) {
-          final cubit = context.read<TranferMailCubit>();
-          return Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.customers != null)
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TranferMailCubit, TranferMailState>(
+          listenWhen: (previous, current) =>
+              previous.message != current.message,
+          listener: (context, state) {
+            if (state.message != null) {
+              ShowMessageInternal.showOverlay(context, state.message ?? '');
+            }
+          },
+        ),
+        BlocListener<TranferMailCubit, TranferMailState>(
+          listenWhen: (previous, current) =>
+              previous.sendEmailDone != current.sendEmailDone,
+          listener: (context, state) {
+            if (state.sendEmailDone) {
+              ShowMessageInternal.showOverlay(context, "Gửi email thành công");
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: const CustomAppBar(
+          isLeading: true,
+          label: 'Gửi Mail Tới Khách hàng',
+          bgColor: AppColors.colorFF940000,
+          style: TextStyles.boldWhiteS20,
+        ),
+        body: BlocBuilder<TranferMailCubit, TranferMailState>(
+          builder: (context, state) {
+            final cubit = context.read<TranferMailCubit>();
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.customers != null)
+                        const Text(
+                          "Danh sách khách hàng gửi mail",
+                          style: TextStyles.boldBlackS20,
+                        ),
+                      if (widget.customers != null)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Table(
+                            border: TableBorder.all(),
+                            columnWidths: const {
+                              0: FlexColumnWidth(1),
+                              1: FlexColumnWidth(1),
+                              2: FlexColumnWidth(2),
+                              3: FlexColumnWidth(2),
+                              4: FlexColumnWidth(1),
+                            },
+                            children: [
+                              const TableRow(
+                                children: [
+                                  TableCell(child: Center(child: Text('STT'))),
+                                  TableCell(
+                                      child:
+                                          Center(child: Text('Mã khách hàng'))),
+                                  TableCell(
+                                      child: Center(
+                                          child: Text('Tên khách hàng'))),
+                                  TableCell(
+                                      child: Center(child: Text('Email'))),
+                                  TableCell(
+                                      child: Center(child: Text('Trạng thái'))),
+                                ],
+                              ),
+                              ...widget.customers!
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                    (e) => TableRowItem(
+                                      e.value,
+                                      e.key + 1,
+                                    ),
+                                  )
+                                  .toList(),
+                            ],
+                          ),
+                        ),
                       const Text(
-                        "Danh sách khách hàng gửi mail",
+                        "Danh sách mẫu mail",
                         style: TextStyles.boldBlackS20,
                       ),
-                    if (widget.customers != null)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Table(
                           border: TableBorder.all(),
                           columnWidths: const {
                             0: FlexColumnWidth(1),
-                            1: FlexColumnWidth(1),
+                            1: FlexColumnWidth(2),
                             2: FlexColumnWidth(2),
-                            3: FlexColumnWidth(2),
-                            4: FlexColumnWidth(1),
+                            3: FlexColumnWidth(3),
+                            4: FlexColumnWidth(2),
+                            5: FlexColumnWidth(1),
                           },
                           children: [
                             const TableRow(
                               children: [
                                 TableCell(child: Center(child: Text('STT'))),
                                 TableCell(
-                                    child:
-                                        Center(child: Text('Mã khách hàng'))),
+                                    child: Center(child: Text('Tên mẫu mail'))),
+                                TableCell(child: Center(child: Text('Chủ đề'))),
+                                TableCell(
+                                    child: Center(child: Text('Nội dung'))),
                                 TableCell(
                                     child:
-                                        Center(child: Text('Tên khách hàng'))),
-                                TableCell(child: Center(child: Text('Email'))),
-                                TableCell(
-                                    child: Center(child: Text('Trạng thái'))),
+                                        Center(child: Text('Thời gian tạo'))),
+                                TableCell(child: Center(child: Text(''))),
                               ],
                             ),
-                            ...widget.customers!
+                            ...state.templates
                                 .asMap()
                                 .entries
-                                .map(
-                                  (e) => TableRowItem(
-                                    e.value,
-                                    e.key + 1,
-                                  ),
-                                )
+                                .map((e) => TableRowEmailItem(
+                                      index: e.key,
+                                      name: e.value.templateName,
+                                      content: e.value.templateContent,
+                                      created: e.value.createdDate,
+                                      onChanged: (e) =>
+                                          cubit.setSelectedIndex(e ?? 0),
+                                      selectedIndex: state.selectedIndex,
+                                      subject: e.value.templateSubject,
+                                    ))
                                 .toList(),
                           ],
                         ),
                       ),
-                    const Text(
-                      "Danh sách mẫu mail",
-                      style: TextStyles.boldBlackS20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Table(
-                        border: TableBorder.all(),
-                        columnWidths: const {
-                          0: FlexColumnWidth(1),
-                          1: FlexColumnWidth(2),
-                          2: FlexColumnWidth(2),
-                          3: FlexColumnWidth(3),
-                          4: FlexColumnWidth(2),
-                          5: FlexColumnWidth(1),
-                        },
+                      Row(
                         children: [
-                          const TableRow(
-                            children: [
-                              TableCell(child: Center(child: Text('STT'))),
-                              TableCell(
-                                  child: Center(child: Text('Tên mẫu mail'))),
-                              TableCell(child: Center(child: Text('Chủ đề'))),
-                              TableCell(child: Center(child: Text('Nội dung'))),
-                              TableCell(
-                                  child: Center(child: Text('Thời gian tạo'))),
-                              TableCell(child: Center(child: Text(''))),
-                            ],
+                          Expanded(
+                            child: state.res != null
+                                ? Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed: state.currentPage > 1
+                                            ? () => cubit.setCurrentPage(
+                                                state.currentPage - 1)
+                                            : null,
+                                        child: const Text('Trước'),
+                                      ),
+                                      Text(
+                                          'Trang ${state.currentPage} : ${state.res?.totalPages ?? 1}'),
+                                      TextButton(
+                                        onPressed: state.currentPage <
+                                                (state.res?.totalPages ?? 0)
+                                            ? () => cubit.setCurrentPage(
+                                                state.currentPage + 1)
+                                            : null,
+                                        child: const Text('Sau'),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox.shrink(),
                           ),
-                          ...state.templates
-                              .asMap()
-                              .entries
-                              .map((e) => TableRowEmailItem(
-                                    index: e.key,
-                                    name: e.value.templateName,
-                                    content: e.value.templateContent,
-                                    created: e.value.createdDate,
-                                    onChanged: (e) =>
-                                        cubit.setSelectedIndex(e ?? 0),
-                                    selectedIndex: state.selectedIndex,
-                                    subject: e.value.templateSubject,
-                                  ))
-                              .toList(),
+                          TextButton(
+                              onPressed: () =>
+                                  _showDialogConfirm(() => cubit.sendEmail(
+                                        widget.customers,
+                                        widget.reportInforRequest,
+                                      )),
+                              child: const Text("Gửi Email")),
                         ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: state.res != null
-                              ? Row(
-                                  children: [
-                                    TextButton(
-                                      onPressed: state.currentPage > 1
-                                          ? () => cubit.setCurrentPage(
-                                              state.currentPage - 1)
-                                          : null,
-                                      child: const Text('Trước'),
-                                    ),
-                                    Text(
-                                        'Trang ${state.currentPage} : ${state.res?.totalPages ?? 1}'),
-                                    TextButton(
-                                      onPressed: state.currentPage <
-                                              (state.res?.totalPages ?? 0)
-                                          ? () => cubit.setCurrentPage(
-                                              state.currentPage + 1)
-                                          : null,
-                                      child: const Text('Sau'),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                        TextButton(
-                            onPressed: () =>
-                                _showDialogConfirm(() => cubit.sendEmail(
-                                      widget.customers,
-                                      widget.reportInforRequest,
-                                    )),
-                            child: const Text("Gửi Email")),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              BlocSelector<TranferMailCubit, TranferMailState, bool>(
-                selector: (state) => state.isLoading,
-                builder: (context, isLoading) {
-                  return isLoading
-                      ? Container(
-                          color: AppColors.colorFF000000.withOpacity(0.5),
-                          alignment: Alignment.center,
-                          child: const CircularProgressIndicator(),
-                        )
-                      : const SizedBox.shrink();
-                },
-              )
-            ],
-          );
-        },
+                BlocSelector<TranferMailCubit, TranferMailState, bool>(
+                  selector: (state) => state.isLoading,
+                  builder: (context, isLoading) {
+                    return isLoading
+                        ? Container(
+                            color: AppColors.colorFF000000.withOpacity(0.5),
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicator(),
+                          )
+                        : const SizedBox.shrink();
+                  },
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

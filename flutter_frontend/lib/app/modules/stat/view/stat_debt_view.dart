@@ -320,11 +320,9 @@ class _StatDebtViewState extends State<StatDebtView> {
                                   reportInforRequest: ReportInforRequest(
                                 district: state.currentDistrict,
                                 month: state.currentSelectDate,
-                                page: state.currentPage,
                                 provine: "Hà Nội",
                                 ward: state.currentWard,
                                 search: "",
-                                size: 10,
                               )));
                             },
                             child: const Text("Gửi mail cho tất cả khách hàng"),

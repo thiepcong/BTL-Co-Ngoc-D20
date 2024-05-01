@@ -344,11 +344,9 @@ class _ListClientViewState extends State<ListClientView> {
                                         reportInforRequest: ReportInforRequest(
                                       district: state.currentDistrict,
                                       month: state.currentSelectDate,
-                                      page: state.currentPage,
                                       provine: "Hà Nội",
                                       ward: state.currentWard,
                                       search: "",
-                                      size: 10,
                                     )));
                                   },
                                   child: const Text(
