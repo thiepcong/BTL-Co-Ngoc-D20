@@ -133,7 +133,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
         templateDetail = templateDetail.replaceAll("\\{\\{customerName\\}\\}", reportDTO.getCustomerName());
         String startTime = String.valueOf(reportDTO.getStartTime()).substring(5, 7) + " - " + String.valueOf(reportDTO.getStartTime()).substring(0, 4);
         templateDetail = templateDetail.replaceAll("\\{\\{month\\}\\}", startTime);
-        templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getWaterUsageNumber()));
+        templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getNewWaterUsageIndex() - reportDTO.getOldWaterUsageIndex()));
         templateDetail = templateDetail.replaceAll("\\{\\{total\\}\\}", String.valueOf(reportDTO.getTotaMoney()));
 //
         return templateDetail;
@@ -143,7 +143,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
         templateDetail = templateDetail.replaceAll("\\{\\{customerName\\}\\}", reportDTO.getCustomerName());
         String startTime = String.valueOf(reportDTO.getStartTime()).substring(5, 7) + " - " + String.valueOf(reportDTO.getStartTime()).substring(0, 4);
         templateDetail = templateDetail.replaceAll("\\{\\{month\\}\\}", startTime);
-        templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getWaterUsageNumber()));
+        templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getNewWaterUsageIndex() - reportDTO.getOldWaterUsageIndex()));
         templateDetail = templateDetail.replaceAll("\\{\\{total\\}\\}", String.valueOf(reportDTO.getDebtMoneyNumber()));
 
         Calendar calendar = Calendar.getInstance();
