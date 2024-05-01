@@ -5,6 +5,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import '../../../core/models/customer.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
+import '../../../core/values/show_message_internal.dart';
 import '../../../core/values/text_styles.dart';
 import '../cubit/stat_cubit.dart';
 import '../cubit/stat_state.dart';
@@ -199,16 +200,16 @@ class _StatNewViewState extends State<StatNewView> {
                     0: FlexColumnWidth(1),
                     1: FlexColumnWidth(1),
                     2: FlexColumnWidth(2),
-                    3: FlexColumnWidth(2),
+                    3: FlexColumnWidth(3),
                     4: FlexColumnWidth(2),
-                    5: FlexColumnWidth(2),
+                    5: FlexColumnWidth(3.5),
                     7: FlexColumnWidth(1),
                   },
                   children: [
                     const TableRow(
                       children: [
                         TableCell(child: Center(child: Text('STT'))),
-                        TableCell(child: Center(child: Text('Mã khách hàng'))),
+                        TableCell(child: Center(child: Text('Mã KH'))),
                         TableCell(child: Center(child: Text('Tên khách hàng'))),
                         TableCell(child: Center(child: Text('Địa chỉ'))),
                         TableCell(child: Center(child: Text('Số điện thoại'))),
@@ -254,7 +255,10 @@ class _StatNewViewState extends State<StatNewView> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ShowMessageInternal.showOverlay(
+                          context, "Xuất báo cáo thành công");
+                    },
                     child: const Text('Xuất báo cáo'),
                   ),
                 ],
@@ -274,16 +278,35 @@ class TableRowItem extends TableRow {
   const TableRowItem(this.item, this.index);
   @override
   List<Widget> get children => [
-        TableCell(child: Center(child: Text(index.toString()))),
-        TableCell(child: Center(child: Text(item.customerId.toString()))),
-        TableCell(child: Center(child: Text(item.customerName.toString()))),
-        TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
-        TableCell(child: Center(child: Text(item.customerPhone.toString()))),
-        TableCell(child: Center(child: Text(item.customerEmail.toString()))),
         TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text((index + 1).toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerId.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(item.customerName.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text('${item.district}-${item.ward}'))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerPhone.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(item.customerEmail.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
             child: Center(child: Text(getByType(item.status.toString())))),
         // TableCell(
-        //     child:
+      //     child:
         //         Center(child: Checkbox(value: false, onChanged: (value) {}))),
       ];
 

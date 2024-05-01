@@ -35,12 +35,14 @@ class _$MainRouter extends RootStackRouter {
       );
     },
     TranferMailViewRoute.name: (routeData) {
-      final args = routeData.argsAs<TranferMailViewRouteArgs>();
+      final args = routeData.argsAs<TranferMailViewRouteArgs>(
+          orElse: () => const TranferMailViewRouteArgs());
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: TranferMailView(
           key: args.key,
           customers: args.customers,
+          reportInforRequest: args.reportInforRequest,
         ),
       );
     },
@@ -120,13 +122,15 @@ class ManagerViewRouteArgs {
 class TranferMailViewRoute extends PageRouteInfo<TranferMailViewRouteArgs> {
   TranferMailViewRoute({
     Key? key,
-    required List<Customer> customers,
+    List<Customer>? customers,
+    ReportInforRequest? reportInforRequest,
   }) : super(
           TranferMailViewRoute.name,
           path: 'tranfer_mail',
           args: TranferMailViewRouteArgs(
             key: key,
             customers: customers,
+            reportInforRequest: reportInforRequest,
           ),
         );
 
@@ -136,15 +140,18 @@ class TranferMailViewRoute extends PageRouteInfo<TranferMailViewRouteArgs> {
 class TranferMailViewRouteArgs {
   const TranferMailViewRouteArgs({
     this.key,
-    required this.customers,
+    this.customers,
+    this.reportInforRequest,
   });
 
   final Key? key;
 
-  final List<Customer> customers;
+  final List<Customer>? customers;
+
+  final ReportInforRequest? reportInforRequest;
 
   @override
   String toString() {
-    return 'TranferMailViewRouteArgs{key: $key, customers: $customers}';
+    return 'TranferMailViewRouteArgs{key: $key, customers: $customers, reportInforRequest: $reportInforRequest}';
   }
 }

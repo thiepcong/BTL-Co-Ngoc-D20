@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 import '../../../core/models/customer.dart';
+import '../../../core/models/report_info_request.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
 import '../../../core/values/show_message_internal.dart';
@@ -260,7 +261,7 @@ class _StatDebtViewState extends State<StatDebtView> {
                                       TableCell(
                                           child: Center(
                                               child: Text('Trạng thái'))),
-                                      TableCell(child: Center(child: Text(''))),
+                                      // TableCell(child: Center(child: Text(''))),
                                     ],
                                   ),
                                   ...state.currentItem!.reportDTOList
@@ -314,7 +315,18 @@ class _StatDebtViewState extends State<StatDebtView> {
                     ),
                     (state.currentItem?.reportDTOList ?? []).isNotEmpty
                         ? TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pushRoute(TranferMailViewRoute(
+                                  reportInforRequest: ReportInforRequest(
+                                district: state.currentDistrict,
+                                month: state.currentSelectDate,
+                                page: state.currentPage,
+                                provine: "Hà Nội",
+                                ward: state.currentWard,
+                                search: "",
+                                size: 10,
+                              )));
+                            },
                             child: const Text("Gửi mail cho tất cả khách hàng"),
                           )
                         : const SizedBox.shrink(),
@@ -332,7 +344,8 @@ class _StatDebtViewState extends State<StatDebtView> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Xử lý khi nhấn nút Nhắc nhở
+                        ShowMessageInternal.showOverlay(
+                            context, "Xuất báo cáo thành công");
                       },
                       child: const Text('Xuất báo cáo'),
                     ),
@@ -364,9 +377,9 @@ class TableRowItem extends TableRow {
         TableCell(child: Center(child: Text(item.debtMoneyNumber.toString()))),
         TableCell(
             child: Center(child: Text(getByType(item.status.toString())))),
-        TableCell(
-            child:
-                Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
+        // TableCell(
+        //     child:
+        //         Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
       ];
 
   String getByType(String type) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/models/customer.dart';
+import '../../../core/models/report_info_request.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/text_styles.dart';
 import '../../../core/widgets/appBar/custom_app_bar.dart';
@@ -10,9 +11,14 @@ import '../cubit/tranfer_mail_state.dart';
 import '../repository/tranfer_mail_repository.dart';
 
 class TranferMailView extends StatefulWidget {
-  const TranferMailView({super.key, required this.customers});
+  const TranferMailView({
+    super.key,
+    this.customers,
+    this.reportInforRequest,
+  });
 
-  final List<Customer> customers;
+  final List<Customer>? customers;
+  final ReportInforRequest? reportInforRequest;
 
   @override
   State<TranferMailView> createState() => _TranferMailViewState();
@@ -35,6 +41,7 @@ class _TranferMailViewState extends State<TranferMailView> {
   Widget _buildPage(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
+        isLeading: true,
         label: 'Gửi Mail Tới Khách hàng',
         bgColor: AppColors.colorFF940000,
         style: TextStyles.boldWhiteS20,
@@ -48,47 +55,51 @@ class _TranferMailViewState extends State<TranferMailView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Danh sách khách hàng gửi mail",
-                      style: TextStyles.boldBlackS20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Table(
-                        border: TableBorder.all(),
-                        columnWidths: const {
-                          0: FlexColumnWidth(1),
-                          1: FlexColumnWidth(1),
-                          2: FlexColumnWidth(2),
-                          3: FlexColumnWidth(2),
-                          4: FlexColumnWidth(1),
-                        },
-                        children: [
-                          const TableRow(
-                            children: [
-                              TableCell(child: Center(child: Text('STT'))),
-                              TableCell(
-                                  child: Center(child: Text('Mã khách hàng'))),
-                              TableCell(
-                                  child: Center(child: Text('Tên khách hàng'))),
-                              TableCell(child: Center(child: Text('Email'))),
-                              TableCell(
-                                  child: Center(child: Text('Trạng thái'))),
-                            ],
-                          ),
-                          ...widget.customers
-                              .asMap()
-                              .entries
-                              .map(
-                                (e) => TableRowItem(
-                                  e.value,
-                                  e.key + 1,
-                                ),
-                              )
-                              .toList(),
-                        ],
+                    if (widget.customers != null)
+                      const Text(
+                        "Danh sách khách hàng gửi mail",
+                        style: TextStyles.boldBlackS20,
                       ),
-                    ),
+                    if (widget.customers != null)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Table(
+                          border: TableBorder.all(),
+                          columnWidths: const {
+                            0: FlexColumnWidth(1),
+                            1: FlexColumnWidth(1),
+                            2: FlexColumnWidth(2),
+                            3: FlexColumnWidth(2),
+                            4: FlexColumnWidth(1),
+                          },
+                          children: [
+                            const TableRow(
+                              children: [
+                                TableCell(child: Center(child: Text('STT'))),
+                                TableCell(
+                                    child:
+                                        Center(child: Text('Mã khách hàng'))),
+                                TableCell(
+                                    child:
+                                        Center(child: Text('Tên khách hàng'))),
+                                TableCell(child: Center(child: Text('Email'))),
+                                TableCell(
+                                    child: Center(child: Text('Trạng thái'))),
+                              ],
+                            ),
+                            ...widget.customers!
+                                .asMap()
+                                .entries
+                                .map(
+                                  (e) => TableRowItem(
+                                    e.value,
+                                    e.key + 1,
+                                  ),
+                                )
+                                .toList(),
+                          ],
+                        ),
+                      ),
                     const Text(
                       "Danh sách mẫu mail",
                       style: TextStyles.boldBlackS20,
@@ -135,10 +146,42 @@ class _TranferMailViewState extends State<TranferMailView> {
                         ],
                       ),
                     ),
-                    TextButton(
-                        onPressed: () => _showDialogConfirm(
-                            () => cubit.sendEmail(widget.customers)),
-                        child: const Text("Gửi Email")),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: state.res != null
+                              ? Row(
+                                  children: [
+                                    TextButton(
+                                      onPressed: state.currentPage > 1
+                                          ? () => cubit.setCurrentPage(
+                                              state.currentPage - 1)
+                                          : null,
+                                      child: const Text('Trước'),
+                                    ),
+                                    Text(
+                                        'Trang ${state.currentPage} : ${state.res?.totalPages ?? 1}'),
+                                    TextButton(
+                                      onPressed: state.currentPage <
+                                              (state.res?.totalPages ?? 0)
+                                          ? () => cubit.setCurrentPage(
+                                              state.currentPage + 1)
+                                          : null,
+                                      child: const Text('Sau'),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                        TextButton(
+                            onPressed: () =>
+                                _showDialogConfirm(() => cubit.sendEmail(
+                                      widget.customers,
+                                      widget.reportInforRequest,
+                                    )),
+                            child: const Text("Gửi Email")),
+                      ],
+                    ),
                   ],
                 ),
               ),

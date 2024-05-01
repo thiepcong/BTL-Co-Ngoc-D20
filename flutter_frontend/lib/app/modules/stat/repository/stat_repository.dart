@@ -37,8 +37,8 @@ class StatRepository {
   }
 
   Future<NewCustomer> getNewCustomers({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
     required DateTime date,
@@ -53,8 +53,8 @@ class StatRepository {
   }
 
   Future<StatModel> getNewCustomersList({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
     required DateTime date,
@@ -69,8 +69,8 @@ class StatRepository {
   }
 
   Future<StatModel> getRevenueList({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
     required DateTime date,
