@@ -8,8 +8,8 @@ import '../../../core/values/api_url_constant.dart';
 
 class StatApi extends BaseRemoteSource {
   Future<StatModel> getDebtCustomerList({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
     required DateTime date,
@@ -31,8 +31,8 @@ class StatApi extends BaseRemoteSource {
   }
 
   Future<DebtModel> getDebtCustomer({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required DateTime date,
   }) async {
     final request = dioClient.post(ApiUrlConstants.getDebtCustomer, data: {

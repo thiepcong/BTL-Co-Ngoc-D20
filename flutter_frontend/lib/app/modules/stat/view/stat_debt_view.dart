@@ -231,10 +231,10 @@ class _StatDebtViewState extends State<StatDebtView> {
                                   2: FlexColumnWidth(2),
                                   3: FlexColumnWidth(2),
                                   4: FlexColumnWidth(2),
-                                  5: FlexColumnWidth(2),
+                                  5: FlexColumnWidth(3),
                                   6: FlexColumnWidth(1),
                                   7: FlexColumnWidth(1),
-                                  8: FlexColumnWidth(2)
+                                  // 8: FlexColumnWidth(2)
                                 },
                                 children: [
                                   const TableRow(
@@ -242,8 +242,7 @@ class _StatDebtViewState extends State<StatDebtView> {
                                       TableCell(
                                           child: Center(child: Text('STT'))),
                                       TableCell(
-                                          child: Center(
-                                              child: Text('Mã khách hàng'))),
+                                          child: Center(child: Text('Mã KH'))),
                                       TableCell(
                                           child: Center(
                                               child: Text('Tên khách hàng'))),
@@ -328,18 +327,18 @@ class _StatDebtViewState extends State<StatDebtView> {
                             child: const Text("Gửi mail cho tất cả khách hàng"),
                           )
                         : const SizedBox.shrink(),
-                    TextButton(
-                      onPressed: () {
-                        if (state.customerMails.isEmpty) {
-                          ShowMessageInternal.showOverlay(
-                              context, 'Vui lòng chọn ít nhất một khách hàng');
-                          return;
-                        }
-                        context.pushRoute(TranferMailViewRoute(
-                            customers: state.customerMails));
-                      },
-                      child: const Text('Nhắc nhở'),
-                    ),
+                    // TextButton(
+                    //   onPressed: () {
+                    //     if (state.customerMails.isEmpty) {
+                    //       ShowMessageInternal.showOverlay(
+                    //           context, 'Vui lòng chọn ít nhất một khách hàng');
+                    //       return;
+                    //     }
+                    //     context.pushRoute(TranferMailViewRoute(
+                    //         customers: state.customerMails));
+                    //   },
+                    //   child: const Text('Nhắc nhở'),
+                    // ),
                     TextButton(
                       onPressed: () {
                         ShowMessageInternal.showOverlay(
@@ -366,14 +365,35 @@ class TableRowItem extends TableRow {
   const TableRowItem(this.item, this.index, this.isChoose, this.onChanged);
   @override
   List<Widget> get children => [
-        TableCell(child: Center(child: Text(index.toString()))),
-        TableCell(child: Center(child: Text(item.customerId.toString()))),
-        TableCell(child: Center(child: Text(item.customerName.toString()))),
-        TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
-        TableCell(child: Center(child: Text(item.customerPhone.toString()))),
-        TableCell(child: Center(child: Text(item.customerEmail.toString()))),
-        TableCell(child: Center(child: Text(item.debtMoneyNumber.toString()))),
         TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text((index + 1).toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerId.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(item.customerName.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text('${item.district}-${item.ward}'))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerPhone.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(item.customerEmail.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.debtMoneyNumber.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
             child: Center(child: Text(getByType(item.status.toString())))),
         // TableCell(
         //     child:

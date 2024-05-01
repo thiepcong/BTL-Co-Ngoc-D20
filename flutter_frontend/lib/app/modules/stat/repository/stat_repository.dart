@@ -9,8 +9,8 @@ class StatRepository {
   StatRepository(this._api);
 
   Future<StatModel> getDebtCustomerList({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required int page,
     required int size,
     required DateTime date,
@@ -25,8 +25,8 @@ class StatRepository {
   }
 
   Future<DebtModel> getDebtCustomer({
-    required String district,
-    required String ward,
+    String? district,
+    String? ward,
     required DateTime date,
   }) async {
     return _api.getDebtCustomer(

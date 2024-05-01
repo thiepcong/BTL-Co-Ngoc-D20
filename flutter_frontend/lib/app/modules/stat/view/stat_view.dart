@@ -7,6 +7,7 @@ import '../../../core/widgets/appBar/custom_app_bar.dart';
 import '../cubit/stat_cubit.dart';
 import '../cubit/stat_state.dart';
 import '../repository/stat_repository.dart';
+import 'stat_debt_view.dart';
 import 'stat_new_view.dart';
 import 'stat_revenue_view.dart';
 
@@ -48,7 +49,7 @@ class _StatViewState extends State<StatView> {
           body: Stack(
             children: [
               DefaultTabController(
-                length: 2,
+                length: 3,
                 child: Column(
                   children: [
                     BlocBuilder<StatCubit, StatState>(
@@ -58,7 +59,7 @@ class _StatViewState extends State<StatView> {
                           tabs: const [
                             Tab(text: 'Doanh Thu'),
                             Tab(text: 'Số Lượng Mới Sử Dụng'),
-                            // Tab(text: 'Nợ Tiền Dịch Vụ'),
+                            Tab(text: 'Nợ Tiền Dịch Vụ'),
                           ],
                         );
                       },
@@ -68,7 +69,7 @@ class _StatViewState extends State<StatView> {
                       children: [
                         StatRevenueView(),
                         StatNewView(),
-                        // StatDebtView()
+                        StatDebtView(),
                       ],
                     ))
                   ],

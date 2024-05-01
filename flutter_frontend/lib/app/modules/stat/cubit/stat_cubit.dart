@@ -49,17 +49,14 @@ class StatCubit extends Cubit<StatState> {
   void getDebtCustomerList() async {
     try {
       emit(state.copyWith(message: null));
-      if (state.currentDistrict == null ||
-          state.currentWard == null ||
-          state.currentSelectDate == null) {
-        emit(state.copyWith(
-            message: "Vui lòng chọn quận/huyện, xã/phường và tháng"));
+      if (state.currentSelectDate == null) {
+        emit(state.copyWith(message: "Vui lòng chọn tháng"));
         return;
       }
       emit(state.copyWith(isLoading: true, message: null));
       final res = await _repo.getDebtCustomerList(
-        district: state.currentDistrict!,
-        ward: state.currentWard!,
+        district: state.currentDistrict,
+        ward: state.currentWard,
         date: state.currentSelectDate!,
         page: state.currentPage,
         size: 10,
@@ -79,17 +76,14 @@ class StatCubit extends Cubit<StatState> {
   void getDebtCustomer() async {
     try {
       emit(state.copyWith(message: null));
-      if (state.currentDistrict == null ||
-          state.currentWard == null ||
-          state.currentSelectDate == null) {
-        emit(state.copyWith(
-            message: "Vui lòng chọn quận/huyện, xã/phường và tháng"));
+      if (state.currentSelectDate == null) {
+        emit(state.copyWith(message: "Vui lòng chọn tháng"));
         return;
       }
       emit(state.copyWith(isLoading: true, message: null));
       final res = await _repo.getDebtCustomer(
-        district: state.currentDistrict!,
-        ward: state.currentWard!,
+        district: state.currentDistrict,
+        ward: state.currentWard,
         date: state.currentSelectDate!,
       );
       emit(state.copyWith(isLoading: false, currentDebt: res));
