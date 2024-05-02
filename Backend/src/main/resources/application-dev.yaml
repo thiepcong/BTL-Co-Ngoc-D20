@@ -18,9 +18,9 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
   datasource:
-    url : jdbc:mysql://127.0.0.1:3306/HTTinhTienNuoc
+    url : jdbc:mysql://localhost:3306/HTTinhTienNuoc
     username : root
-    password : 123456789
+    password : '[Chi1209]'
     driver-class-name : com.mysql.cj.jdbc.Driver
   servlet:
     multipart:

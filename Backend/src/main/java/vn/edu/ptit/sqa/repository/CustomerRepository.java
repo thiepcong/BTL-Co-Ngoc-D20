@@ -35,7 +35,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -66,7 +66,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -95,7 +95,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.id = wm.address.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE (:province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -128,7 +128,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -161,7 +161,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -189,7 +189,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -221,7 +221,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -253,7 +253,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -306,7 +306,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE (:province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -339,7 +339,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE (:province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -369,7 +369,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
@@ -398,7 +398,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
             "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
             "       LEFT JOIN WaterMeasurementIndex wmi ON wmi.waterMeter.id = wm.id " +
-            "       LEFT JOIN Invoice i ON wm.id = i.waterMeasurementIndex.id " +
+            "       LEFT JOIN Invoice i ON wmi.id = i.waterMeasurementIndex.id " +
             "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
             "           AND (:district IS NULL OR ad.district = :district) " +
             "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
