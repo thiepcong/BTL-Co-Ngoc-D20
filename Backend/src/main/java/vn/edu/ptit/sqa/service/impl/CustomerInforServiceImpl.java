@@ -33,7 +33,15 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Long usageIndex = newIndex - oldIndex;
         for(PriceScale i : priceScales){
             if(usageIndex <= 0) break;
-            int tmp = i.getEndIndex() - i.getStartIndex();
+            int tmp;
+
+            if(i.getStartIndex() == 0) {
+                tmp = i.getEndIndex() - i.getStartIndex();
+            }
+            else{
+                tmp = i.getEndIndex() - i.getStartIndex() + 1;
+            }
+
             if(usageIndex <= tmp) {
                 money += usageIndex * i.getPrice();
                 break;
@@ -45,8 +53,10 @@ public class CustomerInforServiceImpl implements CustomerInforService {
     }
     @Override
     public ReportInforResponse getReportByAddress(ReportInforRequest request, Pageable pageable) {
+        Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
+        Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         Page<ReportDTO> reportDtoPage = customerRepository.findByAddressPage(request.getProvine(), request.getDistrict(),
-                request.getWard(), request.getSearch(),  pageable);
+                request.getWard(), request.getSearch(), start, end,  pageable);
         List<ReportDTO> dtoList = reportDtoPage.getContent();
         if(dtoList == null) {
             throw new NotFoundException("Err: List is null");
@@ -88,7 +98,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         List<ReportDTO> allCustomerList = customerRepository.findByAddressListAll(request.getProvine(),
-                request.getDistrict(), request.getWard());
+                request.getDistrict(), request.getWard(), start, end);
         int allNum = allCustomerList.size();
         System.out.println(allNum);
         List<ReportDTO> allDebtCustomer = customerRepository.findDebtCustomer(request.getProvine(),
@@ -161,7 +171,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         List<ReportDTO> allCustomerList = customerRepository.findByAddressListAll(request.getProvine(),
-                request.getDistrict(), request.getWard());
+                request.getDistrict(), request.getWard(), null, null);
         int allNum = allCustomerList.size();
         System.out.println(allNum);
         List<ReportDTO> allNewCustomer = customerRepository.findNewCustomer(request.getProvine(),
@@ -214,6 +224,8 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setMoneyNumber(money);
         }
+
+
         Page<RevenueDTO> revenueDTOPage = customerRepository.findRevenuePage(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, pageable);
         List<RevenueDTO> dtos = revenueDTOPage.getContent();
