@@ -255,11 +255,11 @@ class _StatDebtViewState extends State<StatDebtView> {
                                       TableCell(
                                           child: Center(child: Text('Email'))),
                                       TableCell(
-                                          child: Center(
-                                              child: Text('Số tiền nợ'))),
+                                          child:
+                                              Center(child: Text('Số nước'))),
                                       TableCell(
                                           child: Center(
-                                              child: Text('Trạng thái'))),
+                                              child: Text('Số tiền nợ'))),
                                       // TableCell(child: Center(child: Text(''))),
                                     ],
                                   ),
@@ -391,10 +391,14 @@ class TableRowItem extends TableRow {
                 child: Text(item.customerEmail.toString()))),
         TableCell(
             verticalAlignment: TableCellVerticalAlignment.middle,
-            child: Center(child: Text(item.debtMoneyNumber.toString()))),
+            child: Center(
+                child: Text(((item.newWaterUsageIndex ?? 0) -
+                        (item.oldWaterUsageIndex ?? 0))
+                    .toString()))),
         TableCell(
             verticalAlignment: TableCellVerticalAlignment.middle,
-            child: Center(child: Text(getByType(item.status.toString())))),
+            child: Center(child: Text(item.debtMoneyNumber.toString()))),
+
         // TableCell(
         //     child:
         //         Center(child: Checkbox(value: isChoose, onChanged: onChanged))),

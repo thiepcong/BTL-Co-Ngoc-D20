@@ -297,8 +297,8 @@ class TableRowItem extends TableRow {
         TableCell(
             verticalAlignment: TableCellVerticalAlignment.middle,
             child: Center(
-                child: Text((item.newWaterUsageIndex ??
-                        0 - (item.oldWaterUsageIndex ?? 0))
+                child: Text(((item.newWaterUsageIndex ?? 0) -
+                        (item.oldWaterUsageIndex ?? 0))
                     .toString()))),
         TableCell(
             verticalAlignment: TableCellVerticalAlignment.middle,
