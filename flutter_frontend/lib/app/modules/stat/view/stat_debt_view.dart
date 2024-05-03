@@ -339,13 +339,14 @@ class _StatDebtViewState extends State<StatDebtView> {
                     //   },
                     //   child: const Text('Nhắc nhở'),
                     // ),
-                    TextButton(
-                      onPressed: () {
-                        ShowMessageInternal.showOverlay(
-                            context, "Xuất báo cáo thành công");
-                      },
-                      child: const Text('Xuất báo cáo'),
-                    ),
+                    if ((state.currentItem?.reportDTOList ?? []).isNotEmpty)
+                      TextButton(
+                        onPressed: () {
+                          ShowMessageInternal.showOverlay(
+                              context, "Xuất báo cáo thành công");
+                        },
+                        child: const Text('Xuất báo cáo'),
+                      ),
                   ],
                 ),
               ),

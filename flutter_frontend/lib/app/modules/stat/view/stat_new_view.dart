@@ -119,7 +119,7 @@ class _StatNewViewState extends State<StatNewView> {
                     onPressed: () {
                       cubit.getNewCustomers();
                     },
-                    child: const Text('Xem'),
+                    child: const Text('Thống kê'),
                   ),
                 ],
               ),
@@ -159,7 +159,7 @@ class _StatNewViewState extends State<StatNewView> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 180),
+              padding: const EdgeInsets.symmetric(horizontal: 360),
               child: Table(
                 border: TableBorder.all(),
                 columnWidths: const {
@@ -203,7 +203,7 @@ class _StatNewViewState extends State<StatNewView> {
                     3: FlexColumnWidth(3),
                     4: FlexColumnWidth(2),
                     5: FlexColumnWidth(3.5),
-                    7: FlexColumnWidth(1),
+                    // 7: FlexColumnWidth(1),
                   },
                   children: [
                     const TableRow(
@@ -214,7 +214,7 @@ class _StatNewViewState extends State<StatNewView> {
                         TableCell(child: Center(child: Text('Địa chỉ'))),
                         TableCell(child: Center(child: Text('Số điện thoại'))),
                         TableCell(child: Center(child: Text('Email'))),
-                        TableCell(child: Center(child: Text('Trạng thái'))),
+                        // TableCell(child: Center(child: Text('Trạng thái'))),
                       ],
                     ),
                     ...(state.currentItem?.reportDTOList
@@ -254,13 +254,14 @@ class _StatNewViewState extends State<StatNewView> {
                       ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      ShowMessageInternal.showOverlay(
-                          context, "Xuất báo cáo thành công");
-                    },
-                    child: const Text('Xuất báo cáo'),
-                  ),
+                  if ((state.currentItem?.reportDTOList ?? []).isNotEmpty)
+                    TextButton(
+                      onPressed: () {
+                        ShowMessageInternal.showOverlay(
+                            context, "Xuất báo cáo thành công");
+                      },
+                      child: const Text('Xuất báo cáo'),
+                    ),
                 ],
               ),
             ),
@@ -302,11 +303,11 @@ class TableRowItem extends TableRow {
             child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(item.customerEmail.toString()))),
-        TableCell(
-            verticalAlignment: TableCellVerticalAlignment.middle,
-            child: Center(child: Text(getByType(item.status.toString())))),
         // TableCell(
-      //     child:
+        //     verticalAlignment: TableCellVerticalAlignment.middle,
+        //     child: Center(child: Text(getByType(item.status.toString())))),
+        // TableCell(
+        //     child:
         //         Center(child: Checkbox(value: false, onChanged: (value) {}))),
       ];
 

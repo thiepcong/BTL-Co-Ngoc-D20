@@ -140,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
                                     _passwordController.text);
                               }
                             },
-                            child: const Text('Login'),
+                            child: const Text('Đăng nhập'),
                           ),
                         ],
                       ),

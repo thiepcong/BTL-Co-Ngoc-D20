@@ -117,7 +117,7 @@ class _StatRevenueViewState extends State<StatRevenueView> {
                   const SizedBox(width: 24),
                   ElevatedButton(
                     onPressed: () => cubit.getRevenueList(),
-                    child: const Text('Xem'),
+                    child: const Text('Thống kê'),
                   ),
                 ],
               ),
@@ -246,13 +246,14 @@ class _StatRevenueViewState extends State<StatRevenueView> {
                       ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      ShowMessageInternal.showOverlay(
-                          context, "Xuất báo cáo thành công");
-                    },
-                    child: const Text('Xuất báo cáo'),
-                  ),
+                  if ((state.currentItem?.reportDTOList ?? []).isNotEmpty)
+                    TextButton(
+                      onPressed: () {
+                        ShowMessageInternal.showOverlay(
+                            context, "Xuất báo cáo thành công");
+                      },
+                      child: const Text('Xuất báo cáo'),
+                    ),
                 ],
               ),
             ),
