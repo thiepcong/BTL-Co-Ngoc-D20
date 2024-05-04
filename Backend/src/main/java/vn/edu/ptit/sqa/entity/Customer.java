@@ -3,12 +3,14 @@ package vn.edu.ptit.sqa.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 public class Customer {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
