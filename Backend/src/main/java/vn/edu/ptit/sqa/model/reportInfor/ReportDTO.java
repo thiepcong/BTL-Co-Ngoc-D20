@@ -1,5 +1,6 @@
 package vn.edu.ptit.sqa.model.reportInfor;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructors
 @Accessors(chain = true)
 public class ReportDTO {
     private Long customerId;

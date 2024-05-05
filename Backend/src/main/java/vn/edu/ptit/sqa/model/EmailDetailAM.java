@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmailDetailAM {
     ReportInforRequest reportInforRequest;
-    private List<String> toList;
     @NotNull
     private Integer templateId;
     private List<Long> attachmentIds;
