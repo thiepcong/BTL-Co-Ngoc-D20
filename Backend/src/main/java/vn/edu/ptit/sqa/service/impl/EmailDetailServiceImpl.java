@@ -63,7 +63,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
 
     @Transactional
     @Override
-    public void createEmailDetail(EmailDetailAM request) {
+    public Boolean createEmailDetail(EmailDetailAM request) {
         EmailTemplate emailTemplate = emailTemplateService.getEmailTemplateById(request.getTemplateId());
         List<EmailAttachment> emailAttachments = new ArrayList<>();
         request.getAttachmentIds().forEach(attachmentId -> {
@@ -98,6 +98,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
                 emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
                 sendEmail(emailDetailMessage);
             }
+            return true;
         }else if(emailTemplate.getId() == 10){
             DebtReportResponse reportInforResponse = customerInforService.getDebtCustomerList(request.getReportInforRequest(), null);
             for (DebtCustomerDTO reportDTO : reportInforResponse.getDebtCustomerList()) {
@@ -126,6 +127,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
                 emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
                 sendEmail(emailDetailMessage);
             }
+            return true;
         }else throw new NotFoundException("Send type not found");
     }
 
@@ -135,7 +137,6 @@ public class EmailDetailServiceImpl implements EmailDetailService {
         templateDetail = templateDetail.replaceAll("\\{\\{month\\}\\}", startTime);
         templateDetail = templateDetail.replaceAll("\\{\\{amountOfWater\\}\\}", String.valueOf(reportDTO.getNewWaterUsageIndex() - reportDTO.getOldWaterUsageIndex()));
         templateDetail = templateDetail.replaceAll("\\{\\{total\\}\\}", String.valueOf(reportDTO.getTotaMoney()));
-//
         return templateDetail;
     }
 
@@ -157,7 +158,8 @@ public class EmailDetailServiceImpl implements EmailDetailService {
 
     @Override
     @Transactional
-    public void sendEmail(EmailDetailDto request) {
+    public Boolean sendEmail(EmailDetailDto request) {
+        Boolean res = false;
         try{
 
             HashMap<String, byte[]> attachmentFiles = new HashMap<>();
@@ -179,6 +181,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
 
             request.setStatus(AppProperties.EMAIL_DETAIL_STATUS.SEND_SUCCESS);
             log.info("Send email successfully!");
+            res = true;
         }catch(Exception e){
             request.setStatus(AppProperties.EMAIL_DETAIL_STATUS.SEND_FAIL);
 
@@ -188,9 +191,10 @@ public class EmailDetailServiceImpl implements EmailDetailService {
         EmailDetail emailDetail = emailDetailRepo.getById(request.getId());
         emailDetail.setStatus(request.getStatus());
         emailDetailRepo.save(emailDetail);
-
+        return res;
     }
 
+//    Hàm dùng để test API
     @Override
     public EmailDetailDto getEmailDetailById(Long id) {
         EmailDetail emailDetail = emailDetailRepo.findById(id)
@@ -198,6 +202,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
         return ConverterUtil.mappingToObject(emailDetail, EmailDetailDto.class);
     }
 
+    // Hàm dùng để test API
     @Override
     public DataTableResults<EmailDetailDto> getAllEmailDetails(PaginationRequest paginationRequest){
         Pageable paging = PageRequest.of(paginationRequest.getPageNum()-1, paginationRequest.getPageSize());

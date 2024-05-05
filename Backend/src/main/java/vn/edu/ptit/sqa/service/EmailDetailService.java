@@ -11,8 +11,8 @@ import vn.edu.ptit.sqa.model.reportInfor.ReportInforRequest;
 import java.util.List;
 
 public interface EmailDetailService {
-    void createEmailDetail(EmailDetailAM emailDetailAM);
-    void sendEmail(EmailDetailDto emailDetailDto);
+    Boolean createEmailDetail(EmailDetailAM emailDetailAM);
+    Boolean sendEmail(EmailDetailDto emailDetailDto);
 
     EmailDetailDto getEmailDetailById(Long id);
 

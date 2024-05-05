@@ -23,7 +23,7 @@ public interface AppProperties {
         String HOST = "smtp.gmail.com";
         Integer PORT = 587;
         String USERNAME = "huynhndev0403@gmail.com";
-        String PASSWORD = "uepi yvpo uxdr wupz";
+        String PASSWORD = "";
     }
     interface EMAIL_ATTACHMENT{
         HashSet<String> VALID_FILE_TYPE = new HashSet<>(List.of(".doc", ".docx", ".xlsx", ".csv", ".pdf",
