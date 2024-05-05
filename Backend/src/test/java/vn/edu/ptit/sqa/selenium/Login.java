@@ -45,7 +45,7 @@ public class Login {
 
     @Test
     public void loginDisplayDone() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         assertAll("Login display",
                 () -> assertTrue(((String) driver.getCurrentUrl()).contains(siteUrl+"#login")),
                 () -> assertEquals("Đăng nhập",
@@ -57,7 +57,7 @@ public class Login {
                 () -> assertEquals("Mật khẩu",
                         driver.findElement(By.id("flt-semantic-node-5")).findElement(By.cssSelector("input"))
                                 .getAttribute("aria-label")),
-                () -> assertEquals("Login",
+                () -> assertEquals("Đăng nhập",
                         driver.findElement(By.cssSelector("flt-semantics[role=\"button\"]"))
                                 .getAttribute("aria-label"))
                 );
@@ -65,7 +65,7 @@ public class Login {
 
     @Test
     public void loginHappy() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         WebElement userNameInput = driver.findElement(By.cssSelector("#flt-semantic-node-4 input"));
                 //(WebElement) js.executeScript("return document.querySelector(\"#flt-semantic-node-4 input\")");
         userNameInput.sendKeys("admin");
@@ -84,7 +84,7 @@ public class Login {
 
     @Test
     public void loginLostUserName() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         WebElement passwordInput = driver.findElement(By.cssSelector("#flt-semantic-node-5 input"));
         passwordInput.sendKeys("123123123");
         Thread.sleep(1000);
@@ -103,7 +103,7 @@ public class Login {
 
     @Test
     public void loginLostPassword() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         WebElement usernameInput = driver.findElement(By.cssSelector("#flt-semantic-node-4 input"));
         //(WebElement) js.executeScript("return document.querySelector(\"#flt-semantic-node-5 input\")");
         usernameInput.sendKeys("admin");
@@ -123,7 +123,7 @@ public class Login {
 
     @Test
     public void loginBadCredential() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         WebElement userNameInput = driver.findElement(By.cssSelector("#flt-semantic-node-4 input"));
         //(WebElement) js.executeScript("return document.querySelector(\"#flt-semantic-node-4 input\")");
         userNameInput.sendKeys("admin2");
@@ -142,7 +142,7 @@ public class Login {
 
     @Test
     public void loginNavigationDone() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         WebElement userNameInput = driver.findElement(By.cssSelector("#flt-semantic-node-4 input"));
         //(WebElement) js.executeScript("return document.querySelector(\"#flt-semantic-node-4 input\")");
         userNameInput.sendKeys("admin");
@@ -157,7 +157,7 @@ public class Login {
 
         assertAll("Login Navigation Done",
                 () -> assertTrue(((String) driver.getCurrentUrl()).contains(siteUrl+"#manager")),
-                () -> assertTrue(driver.findElement(By.cssSelector("#flt-semantic-node-40"))
+                () -> assertTrue(driver.findElement(By.cssSelector("#flt-semantic-node-39"))
                                 .getAttribute("aria-label").contains("Quản lý:"))
         );
     }

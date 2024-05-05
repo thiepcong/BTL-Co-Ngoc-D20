@@ -13,10 +13,12 @@ class LoginCubit extends Cubit<LoginState> {
 
   void login(String username, String password) async {
     try {
+      final pre = await SharedPreferences.getInstance();
+      await pre.remove(SecureKeyConstants.accessToken);
       emit(state.copyWith(message: null, isLoading: true));
       final res =
           await _loginRepository.login(usename: username, password: password);
-      final pre = await SharedPreferences.getInstance();
+
       await pre.setString(SecureKeyConstants.accessToken, res.token);
       await pre.setString("userName", res.userInfo.name);
       emit(state.copyWith(
