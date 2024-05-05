@@ -14,7 +14,7 @@ public interface CustomerInforService {
 
     DebtReportResponse getDebtCustomerList(ReportInforRequest request, Pageable pageable);
 
-    NewCustomerResponse getNewCustomerList(ReportInforRequest  request, Pageable pageable);
+    newCustomerResponse getNewCustomerList(ReportInforRequest  request, Pageable pageable);
 
     NewCustomerReportDTO getNewCustomerNumber(ReportInforRequest  request);
     ReportInforResponse getPaidCustomer(ReportInforRequest  request, Pageable pageable);

@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructors
+@AllArgsConstructor
 @Accessors(chain = true)
 public class ReportDTO {
     private Long customerId;

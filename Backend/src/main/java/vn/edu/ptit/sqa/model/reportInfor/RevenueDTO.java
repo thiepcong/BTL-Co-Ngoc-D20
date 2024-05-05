@@ -2,11 +2,15 @@ package vn.edu.ptit.sqa.model.reportInfor;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
+@Accessors(chain = true)
+@NoArgsConstructor
 public class RevenueDTO {
     private Long customerId;
     private String customerName;

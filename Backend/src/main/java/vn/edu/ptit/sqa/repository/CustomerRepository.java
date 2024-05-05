@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import vn.edu.ptit.sqa.entity.Customer;
 import vn.edu.ptit.sqa.model.reportInfor.DebtCustomerDTO;
-import vn.edu.ptit.sqa.model.reportInfor.NewCutomerDTO;
+import vn.edu.ptit.sqa.model.reportInfor.NewCustomerDTO;
 import vn.edu.ptit.sqa.model.reportInfor.ReportDTO;
 import vn.edu.ptit.sqa.model.reportInfor.RevenueDTO;
 
@@ -266,7 +266,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<DebtCustomerDTO> findAllDebtCustomer(String province, String district, String ward,
                                                Date start, Date end);
 
-    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.NewCutomerDTO(" +
+    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.NewCustomerDTO(" +
             "       c.id, " +
             "       c.name, " +
             "       c.phone, " +
@@ -286,8 +286,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "           AND wm.createTime <= :end " +
             "           AND c.isDeleted = FALSE " +
             "       ORDER BY c.name")
-    Page<NewCutomerDTO> findNewCustomerPage(String province, String district, String ward,
-                                            Date start, Date end, Pageable pageable);
+    Page<NewCustomerDTO> findNewCustomerPage(String province, String district, String ward,
+                                             Date start, Date end, Pageable pageable);
 
     @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.ReportDTO(" +
             "       c.id, " +
