@@ -2,11 +2,15 @@ package vn.edu.ptit.sqa.model.reportInfor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructors
+@Accessors(chain = true)
 public class ReportDTO {
     private Long customerId;
     private String customerName;
@@ -55,6 +59,21 @@ public class ReportDTO {
         this.waterUsageNumber = waterUsageNumber;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.status = status;
+    }
+
+    public ReportDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
+                     String provine, String district, String ward, Long waterUsageNumber,
+                     Date startTime, String status) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.customerEmail = customerEmail;
+        this.provine = provine;
+        this.district = district;
+        this.ward = ward;
+        this.waterUsageNumber = waterUsageNumber;
+        this.startTime = startTime;
         this.status = status;
     }
 }

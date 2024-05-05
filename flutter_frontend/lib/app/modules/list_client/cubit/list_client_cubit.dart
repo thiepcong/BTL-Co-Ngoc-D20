@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/app/network/exceptions/bad_request_exception.dart';
 import '../../../core/models/customer.dart';
+import '../../../core/models/stat_model.dart';
 import '../repository/list_client_repository.dart';
 import 'list_client_state.dart';
 
@@ -46,7 +47,7 @@ class ListClientCubit extends Cubit<ListClientState> {
         date: state.currentSelectDate,
         type: handle(),
       );
-      emit(state.copyWith(currentItem: res, isLoading: false));
+      emit(state.copyWith(currentItem: handleRes(res), isLoading: false));
     } catch (e) {
       if (e is BadRequestException) {
         emit(state.copyWith(isLoading: false, message: e.message));
@@ -55,6 +56,15 @@ class ListClientCubit extends Cubit<ListClientState> {
       if (e is StateError) return;
       rethrow;
     }
+  }
+
+  StatModel handleRes(StatModel item) {
+    final res = item.reportDTOList;
+    List<Customer> temp = [];
+    for (final i in res) {
+      if (i.status == 'unpaid' || i.status == 'paid') temp.add(i);
+    }
+    return item.copyWith(reportDTOList: temp);
   }
 
   void setCurrentTrandMail(Customer item, bool? isChoose) {

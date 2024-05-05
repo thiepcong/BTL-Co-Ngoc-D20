@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.ptit.sqa.entity.Customer;
 import vn.edu.ptit.sqa.entity.PriceList;
 import vn.edu.ptit.sqa.entity.PriceScale;
+import vn.edu.ptit.sqa.exception.ExistedException;
 import vn.edu.ptit.sqa.exception.NotFoundException;
 import vn.edu.ptit.sqa.model.pagination.PageDto;
 import vn.edu.ptit.sqa.model.reportInfor.*;
@@ -33,7 +34,15 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Long usageIndex = newIndex - oldIndex;
         for(PriceScale i : priceScales){
             if(usageIndex <= 0) break;
-            int tmp = i.getEndIndex() - i.getStartIndex();
+            int tmp;
+
+            if(i.getStartIndex() == 0) {
+                tmp = i.getEndIndex() - i.getStartIndex();
+            }
+            else{
+                tmp = i.getEndIndex() - i.getStartIndex() + 1;
+            }
+
             if(usageIndex <= tmp) {
                 money += usageIndex * i.getPrice();
                 break;
@@ -45,12 +54,15 @@ public class CustomerInforServiceImpl implements CustomerInforService {
     }
     @Override
     public ReportInforResponse getReportByAddress(ReportInforRequest request, Pageable pageable) {
+        Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
+        Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         Page<ReportDTO> reportDtoPage = customerRepository.findByAddressPage(request.getProvine(), request.getDistrict(),
-                request.getWard(), request.getSearch(),  pageable);
-        List<ReportDTO> dtoList = reportDtoPage.getContent();
-        if(dtoList == null) {
+                request.getWard(), request.getSearch(), start, end,  pageable);
+        if(reportDtoPage == null) {
             throw new NotFoundException("Err: List is null");
         }
+        List<ReportDTO> dtoList = reportDtoPage.getContent();
+
         PageDto pageDto = new PageDto();
         ReportInforResponse response = new ReportInforResponse();
         response.setReportDTOList(dtoList);
@@ -64,12 +76,11 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         Page<ReportDTO> reportDTOPage = customerRepository.findUnPaidCustomerPageByAddressAndTime(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, request.getSearch(), pageable);
-        List<ReportDTO> dtoList = reportDTOPage.getContent();
 
-        if(dtoList == null) {
+        if(reportDTOPage == null) {
             throw new NotFoundException("Err: List is null");
         }
-
+        List<ReportDTO> dtoList = reportDTOPage.getContent();
         setMoneyForList(dtoList);
         List<ReportDTO> unpaidList = customerRepository.findUnPaidCustomerListByAddressAndTime(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, request.getSearch());
@@ -88,7 +99,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         List<ReportDTO> allCustomerList = customerRepository.findByAddressListAll(request.getProvine(),
-                request.getDistrict(), request.getWard());
+                request.getDistrict(), request.getWard(), start, end);
         int allNum = allCustomerList.size();
         System.out.println(allNum);
         List<ReportDTO> allDebtCustomer = customerRepository.findDebtCustomer(request.getProvine(),
@@ -161,7 +172,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
         List<ReportDTO> allCustomerList = customerRepository.findByAddressListAll(request.getProvine(),
-                request.getDistrict(), request.getWard());
+                request.getDistrict(), request.getWard(), null, null);
         int allNum = allCustomerList.size();
         System.out.println(allNum);
         List<ReportDTO> allNewCustomer = customerRepository.findNewCustomer(request.getProvine(),
@@ -214,6 +225,8 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setMoneyNumber(money);
         }
+
+
         Page<RevenueDTO> revenueDTOPage = customerRepository.findRevenuePage(request.getProvine(),
                 request.getDistrict(), request.getWard(), start, end, pageable);
         List<RevenueDTO> dtos = revenueDTOPage.getContent();
@@ -237,19 +250,21 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         return response;
     }
 
-    private void setMoneyForList(List<ReportDTO> reportDTOS){
+    public void setMoneyForList(List<ReportDTO> reportDTOS){
         for(ReportDTO dto : reportDTOS){
             Long customerId = dto.getCustomerId();
             Optional<Customer> customerOptional = customerRepository.findByIdAndIsDeletedFalse(customerId);
-            if(customerOptional.isEmpty()) throw new RuntimeException("Not found customer to solve money");
+            if(customerOptional.isEmpty()) throw new NotFoundException("Not found customer to solve money");
             Customer customer = customerOptional.get();
-            List<PriceList> optionalPriceList = priceListRepo.findByUserType(customer.getUserType().getId(),
+            List<PriceList> optionalPriceList = priceListRepo.findByUserType(
+                    customer.getUserType().getId(),
                     dto.getStartTime());
-            if(optionalPriceList.isEmpty()) throw new RuntimeException("PriceList is not found, can't solve money");
+            if(optionalPriceList.isEmpty()) throw new ExistedException("PriceList is not found, can't solve money");
             List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
             dto.setMoneyPrice(money);
         }
+//        return reportDTOS;
     }
 
 }

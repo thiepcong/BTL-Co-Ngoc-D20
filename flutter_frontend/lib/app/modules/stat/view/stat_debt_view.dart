@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 import '../../../core/models/customer.dart';
+import '../../../core/models/report_info_request.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
 import '../../../core/values/show_message_internal.dart';
@@ -230,10 +231,10 @@ class _StatDebtViewState extends State<StatDebtView> {
                                   2: FlexColumnWidth(2),
                                   3: FlexColumnWidth(2),
                                   4: FlexColumnWidth(2),
-                                  5: FlexColumnWidth(2),
+                                  5: FlexColumnWidth(3),
                                   6: FlexColumnWidth(1),
                                   7: FlexColumnWidth(1),
-                                  8: FlexColumnWidth(2)
+                                  // 8: FlexColumnWidth(2)
                                 },
                                 children: [
                                   const TableRow(
@@ -241,8 +242,7 @@ class _StatDebtViewState extends State<StatDebtView> {
                                       TableCell(
                                           child: Center(child: Text('STT'))),
                                       TableCell(
-                                          child: Center(
-                                              child: Text('Mã khách hàng'))),
+                                          child: Center(child: Text('Mã KH'))),
                                       TableCell(
                                           child: Center(
                                               child: Text('Tên khách hàng'))),
@@ -255,12 +255,12 @@ class _StatDebtViewState extends State<StatDebtView> {
                                       TableCell(
                                           child: Center(child: Text('Email'))),
                                       TableCell(
-                                          child: Center(
-                                              child: Text('Số tiền nợ'))),
+                                          child:
+                                              Center(child: Text('Số nước'))),
                                       TableCell(
                                           child: Center(
-                                              child: Text('Trạng thái'))),
-                                      TableCell(child: Center(child: Text(''))),
+                                              child: Text('Số tiền nợ'))),
+                                      // TableCell(child: Center(child: Text(''))),
                                     ],
                                   ),
                                   ...state.currentItem!.reportDTOList
@@ -312,24 +312,41 @@ class _StatDebtViewState extends State<StatDebtView> {
                         ],
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        if (state.customerMails.isEmpty) {
+                    (state.currentItem?.reportDTOList ?? []).isNotEmpty
+                        ? TextButton(
+                            onPressed: () {
+                              context.pushRoute(TranferMailViewRoute(
+                                  reportInforRequest: ReportInforRequest(
+                                district: state.currentDistrict,
+                                month: state.currentSelectDate,
+                                provine: "Hà Nội",
+                                ward: state.currentWard,
+                                search: "",
+                              )));
+                            },
+                            child: const Text("Gửi mail cho tất cả khách hàng"),
+                          )
+                        : const SizedBox.shrink(),
+                    // TextButton(
+                    //   onPressed: () {
+                    //     if (state.customerMails.isEmpty) {
+                    //       ShowMessageInternal.showOverlay(
+                    //           context, 'Vui lòng chọn ít nhất một khách hàng');
+                    //       return;
+                    //     }
+                    //     context.pushRoute(TranferMailViewRoute(
+                    //         customers: state.customerMails));
+                    //   },
+                    //   child: const Text('Nhắc nhở'),
+                    // ),
+                    if ((state.currentItem?.reportDTOList ?? []).isNotEmpty)
+                      TextButton(
+                        onPressed: () {
                           ShowMessageInternal.showOverlay(
-                              context, 'Vui lòng chọn ít nhất một khách hàng');
-                          return;
-                        }
-                        context.pushRoute(TranferMailViewRoute(
-                            customers: state.customerMails));
-                      },
-                      child: const Text('Nhắc nhở'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Xử lý khi nhấn nút Nhắc nhở
-                      },
-                      child: const Text('Xuất báo cáo'),
-                    ),
+                              context, "Xuất báo cáo thành công");
+                        },
+                        child: const Text('Xuất báo cáo'),
+                      ),
                   ],
                 ),
               ),
@@ -349,18 +366,43 @@ class TableRowItem extends TableRow {
   const TableRowItem(this.item, this.index, this.isChoose, this.onChanged);
   @override
   List<Widget> get children => [
-        TableCell(child: Center(child: Text(index.toString()))),
-        TableCell(child: Center(child: Text(item.customerId.toString()))),
-        TableCell(child: Center(child: Text(item.customerName.toString()))),
-        TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
-        TableCell(child: Center(child: Text(item.customerPhone.toString()))),
-        TableCell(child: Center(child: Text(item.customerEmail.toString()))),
-        TableCell(child: Center(child: Text(item.debtMoneyNumber.toString()))),
         TableCell(
-            child: Center(child: Text(getByType(item.status.toString())))),
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text((index + 1).toString()))),
         TableCell(
-            child:
-                Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerId.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(item.customerName.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text('${item.district}-${item.ward}'))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerPhone.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(item.customerEmail.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(
+                child: Text(((item.newWaterUsageIndex ?? 0) -
+                        (item.oldWaterUsageIndex ?? 0))
+                    .toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.debtMoneyNumber.toString()))),
+
+        // TableCell(
+        //     child:
+        //         Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
       ];
 
   String getByType(String type) {

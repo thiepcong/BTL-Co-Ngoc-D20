@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'customer.dart';
 import 'page.dart';
 
@@ -34,6 +35,20 @@ class StatModel {
       totalMoney: map['totalMoney'] != null ? map['totalMoney'] as int : null,
       totalDebtNumber:
           map['totalDebtNumber'] != null ? map['totalDebtNumber'] as int : null,
+    );
+  }
+
+  StatModel copyWith({
+    List<Customer>? reportDTOList,
+    Page? pageDto,
+    int? totalMoney,
+    int? totalDebtNumber,
+  }) {
+    return StatModel(
+      reportDTOList: reportDTOList ?? this.reportDTOList,
+      pageDto: pageDto ?? this.pageDto,
+      totalMoney: totalMoney ?? this.totalMoney,
+      totalDebtNumber: totalDebtNumber ?? this.totalDebtNumber,
     );
   }
 }

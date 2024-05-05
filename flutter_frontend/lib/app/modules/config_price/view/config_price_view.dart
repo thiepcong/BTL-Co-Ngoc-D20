@@ -85,7 +85,7 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                           },
                         ),
                         const Text(
-                          "*(Mỗi thang giá được tính từ lớn hơn hoặc bằng chỉ số bắt đầu và nhỏ hơn chỉ số kết thúc)",
+                          "*(Mỗi thang giá được tính từ lớn hơn hoặc bằng chỉ số bắt đầu và nhỏ hơn hoặc bằng chỉ số kết thúc)",
                           style: TextStyles.regularBlackS14,
                         ),
                         Expanded(
@@ -111,7 +111,8 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                                     const TableRow(children: [
                                       TableCell(child: Text('STT')),
                                       TableCell(child: Text('Chỉ số đầu (>=)')),
-                                      TableCell(child: Text('Chỉ số cuối (<)')),
+                                      TableCell(
+                                          child: Text('Chỉ số cuối (<=)')),
                                       TableCell(child: Text('Đơn giá')),
                                       TableCell(child: Text('')),
                                     ]),
@@ -176,7 +177,7 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
                                 ElevatedButton(
                                   onPressed: () {
                                     _showDateTimeDialog((e) {
-                                      cubit.save(e);
+                                      _showDialogSave(() => cubit.save(e));
                                     });
                                   },
                                   child: const Text('Lưu'),
@@ -216,6 +217,36 @@ class _ConfigPriceViewState extends State<ConfigPriceView> {
       locale: const Locale('vi'),
     );
     if (picker != null) onSelectDate.call(picker);
+  }
+
+  void _showDialogSave(VoidCallback? onSave) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Bạn chắc chắn muốn lưu lại?"),
+          actions: [
+            PrimaryButton(
+              title: 'Quay lại',
+              backgroundColor: AppColors.colorFFFFFFFF,
+              textColor: AppColors.colorFF000000,
+              textSize: 24,
+              onTap: () => Navigator.pop(context),
+            ),
+            PrimaryButton(
+              title: 'Lưu',
+              backgroundColor: AppColors.colorFFFFFFFF,
+              textColor: AppColors.colorFF000000,
+              textSize: 24,
+              onTap: () {
+                Navigator.pop(context);
+                onSave?.call();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showDialogDelete(VoidCallback? onDelete) {

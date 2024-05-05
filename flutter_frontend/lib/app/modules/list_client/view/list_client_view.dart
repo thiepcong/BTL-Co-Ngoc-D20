@@ -6,6 +6,7 @@ import 'package:flutter_frontend/app/main_router.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 import '../../../core/models/customer.dart';
+import '../../../core/models/report_info_request.dart';
 import '../../../core/values/app_colors.dart';
 import '../../../core/values/data.dart';
 import '../../../core/values/text_styles.dart';
@@ -152,9 +153,14 @@ class _ListClientViewState extends State<ListClientView> {
                           const SizedBox(width: 24),
                           ElevatedButton(
                             onPressed: () {
+                              if (state.currentSelectDate == null) {
+                                ShowMessageInternal.showOverlay(
+                                    context, "Vui lòng chọn tháng");
+                                return;
+                              }
                               cubit.getListClient();
                             },
-                            child: const Text('Xem'),
+                            child: const Text('Thống kê'),
                           ),
                         ],
                       ),
@@ -239,34 +245,49 @@ class _ListClientViewState extends State<ListClientView> {
                             2: const FlexColumnWidth(2),
                             3: const FlexColumnWidth(3),
                             4: const FlexColumnWidth(2),
-                            5: const FlexColumnWidth(2),
+                            5: const FlexColumnWidth(3.5),
                             6: const FlexColumnWidth(2),
-                            if (checkFilter) 8: const FlexColumnWidth(1),
+                            if (checkFilter) 7: const FlexColumnWidth(1),
                           },
                           children: [
                             TableRow(
                               children: [
                                 const TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Center(child: Text('STT'))),
                                 const TableCell(
-                                    child:
-                                        Center(child: Text('Mã khách hàng'))),
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
+                                    child: Center(child: Text('Mã KH'))),
                                 const TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Center(child: Text('Khách hàng'))),
                                 const TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Center(child: Text('Địa chỉ'))),
                                 const TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child:
                                         Center(child: Text('Số điện thoại'))),
                                 const TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Center(child: Text('Email'))),
                                 const TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Center(child: Text('Trạng thái'))),
                                 if (checkFilter)
                                   const TableCell(
+                                      verticalAlignment:
+                                          TableCellVerticalAlignment.middle,
                                       child: Center(child: Text('Tổng tiền'))),
-                                const TableCell(
-                                    child: Center(child: Text('Chọn')))
+                                // const TableCell(
+                                //     child: Center(child: Text('Chọn')))
                               ],
                             ),
                             ...state.currentItem?.reportDTOList
@@ -316,24 +337,43 @@ class _ListClientViewState extends State<ListClientView> {
                               ],
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              if (state.customerMails.isEmpty) {
-                                ShowMessageInternal.showOverlay(context,
-                                    'Vui lòng chọn ít nhất một khách hàng');
-                                return;
-                              }
-                              context.pushRoute(TranferMailViewRoute(
-                                  customers: state.customerMails));
-                            },
-                            child: const Text('Nhắc nhở'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // Xử lý khi nhấn nút Nhắc nhở
-                            },
-                            child: const Text('Xuất báo cáo'),
-                          ),
+                          (state.currentItem?.reportDTOList ?? []).isNotEmpty
+                              ? TextButton(
+                                  onPressed: () {
+                                    context.pushRoute(TranferMailViewRoute(
+                                        reportInforRequest: ReportInforRequest(
+                                      district: state.currentDistrict,
+                                      month: state.currentSelectDate,
+                                      provine: "Hà Nội",
+                                      ward: state.currentWard,
+                                      search: "",
+                                    )));
+                                  },
+                                  child: const Text(
+                                      "Gửi mail cho tất cả khách hàng"),
+                                )
+                              : const SizedBox.shrink(),
+                          // TextButton(
+                          //   onPressed: () {
+                          //     if (state.customerMails.isEmpty) {
+                          //       ShowMessageInternal.showOverlay(context,
+                          //           'Vui lòng chọn ít nhất một khách hàng');
+                          //       return;
+                          //     }
+                          //     context.pushRoute(TranferMailViewRoute(
+                          //         customers: state.customerMails));
+                          //   },
+                          //   child: const Text('Nhắc nhở'),
+                          // ),
+                          if ((state.currentItem?.reportDTOList ?? [])
+                              .isNotEmpty)
+                            TextButton(
+                              onPressed: () {
+                                ShowMessageInternal.showOverlay(
+                                    context, "Xuất báo cáo thành công");
+                              },
+                              child: const Text('Xuất báo cáo'),
+                            ),
                         ],
                       ),
                     ),
@@ -366,19 +406,44 @@ class TableRowItem extends TableRow {
       this.item, this.index, this.isChoose, this.onChanged, this.isFilter);
   @override
   List<Widget> get children => [
-        TableCell(child: Center(child: Text(index.toString()))),
-        TableCell(child: Center(child: Text(item.customerId.toString()))),
-        TableCell(child: Center(child: Text(item.customerName.toString()))),
-        TableCell(child: Center(child: Text('${item.district}-${item.ward}'))),
-        TableCell(child: Center(child: Text(item.customerPhone.toString()))),
-        TableCell(child: Center(child: Text(item.customerEmail.toString()))),
         TableCell(
+          verticalAlignment: TableCellVerticalAlignment.middle,
+          child: Center(child: Text((index + 1).toString())),
+        ),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerId.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(item.customerName.toString()),
+            )),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text('${item.district}-${item.ward}'),
+            )),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Center(child: Text(item.customerPhone.toString()))),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(item.customerEmail.toString()),
+            )),
+        TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
             child: Center(child: Text(getByType(item.status.toString())))),
         if (isFilter)
-          TableCell(child: Center(child: Text(item.moneyPrice.toString()))),
-        TableCell(
-            child:
-                Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
+          TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: Center(child: Text(item.moneyPrice.toString()))),
+        // TableCell(
+        //     child:
+        //         Center(child: Checkbox(value: isChoose, onChanged: onChanged))),
       ];
 
   String getByType(String type) {

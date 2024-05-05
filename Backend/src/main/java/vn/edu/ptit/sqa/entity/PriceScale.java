@@ -25,4 +25,11 @@ public class PriceScale  {
     @JoinColumn(name = "PRICE_LIST_ID")
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private PriceList priceList;
+
+    public PriceScale(Integer startIndex, Integer endIndex,
+                      float price) {
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+        this.price = price;
+    }
 }

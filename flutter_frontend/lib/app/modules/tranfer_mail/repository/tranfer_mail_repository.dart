@@ -1,6 +1,7 @@
 import '../../../core/models/atachment.dart';
-import '../../../core/models/customer.dart';
+import '../../../core/models/report_info_request.dart';
 import '../../../core/models/template_model.dart';
+import '../../../core/models/tranfer_mail_response.dart';
 import '../api/tranfer_mail_api.dart';
 
 class TranferMailRepository {
@@ -8,7 +9,7 @@ class TranferMailRepository {
 
   TranferMailRepository(this._api);
 
-  Future<List<TemplateModel>> getAllTemplate({
+  Future<TranferMailResponse> getAllTemplate({
     required int pageNum,
     required int pageSize,
   }) {
@@ -16,12 +17,14 @@ class TranferMailRepository {
   }
 
   Future<bool> sendEmail({
-    required List<Customer> customers,
+    ReportInforRequest? reportInforRequest,
+    // required List<Customer> customers,
     required TemplateModel template,
     required List<Atachment> attachment,
   }) {
     return _api.sendEmail(
-      customers: customers,
+      reportInforRequest: reportInforRequest,
+      // customers: customers,
       template: template,
       attachment: attachment,
     );
