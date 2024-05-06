@@ -49,6 +49,10 @@ Exception _parseDioErrorResponse(DioException dioError) {
   String? serverMessage;
 
   try {
+    if (dioError.error is FormatException) {
+      return BadRequestException(
+          httpCode: 400, message: "Gửi email thành công", status: '');
+    }
     if (statusCode == -1 || statusCode == HttpStatus.ok) {
       statusCode = dioError.response?.data["status"];
     }

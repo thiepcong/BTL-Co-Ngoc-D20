@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$TranferMailState {
   List<TemplateModel> get templates => throw _privateConstructorUsedError;
+  TranferMailResponse? get res => throw _privateConstructorUsedError;
+  int get currentPage => throw _privateConstructorUsedError;
   int get selectedIndex => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get sendEmailDone => throw _privateConstructorUsedError;
@@ -36,6 +38,8 @@ abstract class $TranferMailStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<TemplateModel> templates,
+      TranferMailResponse? res,
+      int currentPage,
       int selectedIndex,
       bool isLoading,
       bool sendEmailDone,
@@ -57,6 +61,8 @@ class _$TranferMailStateCopyWithImpl<$Res, $Val extends TranferMailState>
   @override
   $Res call({
     Object? templates = null,
+    Object? res = freezed,
+    Object? currentPage = null,
     Object? selectedIndex = null,
     Object? isLoading = null,
     Object? sendEmailDone = null,
@@ -68,6 +74,14 @@ class _$TranferMailStateCopyWithImpl<$Res, $Val extends TranferMailState>
           ? _value.templates
           : templates // ignore: cast_nullable_to_non_nullable
               as List<TemplateModel>,
+      res: freezed == res
+          ? _value.res
+          : res // ignore: cast_nullable_to_non_nullable
+              as TranferMailResponse?,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
       selectedIndex: null == selectedIndex
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
@@ -102,6 +116,8 @@ abstract class _$$TranferMailStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<TemplateModel> templates,
+      TranferMailResponse? res,
+      int currentPage,
       int selectedIndex,
       bool isLoading,
       bool sendEmailDone,
@@ -121,6 +137,8 @@ class __$$TranferMailStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? templates = null,
+    Object? res = freezed,
+    Object? currentPage = null,
     Object? selectedIndex = null,
     Object? isLoading = null,
     Object? sendEmailDone = null,
@@ -132,6 +150,14 @@ class __$$TranferMailStateImplCopyWithImpl<$Res>
           ? _value._templates
           : templates // ignore: cast_nullable_to_non_nullable
               as List<TemplateModel>,
+      res: freezed == res
+          ? _value.res
+          : res // ignore: cast_nullable_to_non_nullable
+              as TranferMailResponse?,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
       selectedIndex: null == selectedIndex
           ? _value.selectedIndex
           : selectedIndex // ignore: cast_nullable_to_non_nullable
@@ -161,6 +187,8 @@ class __$$TranferMailStateImplCopyWithImpl<$Res>
 class _$TranferMailStateImpl extends _TranferMailState {
   const _$TranferMailStateImpl(
       {final List<TemplateModel> templates = const [],
+      this.res,
+      this.currentPage = 1,
       this.selectedIndex = 0,
       this.isLoading = false,
       this.sendEmailDone = false,
@@ -179,6 +207,11 @@ class _$TranferMailStateImpl extends _TranferMailState {
   }
 
   @override
+  final TranferMailResponse? res;
+  @override
+  @JsonKey()
+  final int currentPage;
+  @override
   @JsonKey()
   final int selectedIndex;
   @override
@@ -194,7 +227,7 @@ class _$TranferMailStateImpl extends _TranferMailState {
 
   @override
   String toString() {
-    return 'TranferMailState(templates: $templates, selectedIndex: $selectedIndex, isLoading: $isLoading, sendEmailDone: $sendEmailDone, message: $message, error: $error)';
+    return 'TranferMailState(templates: $templates, res: $res, currentPage: $currentPage, selectedIndex: $selectedIndex, isLoading: $isLoading, sendEmailDone: $sendEmailDone, message: $message, error: $error)';
   }
 
   @override
@@ -204,6 +237,9 @@ class _$TranferMailStateImpl extends _TranferMailState {
             other is _$TranferMailStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._templates, _templates) &&
+            (identical(other.res, res) || other.res == res) &&
+            (identical(other.currentPage, currentPage) ||
+                other.currentPage == currentPage) &&
             (identical(other.selectedIndex, selectedIndex) ||
                 other.selectedIndex == selectedIndex) &&
             (identical(other.isLoading, isLoading) ||
@@ -218,6 +254,8 @@ class _$TranferMailStateImpl extends _TranferMailState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_templates),
+      res,
+      currentPage,
       selectedIndex,
       isLoading,
       sendEmailDone,
@@ -235,6 +273,8 @@ class _$TranferMailStateImpl extends _TranferMailState {
 abstract class _TranferMailState extends TranferMailState {
   const factory _TranferMailState(
       {final List<TemplateModel> templates,
+      final TranferMailResponse? res,
+      final int currentPage,
       final int selectedIndex,
       final bool isLoading,
       final bool sendEmailDone,
@@ -244,6 +284,10 @@ abstract class _TranferMailState extends TranferMailState {
 
   @override
   List<TemplateModel> get templates;
+  @override
+  TranferMailResponse? get res;
+  @override
+  int get currentPage;
   @override
   int get selectedIndex;
   @override

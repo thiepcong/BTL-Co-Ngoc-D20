@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/app/main_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:side_navigation/side_navigation.dart';
 
 import '../../../core/models/login_response.dart';
@@ -30,11 +31,33 @@ class _ManagerViewState extends State<ManagerView> {
   int selectedIndex = 0;
 
   @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  String name = "";
+
+  void init() async {
+    final pre = await SharedPreferences.getInstance();
+    setState(() {
+      name = pre.getString("userName") ?? '';
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        label: 'Quản lý: ${widget.user?.name ?? ''}',
+        label: 'Hệ thống tính tiền nước cho hộ cá nhân',
         bgColor: AppColors.colorFF940000,
+        actions: [
+          Text(
+            'Quản lý: ${widget.user?.name ?? name}',
+            style: TextStyles.regularWhiteS18,
+          ),
+          const SizedBox(width: 12),
+        ],
         style: TextStyles.boldWhiteS20,
       ),
       body: Row(

@@ -4,7 +4,7 @@ class TemplateModel {
   final String templateSubject;
   final String templateContent;
   final String createdDate;
-  final List<TemplateProperty> listProperties;
+  // final List<TemplateProperty> listProperties;
 
   TemplateModel({
     required this.id,
@@ -12,7 +12,7 @@ class TemplateModel {
     required this.templateSubject,
     required this.templateContent,
     required this.createdDate,
-    required this.listProperties,
+    // required this.listProperties,
   });
 
   Map<String, dynamic> toJson() {
@@ -22,7 +22,7 @@ class TemplateModel {
       'templateSubject': templateSubject,
       'templateContent': templateContent,
       'createdDate': createdDate,
-      'listProperties': listProperties.map((x) => x.toMap()).toList(),
+      // 'listProperties': listProperties.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -33,11 +33,11 @@ class TemplateModel {
       templateSubject: map['templateSubject'] as String,
       templateContent: map['templateContent'] as String,
       createdDate: map['createdDate'] as String,
-      listProperties: List<TemplateProperty>.from(
-        (map['listProperties'] as List).map<TemplateProperty>(
-          (x) => TemplateProperty.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      // listProperties: List<TemplateProperty>.from(
+      //   (map['listProperties'] as List).map<TemplateProperty>(
+      //     (x) => TemplateProperty.fromMap(x as Map<String, dynamic>),
+      //   ),
+      // ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'app_routes.dart';
 import 'core/models/customer.dart';
 import 'core/models/login_response.dart';
+import 'core/models/report_info_request.dart';
 import 'modules/login/view/login_view.dart';
 import 'modules/login/view/manager_view.dart';
 import 'modules/tranfer_mail/view/tranfer_mail_view.dart';

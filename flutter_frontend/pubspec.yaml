@@ -4,6 +4,7 @@ description: "A new Flutter project."
 publish_to: 'none' 
 
 # flutter pub run build_runner build --delete-conflicting-outputs
+# flutter build web --web-renderer html
 version: 1.0.0+1
 
 environment:

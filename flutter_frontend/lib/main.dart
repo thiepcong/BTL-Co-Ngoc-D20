@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'app/flavors/build_config.dart';
 import 'app/flavors/env_config.dart';
@@ -24,5 +25,6 @@ void main() async {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
+  SemanticsBinding.instance.ensureSemantics();
   runApp(const MyApp());
 }

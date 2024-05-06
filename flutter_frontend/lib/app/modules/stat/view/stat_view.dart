@@ -69,7 +69,7 @@ class _StatViewState extends State<StatView> {
                       children: [
                         StatRevenueView(),
                         StatNewView(),
-                        StatDebtView()
+                        StatDebtView(),
                       ],
                     ))
                   ],

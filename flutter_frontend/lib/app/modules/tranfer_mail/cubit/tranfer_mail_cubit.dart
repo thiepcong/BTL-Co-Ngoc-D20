@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_frontend/app/network/exceptions/bad_request_exception.dart';
 import '../../../core/models/customer.dart';
+import '../../../core/models/report_info_request.dart';
 import '../repository/tranfer_mail_repository.dart';
 import 'tranfer_mail_state.dart';
 
@@ -12,8 +13,15 @@ class TranferMailCubit extends Cubit<TranferMailState> {
   void init() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final res = await _repo.getAllTemplate(pageNum: 1, pageSize: 10);
-      emit(state.copyWith(isLoading: false, templates: res));
+      final res = await _repo.getAllTemplate(
+        pageNum: state.currentPage,
+        pageSize: 10,
+      );
+      emit(state.copyWith(
+        isLoading: false,
+        templates: res.data,
+        res: res,
+      ));
     } catch (e) {
       if (e is BadRequestException) {
         emit(state.copyWith(isLoading: false, message: e.message));
@@ -23,15 +31,25 @@ class TranferMailCubit extends Cubit<TranferMailState> {
     }
   }
 
+  void setCurrentPage(int page) {
+    emit(state.copyWith(currentPage: page));
+    init();
+  }
+
   void setSelectedIndex(int selectedIndex) {
     emit(state.copyWith(selectedIndex: selectedIndex));
   }
 
-  void sendEmail(List<Customer> customers) async {
+  void sendEmail(
+    List<Customer>? customers,
+    ReportInforRequest? reportInforRequest,
+  ) async {
     try {
+      // if (customers == null) return;
       emit(state.copyWith(isLoading: true, sendEmailDone: false));
       final res = await _repo.sendEmail(
-        customers: customers,
+        reportInforRequest: reportInforRequest,
+        // customers: customers,
         template: state.templates[state.selectedIndex],
         attachment: [],
       );
@@ -41,6 +59,8 @@ class TranferMailCubit extends Cubit<TranferMailState> {
         emit(state.copyWith(isLoading: false, message: e.message));
         return;
       }
+      print(e.toString());
+      emit(state.copyWith(isLoading: false, message: "Đã có lỗi xảy ra"));
       rethrow;
     }
   }
