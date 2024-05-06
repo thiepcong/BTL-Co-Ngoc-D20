@@ -25,17 +25,17 @@ public class EmailDetailController {
         return ResponseEntity.ok("OK");
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getEmailDetailById(@PathVariable("id") Long id){
-        return ResponseEntity.ok(emailDetailService.getEmailDetailById(id));
-    }
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    @GetMapping
-    public ResponseEntity<?> getAllEmailDetails(
-                @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-                @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize){
-        PaginationRequest paginationRequest = new PaginationRequest(true, pageNum, pageSize);
-        return ResponseEntity.ok(emailDetailService.getAllEmailDetails(paginationRequest));
-    }
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> getEmailDetailById(@PathVariable("id") Long id){
+//        return ResponseEntity.ok(emailDetailService.getEmailDetailById(id));
+//    }
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    @GetMapping
+//    public ResponseEntity<?> getAllEmailDetails(
+//                @RequestParam(name = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+//                @RequestParam(name = "pageSize", required = false, defaultValue = "20") Integer pageSize){
+//        PaginationRequest paginationRequest = new PaginationRequest(true, pageNum, pageSize);
+//        return ResponseEntity.ok(emailDetailService.getAllEmailDetails(paginationRequest));
+//    }
 }
