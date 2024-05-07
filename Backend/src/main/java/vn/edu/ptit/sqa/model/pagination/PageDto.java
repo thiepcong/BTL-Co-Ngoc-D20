@@ -11,7 +11,7 @@ public class PageDto {
     private int	totalPages;
     private int	size;
     private int	number;
-    private Sort sort;
+//    private Sort sort;
     private int	numberOfElements;
     private boolean	first;
 
@@ -26,7 +26,7 @@ public class PageDto {
         pageDto.setTotalElements(page.getTotalElements());
         pageDto.setSize(page.getSize());
         pageDto.setNumber(page.getNumber() + 1);
-        pageDto.setSort(page.getSort());
+//        pageDto.setSort(page.getSort());
         pageDto.setNumberOfElements(page.getNumberOfElements());
         pageDto.setFirst(page.isFirst());
         pageDto.setTotalPages(page.getTotalPages());

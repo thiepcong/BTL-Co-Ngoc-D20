@@ -169,7 +169,7 @@ public class CustomerInforServiceImplTest {
         assertNotNull(response);
         assertEquals(reportDTOList.size(), response.getReportDTOList().size());
         assertEquals(1, response.getPageDto().getTotalElements());
-        assertEquals(151000.0F, response.getTotalMoney());
+        assertEquals(173650.0F, response.getTotalMoney());
     }
 
 
@@ -251,7 +251,7 @@ public class CustomerInforServiceImplTest {
         List<ReportDTO> response = customerInforService.setMoneyForList(reportDTOS);
 
         assertNotNull(response);
-        assertEquals(215400.0F, response.get(0).getMoneyPrice());
+        assertEquals(247710.0F, response.get(0).getMoneyPrice());
     }
 
     /**
@@ -309,7 +309,7 @@ public class CustomerInforServiceImplTest {
         assertNotNull(response);
         assertEquals(reportDTOList.size(), response.getReportDTOList().size());
         assertEquals(1, response.getPageDto().getTotalElements());
-        assertEquals(151000.0F, response.getTotalMoney());
+        assertEquals(173650.0F, response.getTotalMoney());
     }
 
     @Test
@@ -384,7 +384,7 @@ public class CustomerInforServiceImplTest {
         assertNotNull(response);
         assertEquals(revenueDTOS.size(), response.getRevenueDTOList().size());
         assertEquals(1, response.getPageDto().getTotalElements());
-        assertEquals(151000.0F, response.getTotalMoney());
+        assertEquals(173650.0F, response.getTotalMoney());
     }
 
     @Test
@@ -545,7 +545,7 @@ public class CustomerInforServiceImplTest {
         assertNotNull(response);
         assertEquals(debtCustomerDTOS.size(), response.getDebtCustomerList().size());
         assertEquals(1, response.getPageDto().getTotalElements());
-        assertEquals(151000.0F, response.getTotalDebtNumber());
+        assertEquals(173650.0F, response.getTotalDebtNumber());
     }
 
     @Test
@@ -711,7 +711,7 @@ public class CustomerInforServiceImplTest {
         assertNotNull(response);
         assertEquals(debtCustomerDTOS.size(), response.getDebtNum());
         assertEquals(reportDTOS.size(), response.getAllCustomerNum());
-        assertEquals("100.0%", response.getPercent());
+        assertEquals("100%", response.getPercent());
     }
 
     @Test
@@ -822,7 +822,7 @@ public class CustomerInforServiceImplTest {
         assertNotNull(response);
         assertEquals(newCustomerDTOS.size(), response.getNewCustomerNum());
         assertEquals(reportDTOS.size(), response.getAllCustomerNum());
-        assertEquals("100.0%", response.getPercent());
+        assertEquals("100%", response.getPercent());
     }
 
     @Test

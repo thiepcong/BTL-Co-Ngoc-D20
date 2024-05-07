@@ -16,6 +16,7 @@ import vn.edu.ptit.sqa.repository.PriceListRepo;
 import vn.edu.ptit.sqa.service.CustomerInforService;
 import vn.edu.ptit.sqa.util.DateUtils;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -113,7 +114,9 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         }
         response.setAllCustomerNum(allNum);
         double percent = (double) debtNum / allNum * 100;
-        response.setPercent(percent + "%");
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formattedPercent = df.format(percent);
+        response.setPercent(formattedPercent + "%");
         return response;
     }
 
@@ -139,6 +142,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             if(optionalPriceList.isEmpty()) throw new ExistedException("PriceList is not found, can't solve money");
             List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
+            money += money * 0.15;
             dto.setDebtMoneyNumber(money);
         }
 
@@ -152,6 +156,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             if(optionalPriceList.isEmpty()) throw new ExistedException("PriceList is not found, can't solve money");
             List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
+            money += money * 0.15;
             dto.setDebtMoneyNumber(money);
         }
         float totalDebtMoney = (float) allDebtCustomers.stream().mapToDouble(DebtCustomerDTO::getDebtMoneyNumber).sum();
@@ -194,7 +199,9 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         }
         response.setAllCustomerNum(allNum);
         double percent = (double) newCustomerNum / allNum * 100;
-        response.setPercent(percent + "%");
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formattedPercent = df.format(percent);
+        response.setPercent(formattedPercent + "%");
         return response;
     }
 
@@ -241,6 +248,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             if(optionalPriceList.isEmpty()) throw new ExistedException("PriceList is not found, can't solve money");
             List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
+            money += money * 0.15;
             dto.setMoneyNumber(money);
         }
 
@@ -258,6 +266,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             if(optionalPriceList.isEmpty()) throw new ExistedException("PriceList is not found, can't solve money");
             List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
+            money += money * 0.15;
             dto.setMoneyNumber(money);
         }
         float totalMoney = (float) allRevenues.stream().mapToDouble(RevenueDTO::getMoneyNumber).sum();
@@ -280,6 +289,7 @@ public class CustomerInforServiceImpl implements CustomerInforService {
             if(optionalPriceList.isEmpty()) throw new ExistedException("PriceList is not found, can't solve money");
             List<PriceScale> priceScales = optionalPriceList.get(0).getListPriceScales();
             float money = getMoney(dto.getNewWaterUsageIndex(), dto.getOldWaterUsageIndex(), priceScales);
+            money += money * 0.15;
             dto.setMoneyPrice(money);
         }
         return reportDTOS;
