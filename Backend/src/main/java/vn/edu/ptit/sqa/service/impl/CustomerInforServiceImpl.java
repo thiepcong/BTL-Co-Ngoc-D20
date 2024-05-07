@@ -106,6 +106,11 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         int debtNum = allDebtCustomer.size();
         DebtReportDTO response = new DebtReportDTO();
         response.setDebtNum(debtNum);
+        if(allNum == 0){
+            response.setAllCustomerNum(allNum);
+            response.setPercent(0.0 + "%");
+            return response;
+        }
         response.setAllCustomerNum(allNum);
         double percent = (double) debtNum / allNum * 100;
         response.setPercent(percent + "%");
@@ -173,8 +178,8 @@ public class CustomerInforServiceImpl implements CustomerInforService {
     public NewCustomerReportDTO getNewCustomerNumber(ReportInforRequest request) {
         Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
         Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
-        List<ReportDTO> allCustomerList = customerRepository.findByAddressListAll(request.getProvine(),
-                request.getDistrict(), request.getWard(), null, null);
+        List<ReportDTO> allCustomerList = customerRepository.findCustomerListByAddress(request.getProvine(),
+                request.getDistrict(), request.getWard(), end);
         int allNum = allCustomerList.size();
         System.out.println(allNum);
         List<ReportDTO> allNewCustomer = customerRepository.findNewCustomer(request.getProvine(),
@@ -182,6 +187,11 @@ public class CustomerInforServiceImpl implements CustomerInforService {
         int newCustomerNum = allNewCustomer.size();
         NewCustomerReportDTO response = new NewCustomerReportDTO();
         response.setNewCustomerNum(newCustomerNum);
+        if(allNum == 0){
+            response.setAllCustomerNum(allNum);
+            response.setPercent(0.0 + "%");
+            return response;
+        }
         response.setAllCustomerNum(allNum);
         double percent = (double) newCustomerNum / allNum * 100;
         response.setPercent(percent + "%");
