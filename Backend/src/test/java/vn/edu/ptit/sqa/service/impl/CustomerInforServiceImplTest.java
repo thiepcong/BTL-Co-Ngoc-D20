@@ -714,6 +714,40 @@ public class CustomerInforServiceImplTest {
         assertEquals("100.0%", response.getPercent());
     }
 
+    @Test
+    public void testGetDebtCustomerNumberWithCustomerAllListIsEmpty() {
+        ReportInforRequest request = mockReportInforRequest();
+        Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
+        Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
+
+        // Mock data
+        List<ReportDTO> debtCustomerDTOS = new ArrayList<>();
+        debtCustomerDTOS.add(new ReportDTO().setProvine("Ha Noi")
+                .setDistrict("Ha Dong")
+                .setWard("Van Quan")
+                .setStartTime(new Date())
+                .setCustomerId(1L)
+                .setNewWaterUsageIndex(100L)
+                .setOldWaterUsageIndex(30L));
+
+
+        List<ReportDTO> reportDTOS = new ArrayList<>();
+
+
+        when(customerRepository.findByAddressListAll(request.getProvine(), request.getDistrict(),
+                request.getWard(), start, end)).thenReturn(reportDTOS);
+        when(customerRepository.findDebtCustomer(request.getProvine(), request.getDistrict(),
+                request.getWard(), start, end)).thenReturn(debtCustomerDTOS);
+
+
+        DebtReportDTO response = customerInforService.getDebtCustomerNumber(request);
+
+        // Assertions
+        assertNotNull(response);
+        assertEquals(debtCustomerDTOS.size(), response.getDebtNum());
+        assertEquals(reportDTOS.size(), response.getAllCustomerNum());
+        assertEquals("0.0%", response.getPercent());
+    }
     /**
      * get NewCustomerList servce method
      */
@@ -776,8 +810,8 @@ public class CustomerInforServiceImplTest {
                 .setOldWaterUsageIndex(30L));
 
 
-        when(customerRepository.findByAddressListAll(request.getProvine(), request.getDistrict(),
-                request.getWard(), nullDate, nullDate)).thenReturn(reportDTOS);
+        when(customerRepository.findCustomerListByAddress(request.getProvine(), request.getDistrict(),
+                request.getWard(), end)).thenReturn(reportDTOS);
         when(customerRepository.findNewCustomer(request.getProvine(), request.getDistrict(),
                 request.getWard(), start, end)).thenReturn(newCustomerDTOS);
 
@@ -789,5 +823,40 @@ public class CustomerInforServiceImplTest {
         assertEquals(newCustomerDTOS.size(), response.getNewCustomerNum());
         assertEquals(reportDTOS.size(), response.getAllCustomerNum());
         assertEquals("100.0%", response.getPercent());
+    }
+
+    @Test
+    public void testGetNewCustomerNumberWithAllCustomerListIsEmpty() {
+        ReportInforRequest request = mockReportInforRequest();
+        Date start = DateUtils.getStartDayOfMonthFromCurrentDate(request.getMonth());
+        Date end = DateUtils.getEndDayOfMonthFromCurrentDate(request.getMonth());
+
+        Date nullDate = null;
+        // Mock data
+        List<ReportDTO> newCustomerDTOS = new ArrayList<>();
+        newCustomerDTOS.add(new ReportDTO().setProvine("Ha Noi")
+                .setDistrict("Ha Dong")
+                .setWard("Van Quan")
+                .setStartTime(new Date())
+                .setCustomerId(1L)
+                .setNewWaterUsageIndex(100L)
+                .setOldWaterUsageIndex(30L));
+
+
+        List<ReportDTO> reportDTOS = new ArrayList<>();
+
+        when(customerRepository.findCustomerListByAddress(request.getProvine(), request.getDistrict(),
+                request.getWard(), end)).thenReturn(reportDTOS);
+        when(customerRepository.findNewCustomer(request.getProvine(), request.getDistrict(),
+                request.getWard(), start, end)).thenReturn(newCustomerDTOS);
+
+
+        NewCustomerReportDTO response = customerInforService.getNewCustomerNumber(request);
+
+        // Assertions
+        assertNotNull(response);
+        assertEquals(newCustomerDTOS.size(), response.getNewCustomerNum());
+        assertEquals(reportDTOS.size(), response.getAllCustomerNum());
+        assertEquals("0.0%", response.getPercent());
     }
 }

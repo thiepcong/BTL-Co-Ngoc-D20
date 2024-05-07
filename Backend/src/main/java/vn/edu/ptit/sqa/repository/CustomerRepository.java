@@ -83,6 +83,30 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "       c.name, " +
             "       c.phone, " +
             "       c.email," +
+            "       ad.provine," +
+            "       ad.district," +
+            "       ad.ward," +
+            "       wm.waterUsageNumber," +
+            "       wm.createTime ," +
+            "       wm.createTime ," +
+            "      'unpaid' ) " +
+            "       FROM Customer c " +
+            "       LEFT JOIN Address ad ON c.id = ad.customer.id " +
+            "       LEFT JOIN WaterMeter wm ON ad.waterMeter.id = wm.id" +
+            "       WHERE ( :province IS NULL OR  ad.provine = :province)  " +
+            "           AND (:district IS NULL OR ad.district = :district) " +
+            "           AND ( :ward IS NULL OR ad.ward = :ward)  " +
+            "           AND (:end IS NULL OR wm.createTime <= :end) " +
+            "           AND c.isDeleted = FALSE " +
+            "       ORDER BY c.name ")
+    List<ReportDTO> findCustomerListByAddress(String province, String district, String ward, Date end);
+
+
+    @Query(value = "SELECT new vn.edu.ptit.sqa.model.reportInfor.ReportDTO(" +
+            "       c.id, " +
+            "       c.name, " +
+            "       c.phone, " +
+            "       c.email," +
             "       ad.provine, " +
             "       ad.district, " +
             "       ad.ward, " +
@@ -197,7 +221,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "           AND wm.createTime <= :end " +
             "           AND wmi.startTime >= :start " +
             "           AND wmi.endTime <= :end " +
-            "           AND c.isDeleted = FALSE " +
             "           AND c.isDeleted = FALSE " +
             "           AND i.isDeleted = FALSE " +
             "       ORDER BY c.name")
