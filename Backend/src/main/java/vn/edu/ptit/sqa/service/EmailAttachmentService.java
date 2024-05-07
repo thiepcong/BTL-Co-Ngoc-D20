@@ -6,6 +6,6 @@ import vn.edu.ptit.sqa.model.EmailAttachmentResponse;
 import java.util.List;
 
 public interface EmailAttachmentService {
-    List<EmailAttachmentResponse> uploadAllAttachments(List<MultipartFile> files);
+//    List<EmailAttachmentResponse> uploadAllAttachments(List<MultipartFile> files);
 
 }

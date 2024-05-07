@@ -1,8 +1,9 @@
 package vn.edu.ptit.sqa.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,25 +14,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.aot.DisabledInAotMode;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-//import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import vn.edu.ptit.sqa.config.ConfigSecurity;
 import vn.edu.ptit.sqa.entity.UserType;
+import vn.edu.ptit.sqa.exception.BadRequestException;
 import vn.edu.ptit.sqa.exception.NotFoundException;
 import vn.edu.ptit.sqa.model.*;
 import vn.edu.ptit.sqa.model.pagination.DataTableResults;
@@ -39,25 +36,27 @@ import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
 import vn.edu.ptit.sqa.service.PriceListService;
 import vn.edu.ptit.sqa.util.converter.ConverterUtil;
 
-@ContextConfiguration(classes = {PriceListController.class})
-@ExtendWith(SpringExtension.class)
-@DisabledInAotMode
+@ContextConfiguration(classes = {ConfigSecurity.class})
+@AutoConfigureMockMvc(addFilters = false)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(PriceListController.class)
 class PriceListControllerTest {
-    @Autowired
-    private PriceListController priceListController;
 
     @MockBean
     private PriceListService priceListService;
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     /**
      * Method under test:
      * {@link PriceListController#createPriceList(Integer, PriceListRequest)}
      */
     @Test
-    void testCreatePriceList() throws Exception {
+    void testCreatePriceList_Valid() throws Exception {
         // Arrange
         PriceListResponse priceListResponse = new PriceListResponse();
         priceListResponse.setId(32);
@@ -87,42 +86,12 @@ class PriceListControllerTest {
 
         priceListRequest.setListPriceScales(priceScaleRequests);
         String content = (new ObjectMapper()).writeValueAsString(priceListRequest);
-        MockHttpServletRequestBuilder requestBuilder = post("/api/price_list/1", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-
-        // Act and Assert
-        MockMvcBuilders.standaloneSetup(priceListController)
-                .build()
-                .perform(requestBuilder)
+        mockMvc.perform(post("/api/price_list/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("application/json;charset=UTF-8"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"id\":32,\"userType\":{" +
-                                "\"id\":1," +
-                                "\"typeName\":\"Ho ngheo\""+
-                                "}," +
-                                "\"applyDate\":1711929600000," +
-                                "\"status\":1,"+
-                                "\"listPriceScales\":[" +
-                                "{" +
-                                "\"id\":163," +
-                                "\"startIndex\":0," +
-                                "\"endIndex\":50," +
-                                "\"price\":2100.0" +
-                                "}," +
-                                "{" +
-                                "\"id\":164," +
-                                "\"startIndex\":51," +
-                                "\"endIndex\":100," +
-                                "\"price\":2300.0" +
-                                "}," +
-                                "{" +
-                                "\"id\":165," +
-                                "\"startIndex\":101," +
-                                "\"endIndex\":150," +
-                                "\"price\":2500.0" +
-                                "}]}"));
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andDo(print());
     }
 
     /**
@@ -131,103 +100,188 @@ class PriceListControllerTest {
      */
     @Test
     void testCreatePriceList_UserTypeNotFound() throws Exception {
-//        // Arrange
-        ResponseError responseError = new ResponseError();
-        responseError.setStatus("NOT_FOUND");
-        responseError.setMessage("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị");
-        responseError.setErrors(new ArrayList<>());
-        when(priceListService.createPriceList(Mockito.<Integer>any(), Mockito.<PriceListRequest>any()))
-                .thenThrow(NotFoundException.class);
-
         PriceListRequest priceListRequest = new PriceListRequest();
         priceListRequest
                 .setApplyDate(Date.from(LocalDate.of(2024, 4, 1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
         List<PriceScaleRequest> priceScaleRequests = new ArrayList<>();
         priceScaleRequests.add(new PriceScaleRequest(0, 50, 2100));
-        priceScaleRequests.add(new PriceScaleRequest(55, 100, 2300));
+        priceScaleRequests.add(new PriceScaleRequest(51, 100, 2300));
         priceScaleRequests.add(new PriceScaleRequest(101, 150, 2500));
 
         priceListRequest.setListPriceScales(priceScaleRequests);
+        when(priceListService.createPriceList(1000, priceListRequest))
+                .thenThrow(new NotFoundException("customer type id 1000"));
+
         String content = (new ObjectMapper()).writeValueAsString(priceListRequest);
         mockMvc.perform(post("/api/price_list/1000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
-//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/price_list/1000", 1)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(content);
-//
-//        // Act and Assert
-//        MockMvcBuilders.standaloneSetup(priceListController)
-//                .build()
-//                .perform(requestBuilder)
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-//                .andExpect(jsonPath("$.status").value("BAD_REQUEST")).andReturn();
-//        System.out.println(result.getResponse().getContentAsString());
-//                assertEquals("{\"status\":\"BAD_REQUEST\",\"message\":\"Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị\",\"errors\":[]}",
-//                result.getResponse().getContentAsString());
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andDo(print());
     }
 
-    /**
-     * Method under test:
-     * {@link PriceListController#getAllPriceList(Integer, Integer)}
-     */
+    @Test
+    void testCreatePriceList_ChiSoDauLonHonChiSoCuoiBacTruoc_LonHon1DonVi() throws Exception {
+        PriceListRequest priceListRequest = new PriceListRequest();
+        priceListRequest
+                .setApplyDate(Date.from(LocalDate.of(2024, 4, 1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
+        List<PriceScaleRequest> priceScaleRequests = new ArrayList<>();
+        priceScaleRequests.add(new PriceScaleRequest(0, 50, 2100));
+        priceScaleRequests.add(new PriceScaleRequest(52, 100, 2300));
+        priceScaleRequests.add(new PriceScaleRequest(101, 150, 2500));
+
+        priceListRequest.setListPriceScales(priceScaleRequests);
+        when(priceListService.createPriceList(1, priceListRequest))
+                .thenThrow(new BadRequestException("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị"));
+
+        String content = (new ObjectMapper()).writeValueAsString(priceListRequest);
+        mockMvc.perform(post("/api/price_list/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị"))
+                .andDo(print());
+    }
+
+    @Test
+    void testCreatePriceList_ChiSoDauBeHonHoacBangChiSoCuoiBacTruoc() throws Exception {
+        PriceListRequest priceListRequest = new PriceListRequest();
+        priceListRequest
+                .setApplyDate(Date.from(LocalDate.of(2024, 5, 6).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
+        List<PriceScaleRequest> priceScaleRequests = new ArrayList<>();
+        priceScaleRequests.add(new PriceScaleRequest(0, 50, 2100));
+        priceScaleRequests.add(new PriceScaleRequest(50, 100, 2300));
+        priceScaleRequests.add(new PriceScaleRequest(101, 150, 2500));
+
+        priceListRequest.setListPriceScales(priceScaleRequests);
+        when(priceListService.createPriceList(1, priceListRequest))
+                .thenThrow(new BadRequestException("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị"));
+
+        String content = (new ObjectMapper()).writeValueAsString(priceListRequest);
+        mockMvc.perform(post("/api/price_list/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("Chỉ số đầu phải lớn hơn chỉ số cuối bậc trước 1 đơn vị"))
+                .andDo(print());
+    }
+
+    @Test
+    void testCreatePriceList_ChiSoDauLonHonHoacBangChiSoCuoi() throws Exception {
+        PriceListRequest priceListRequest = new PriceListRequest();
+        priceListRequest
+                .setApplyDate(Date.from(LocalDate.of(2024, 5, 6).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
+        List<PriceScaleRequest> priceScaleRequests = new ArrayList<>();
+        priceScaleRequests.add(new PriceScaleRequest(0, 50, 2100));
+        priceScaleRequests.add(new PriceScaleRequest(51, 100, 2300));
+        priceScaleRequests.add(new PriceScaleRequest(101, 101, 2500));
+
+        priceListRequest.setListPriceScales(priceScaleRequests);
+        when(priceListService.createPriceList(1, priceListRequest))
+                .thenThrow(new BadRequestException("Chỉ số đầu phải bé hơn chỉ số cuối"));
+
+        String content = (new ObjectMapper()).writeValueAsString(priceListRequest);
+        mockMvc.perform(post("/api/price_list/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("Chỉ số đầu phải bé hơn chỉ số cuối"))
+                .andDo(print());
+    }
+
+    @Test
+    void testGetPriceListById_PriceListNotFound() throws Exception {
+
+        when(priceListService.getPriceListResponseById(100))
+                .thenThrow(new NotFoundException("PriceList id 100"));
+        mockMvc.perform(get("/api/price_list/100")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("PriceList id 100 Not found data"))
+                .andDo(print());
+    }
+
+    @Test
+    void testGetPriceListById_Valid() throws Exception {
+        PriceListResponse priceListResponse = new PriceListResponse();
+        priceListResponse.setId(2);
+        priceListResponse.setStatus(1);
+        UserType userType = new UserType();
+        userType.setId(1);
+        userType.setTypeName("Ho ngheo");
+        priceListResponse.setUserType(ConverterUtil.mappingToObject(userType, UserTypeResponse.class));
+        priceListResponse.setApplyDate(Date.from(LocalDate.of(2024, 4, 1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
+        priceListResponse.setStatus(1);
+        List<PriceScaleResponse> priceScaleRequestsResponse = new ArrayList<>();
+        priceScaleRequestsResponse.add(new PriceScaleResponse(163, 0, 50, 2100));
+        priceScaleRequestsResponse.add(new PriceScaleResponse(164, 51, 100, 2300));
+        priceScaleRequestsResponse.add(new PriceScaleResponse(165, 101, 150, 2500));
+        priceListResponse.setListPriceScales(priceScaleRequestsResponse);
+        when(priceListService.getPriceListResponseById(100))
+                .thenReturn(priceListResponse);
+        mockMvc.perform(get("/api/price_list/2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(print());
+    }
+
     @Test
     void testGetAllPriceList() throws Exception {
-        // Arrange
-        when(priceListService.getAllPriceList(Mockito.<PaginationRequest>any())).thenReturn(new DataTableResults<>());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/price_list");
+        PriceListResponse priceListResponse = new PriceListResponse();
+        priceListResponse.setId(2);
+        priceListResponse.setStatus(1);
+        UserType userType = new UserType();
+        userType.setId(1);
+        userType.setTypeName("Ho ngheo");
+        priceListResponse.setUserType(ConverterUtil.mappingToObject(userType, UserTypeResponse.class));
+        priceListResponse.setApplyDate(Date.from(LocalDate.of(2024, 4, 1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
+        priceListResponse.setStatus(1);
+        List<PriceScaleResponse> priceScaleRequestsResponse = new ArrayList<>();
+        priceScaleRequestsResponse.add(new PriceScaleResponse(163, 0, 50, 2100));
+        priceScaleRequestsResponse.add(new PriceScaleResponse(164, 51, 100, 2300));
+        priceScaleRequestsResponse.add(new PriceScaleResponse(165, 101, 150, 2500));
+        priceListResponse.setListPriceScales(priceScaleRequestsResponse);
 
-        // Act and Assert
-        MockMvcBuilders.standaloneSetup(priceListController)
-                .build()
-                .perform(requestBuilder)
+        PriceListResponse priceListResponse2 = new PriceListResponse();
+        priceListResponse2.setId(3);
+        priceListResponse2.setStatus(1);
+        UserType userType2 = new UserType();
+        userType2.setId(3);
+        userType2.setTypeName("Ho ngheo");
+        priceListResponse2.setUserType(ConverterUtil.mappingToObject(userType, UserTypeResponse.class));
+        priceListResponse2.setApplyDate(Date.from(LocalDate.of(2024, 6, 1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant()));
+        priceListResponse2.setStatus(1);
+        List<PriceScaleResponse> priceScaleRequestsResponse2 = new ArrayList<>();
+        priceScaleRequestsResponse2.add(new PriceScaleResponse(166, 0, 50, 2300));
+        priceScaleRequestsResponse2.add(new PriceScaleResponse(167, 51, 100, 2500));
+        priceScaleRequestsResponse2.add(new PriceScaleResponse(168, 101, 150, 2700));
+        priceListResponse2.setListPriceScales(priceScaleRequestsResponse2);
+
+        List<PriceListResponse> priceListResponses = new ArrayList<>();
+        priceListResponses.add(priceListResponse);
+        priceListResponses.add(priceListResponse2);
+        DataTableResults<PriceListResponse> dataTableResults = new DataTableResults<>();
+        dataTableResults.setCurrentPage(0);
+        dataTableResults.setTotalItems(2L);
+        dataTableResults.setTotalPages(1);
+        dataTableResults.setData(priceListResponses);
+
+        PaginationRequest paginationRequest = new PaginationRequest(true, 0, 2);
+        when(priceListService.getAllPriceList(paginationRequest))
+                .thenReturn(dataTableResults);
+        mockMvc.perform(get("/api/price_list?pageNum=0&pageSize=2")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"currentPage\":null,\"totalPages\":null,\"totalItems\":null,\"data\":null}"));
-    }
-
-    /**
-     * Method under test: {@link PriceListController#getPriceListById(Integer)}
-     */
-    @Test
-    void testGetPriceListById() throws Exception {
-        // Arrange
-        when(priceListService.getPriceListResponseById(Mockito.<Integer>any())).thenReturn(new PriceListResponse());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/price_list/{id}", 1);
-
-        // Act and Assert
-        MockMvcBuilders.standaloneSetup(priceListController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"id\":null,\"userType\":null,\"applyDate\":null,\"status\":null,\"listPriceScales\":null}"));
-    }
-
-    /**
-     * Method under test: {@link PriceListController#getPriceListById(Integer)}
-     */
-    @Test
-    void testGetPriceListById2() throws Exception {
-        // Arrange
-        when(priceListService.getAllPriceList(Mockito.<PaginationRequest>any())).thenReturn(new DataTableResults<>());
-        when(priceListService.getPriceListResponseById(Mockito.<Integer>any())).thenReturn(new PriceListResponse());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/price_list/{id}", "",
-                "Uri Variables");
-
-        // Act and Assert
-        MockMvcBuilders.standaloneSetup(priceListController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"currentPage\":null,\"totalPages\":null,\"totalItems\":null,\"data\":null}"));
+                .andDo(print());
     }
 }

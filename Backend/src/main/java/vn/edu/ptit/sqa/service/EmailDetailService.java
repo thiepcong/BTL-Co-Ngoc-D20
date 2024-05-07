@@ -14,8 +14,8 @@ public interface EmailDetailService {
     Boolean createEmailDetail(EmailDetailAM emailDetailAM);
     Boolean sendEmail(EmailDetailDto emailDetailDto);
 
-    EmailDetailDto getEmailDetailById(Long id);
-
-    DataTableResults<EmailDetailDto> getAllEmailDetails(PaginationRequest paginationRequest);
+//    EmailDetailDto getEmailDetailById(Long id);
+//
+//    DataTableResults<EmailDetailDto> getAllEmailDetails(PaginationRequest paginationRequest);
 
 }
