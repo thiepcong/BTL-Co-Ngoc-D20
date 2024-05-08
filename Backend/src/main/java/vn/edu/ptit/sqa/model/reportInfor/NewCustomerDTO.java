@@ -1,11 +1,15 @@
 package vn.edu.ptit.sqa.model.reportInfor;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
-public class NewCutomerDTO {
+@NoArgsConstructor
+@Accessors(chain = true)
+public class NewCustomerDTO {
     private Long customerId;
     private String customerName;
     private String customerPhone;
@@ -18,8 +22,8 @@ public class NewCutomerDTO {
     private int customerNumber;
     private Date createTime;
 
-    public NewCutomerDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
-                           String provine, String district, String ward, Long waterUsageNumber, Date createTime) {
+    public NewCustomerDTO(Long customerId, String customerName, String customerPhone, String customerEmail,
+                          String provine, String district, String ward, Long waterUsageNumber, Date createTime) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;

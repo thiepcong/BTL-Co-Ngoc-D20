@@ -67,7 +67,7 @@ class StatApi extends BaseRemoteSource {
     try {
       return callApiWithErrorParser(request).then((value) => StatModel.fromJson(
             value.data,
-            keyList: 'newCutomerDTOList',
+            keyList: 'newCustomerDTOList',
           ));
     } catch (e) {
       rethrow;

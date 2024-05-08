@@ -6,9 +6,9 @@ import vn.edu.ptit.sqa.model.pagination.PageDto;
 import java.util.List;
 
 @Data
-public class NewCustomerResponse {
-    private NewCutomerDTO newCutomerDTO;
-    private List<NewCutomerDTO> newCutomerDTOList;
+public class newCustomerResponse {
+    private NewCustomerDTO newCustomerDTO;
+    private List<NewCustomerDTO> newCustomerDTOList;
     private Long totalNewNumber;
     private PageDto pageDto;
 }
