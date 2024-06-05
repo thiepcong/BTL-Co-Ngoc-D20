@@ -15,13 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/emailAttachment")
 public class EmailAttachmentController {
-    @Autowired
-    EmailAttachmentService emailAttachmentService;
-
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    public ResponseEntity<List<EmailAttachmentResponse>> addAttachment(@RequestParam("attachments") List<MultipartFile> files){
-
-        return new ResponseEntity<>(emailAttachmentService.uploadAllAttachments(files), HttpStatus.OK);
-    };
+//    @Autowired
+//    EmailAttachmentService emailAttachmentService;
+//
+//    @PostMapping
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    public ResponseEntity<List<EmailAttachmentResponse>> addAttachment(@RequestParam("attachments") List<MultipartFile> files){
+//
+//        return new ResponseEntity<>(emailAttachmentService.uploadAllAttachments(files), HttpStatus.OK);
+//    };
 }

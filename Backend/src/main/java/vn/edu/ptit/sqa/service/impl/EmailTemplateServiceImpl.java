@@ -26,23 +26,22 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 
     private final EmailTemplateRepo emailTemplateRepo;
 
-    @Override
-    @Transactional
-    public TemplateResponse createTemplate(TemplateAM templateAM) {
-        EmailTemplate emailTemplate = ConverterUtil.mappingToObject(templateAM, EmailTemplate.class);
-        emailTemplate.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        emailTemplate = emailTemplateRepo.save(emailTemplate);
-        return ConverterUtil.mappingToObject(emailTemplate, TemplateResponse.class);
-    }
+//    @Override
+//    @Transactional
+//    public TemplateResponse createTemplate(TemplateAM templateAM) {
+//        EmailTemplate emailTemplate = ConverterUtil.mappingToObject(templateAM, EmailTemplate.class);
+//        emailTemplate.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+//        emailTemplate = emailTemplateRepo.save(emailTemplate);
+//        return ConverterUtil.mappingToObject(emailTemplate, TemplateResponse.class);
+//    }
 
-    @Override
-    public TemplateResponse getEmailTemplateResById(Integer id) {
-        Optional<EmailTemplate> emailTemplate = emailTemplateRepo.findById(id);
-        if(emailTemplate.isEmpty()) throw new NotFoundException("Email Template " + id + " not found");
-        TemplateResponse templateResponse = ConverterUtil.mappingToObject(emailTemplate.get(), TemplateResponse.class);
-//        templateResponse.setListProperties(ConverterUtil.mapList(emailTemplate.get().getListProperties(), TemplatePropertyResponse.class));
-        return templateResponse;
-    }
+//    @Override
+//    public TemplateResponse getEmailTemplateResById(Integer id) {
+//        Optional<EmailTemplate> emailTemplate = emailTemplateRepo.findById(id);
+//        if(emailTemplate.isEmpty()) throw new NotFoundException("Email Template " + id + " not found");
+//        TemplateResponse templateResponse = ConverterUtil.mappingToObject(emailTemplate.get(), TemplateResponse.class);
+//        return templateResponse;
+//    }
 
     @Override
     public EmailTemplate getEmailTemplateById(Integer id) {

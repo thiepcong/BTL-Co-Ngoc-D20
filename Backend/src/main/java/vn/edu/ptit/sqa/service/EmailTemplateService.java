@@ -9,8 +9,8 @@ import vn.edu.ptit.sqa.model.pagination.PaginationRequest;
 import java.util.List;
 
 public interface EmailTemplateService {
-    TemplateResponse createTemplate(TemplateAM templateAM);
-    TemplateResponse getEmailTemplateResById(Integer id);
+//    TemplateResponse createTemplate(TemplateAM templateAM);
+//    TemplateResponse getEmailTemplateResById(Integer id);
 
     EmailTemplate getEmailTemplateById(Integer id);
     DataTableResults<TemplateResponse> getAllEmailTemplates(PaginationRequest paginationRequest);

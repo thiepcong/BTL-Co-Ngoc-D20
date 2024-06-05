@@ -44,4 +44,8 @@ public class DebtCustomerDTO {
         this.endTime = endTime;
         this.status = status;
     }
+
+    public DebtCustomerDTO() {
+
+    }
 }

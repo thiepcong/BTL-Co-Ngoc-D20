@@ -190,11 +190,8 @@ class PriceScaleServiceImplTest {
         Optional<PriceScale> ofResult = Optional.of(priceScale);
         when(priceScaleRepo.findById(Mockito.<Integer>any())).thenReturn(ofResult);
 
-        // Act
         PriceScaleResponse actualPriceScaleById = priceScaleServiceImpl.getPriceScaleById(1);
 
-        // Assert
-//        verify(priceScaleRepo).findById(eq(1));
         assertEquals(1, actualPriceScaleById.getId().intValue());
         assertEquals(1, actualPriceScaleById.getStartIndex().intValue());
         assertEquals(10.0f, actualPriceScaleById.getPrice());
@@ -205,14 +202,11 @@ class PriceScaleServiceImplTest {
      * Method under test: {@link PriceScaleServiceImpl#getPriceScaleById(Integer)}
      */
     @Test
-    void testGetPriceScaleById_NotFound2() {
+    void testGetPriceScaleById_NotFound() {
         // Arrange
         Optional<PriceScale> emptyResult = Optional.empty();
         when(priceScaleRepo.findById(Mockito.<Integer>any())).thenReturn(emptyResult);
-
-        // Act and Assert
         assertThrows(NotFoundException.class, () -> priceScaleServiceImpl.getPriceScaleById(9));
-//        verify(priceScaleRepo).findById(eq(1));
     }
 
 }

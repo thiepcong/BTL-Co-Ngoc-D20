@@ -16,16 +16,16 @@ import vn.edu.ptit.sqa.service.EmailTemplateService;
 public class EmailTemplateController {
     private final EmailTemplateService emailTemplateService;
 
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    public ResponseEntity<?> createTemplate(@Valid @RequestBody TemplateAM templateAM){
-        return ResponseEntity.ok(emailTemplateService.createTemplate(templateAM));
-    }
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    public ResponseEntity<?> getEmailTemplateById(@PathVariable("id") Integer id){
-        return ResponseEntity.ok(emailTemplateService.getEmailTemplateResById(id));
-    }
+//    @PostMapping
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    public ResponseEntity<?> createTemplate(@Valid @RequestBody TemplateAM templateAM){
+//        return ResponseEntity.ok(emailTemplateService.createTemplate(templateAM));
+//    }
+//    @GetMapping("/{id}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    public ResponseEntity<?> getEmailTemplateById(@PathVariable("id") Integer id){
+//        return ResponseEntity.ok(emailTemplateService.getEmailTemplateResById(id));
+//    }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")

@@ -17,34 +17,34 @@ import java.util.List;
 @Service
 public class EmailAttachmentServiceImpl implements EmailAttachmentService {
 
-    @Autowired
-    EmailAttachmentRepo emailAttachmentRepo;
-
-    @Autowired
-    FTPServiceImpl ftpService;
-
-    @Override
-    public List<EmailAttachmentResponse> uploadAllAttachments(List<MultipartFile> files) {
-        List<EmailAttachmentResponse> listAttachments = new ArrayList<>();
-        for(MultipartFile file : files){
-            int lastDotIndex = file.getOriginalFilename().lastIndexOf('.');
-            if (lastDotIndex > 0) {
-                String fileDomain = file.getOriginalFilename().substring(lastDotIndex);
-                if(!AppProperties.EMAIL_ATTACHMENT.VALID_FILE_TYPE.contains(fileDomain))
-                    throw new BadRequestException("Type of File " + file.getOriginalFilename() + " is not supported");
-                else{
-                    String fileName = ftpService.uploadFile(file, fileDomain);
-                    EmailAttachment emailAttachment = new EmailAttachment();
-                    emailAttachment.setFileName(fileName);
-                    emailAttachment.setOriginalFileName(file.getOriginalFilename());
-                    emailAttachment = emailAttachmentRepo.save(emailAttachment);
-                    listAttachments.add(ConverterUtil.mappingToObject(emailAttachment, EmailAttachmentResponse.class));
-                }
-            }else{
-                throw new BadRequestException("File is invalid: " + file.getOriginalFilename());
-            }
-        }
-        return listAttachments;
-    }
+//    @Autowired
+//    EmailAttachmentRepo emailAttachmentRepo;
+//
+//    @Autowired
+//    FTPServiceImpl ftpService;
+//
+//    @Override
+//    public List<EmailAttachmentResponse> uploadAllAttachments(List<MultipartFile> files) {
+//        List<EmailAttachmentResponse> listAttachments = new ArrayList<>();
+//        for(MultipartFile file : files){
+//            int lastDotIndex = file.getOriginalFilename().lastIndexOf('.');
+//            if (lastDotIndex > 0) {
+//                String fileDomain = file.getOriginalFilename().substring(lastDotIndex);
+//                if(!AppProperties.EMAIL_ATTACHMENT.VALID_FILE_TYPE.contains(fileDomain))
+//                    throw new BadRequestException("Type of File " + file.getOriginalFilename() + " is not supported");
+//                else{
+//                    String fileName = ftpService.uploadFile(file, fileDomain);
+//                    EmailAttachment emailAttachment = new EmailAttachment();
+//                    emailAttachment.setFileName(fileName);
+//                    emailAttachment.setOriginalFileName(file.getOriginalFilename());
+//                    emailAttachment = emailAttachmentRepo.save(emailAttachment);
+//                    listAttachments.add(ConverterUtil.mappingToObject(emailAttachment, EmailAttachmentResponse.class));
+//                }
+//            }else{
+//                throw new BadRequestException("File is invalid: " + file.getOriginalFilename());
+//            }
+//        }
+//        return listAttachments;
+//    }
 
 }

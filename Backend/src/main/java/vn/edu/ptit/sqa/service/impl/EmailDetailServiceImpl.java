@@ -66,11 +66,11 @@ public class EmailDetailServiceImpl implements EmailDetailService {
     public Boolean createEmailDetail(EmailDetailAM request) {
         EmailTemplate emailTemplate = emailTemplateService.getEmailTemplateById(request.getTemplateId());
         List<EmailAttachment> emailAttachments = new ArrayList<>();
-        request.getAttachmentIds().forEach(attachmentId -> {
-            EmailAttachment emailAttachment = emailAttachmentRepo.getById(attachmentId);
-            emailAttachments.add(emailAttachment);
-        });
-        if(emailTemplate.getId() == 2) {
+//        request.getAttachmentIds().forEach(attachmentId -> {
+//            EmailAttachment emailAttachment = emailAttachmentRepo.getById(attachmentId);
+//            emailAttachments.add(emailAttachment);
+//        });
+        if(emailTemplate.getId() == 8) {
             ReportInforResponse reportInforResponse = customerInforService.getUnPaidClientList(request.getReportInforRequest(), null);
             for (ReportDTO reportDTO : reportInforResponse.getReportDTOList()) {
                 String to = reportDTO.getCustomerEmail();
@@ -95,7 +95,7 @@ public class EmailDetailServiceImpl implements EmailDetailService {
                 emailDetail = emailDetailRepo.save(emailDetail);
 
                 EmailDetailDto emailDetailMessage = ConverterUtil.mappingToObject(emailDetail, EmailDetailDto.class);
-                emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
+//                emailDetailMessage.setEmailAttachments(ConverterUtil.mapList(emailDetail.getEmailAttachments().stream().toList(), EmailAttachmentResponse.class));
                 sendEmail(emailDetailMessage);
             }
 
@@ -165,15 +165,15 @@ public class EmailDetailServiceImpl implements EmailDetailService {
         try{
 
             HashMap<String, byte[]> attachmentFiles = new HashMap<>();
-            request.getEmailAttachments().forEach(attachment ->{
-
-                int lastSlash = attachment.getFileName().lastIndexOf('/');
-
-                attachmentFiles.put(attachment.getOriginalFileName(),
-                        ftpService.readFile(AppProperties.EMAIL_ATTACHMENT.REMOTE_FILE_PATH +
-                                attachment.getFileName().substring(lastSlash + 1)));
-
-            });
+//            request.getEmailAttachments().forEach(attachment ->{
+//
+//                int lastSlash = attachment.getFileName().lastIndexOf('/');
+//
+//                attachmentFiles.put(attachment.getOriginalFileName(),
+//                        ftpService.readFile(AppProperties.EMAIL_ATTACHMENT.REMOTE_FILE_PATH +
+//                                attachment.getFileName().substring(lastSlash + 1)));
+//
+//            });
 
             EmailUtil.sendEmailWithAttachments(
                     request.getToEmail(),
@@ -197,27 +197,27 @@ public class EmailDetailServiceImpl implements EmailDetailService {
     }
 
 //    Hàm dùng để test API
-    @Override
-    public EmailDetailDto getEmailDetailById(Long id) {
-        EmailDetail emailDetail = emailDetailRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("EmailDetail id " + id));
-        return ConverterUtil.mappingToObject(emailDetail, EmailDetailDto.class);
-    }
-
-    // Hàm dùng để test API
-    @Override
-    public DataTableResults<EmailDetailDto> getAllEmailDetails(PaginationRequest paginationRequest){
-        Pageable paging = PageRequest.of(paginationRequest.getPageNum()-1, paginationRequest.getPageSize());
-
-        Page<EmailDetail> emailDetails = emailDetailRepo.findAll(paging);
-        List<EmailDetail> emailDetailList = emailDetails.getContent();
-
-        List<EmailDetailDto> emailDetailDtos = ConverterUtil.mapList(emailDetailList, EmailDetailDto.class);
-        DataTableResults<EmailDetailDto> res = new DataTableResults<>(emailDetailDtos);
-        res.setTotalPages(emailDetails.getTotalPages());
-        res.setTotalItems(emailDetails.getTotalElements());
-        res.setCurrentPage(emailDetails.getNumber()+1);
-
-        return res;
-    }
+//    @Override
+//    public EmailDetailDto getEmailDetailById(Long id) {
+//        EmailDetail emailDetail = emailDetailRepo.findById(id)
+//                .orElseThrow(() -> new NotFoundException("EmailDetail id " + id));
+//        return ConverterUtil.mappingToObject(emailDetail, EmailDetailDto.class);
+//    }
+//
+//    // Hàm dùng để test API
+//    @Override
+//    public DataTableResults<EmailDetailDto> getAllEmailDetails(PaginationRequest paginationRequest){
+//        Pageable paging = PageRequest.of(paginationRequest.getPageNum()-1, paginationRequest.getPageSize());
+//
+//        Page<EmailDetail> emailDetails = emailDetailRepo.findAll(paging);
+//        List<EmailDetail> emailDetailList = emailDetails.getContent();
+//
+//        List<EmailDetailDto> emailDetailDtos = ConverterUtil.mapList(emailDetailList, EmailDetailDto.class);
+//        DataTableResults<EmailDetailDto> res = new DataTableResults<>(emailDetailDtos);
+//        res.setTotalPages(emailDetails.getTotalPages());
+//        res.setTotalItems(emailDetails.getTotalElements());
+//        res.setCurrentPage(emailDetails.getNumber()+1);
+//
+//        return res;
+//    }
 }

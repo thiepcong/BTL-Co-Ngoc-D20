@@ -14,19 +14,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/price_scale")
 public class PriceScaleController {
-    @Autowired
-    PriceScaleService priceScaleService;
-
-    @PostMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    public ResponseEntity<?> createPriceScale(@PathVariable("id") Integer id,
-                                @Valid @RequestBody List<PriceScaleRequest> priceScaleRequests){
-        return ResponseEntity.ok(priceScaleService.createPriceScale(id, priceScaleRequests));
-    }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
-    public ResponseEntity<?> getPriceScaleById(@PathVariable("id") Integer id){
-        return ResponseEntity.ok(priceScaleService.getPriceScaleById(id));
-    }
+//    @Autowired
+//    PriceScaleService priceScaleService;
+//
+//    @PostMapping("/{id}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    public ResponseEntity<?> createPriceScale(@PathVariable("id") Integer id,
+//                                @Valid @RequestBody List<PriceScaleRequest> priceScaleRequests){
+//        return ResponseEntity.ok(priceScaleService.createPriceScale(id, priceScaleRequests));
+//    }
+//
+//    @GetMapping("/{id}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'STAFF')")
+//    public ResponseEntity<?> getPriceScaleById(@PathVariable("id") Integer id){
+//        return ResponseEntity.ok(priceScaleService.getPriceScaleById(id));
+//    }
 }
